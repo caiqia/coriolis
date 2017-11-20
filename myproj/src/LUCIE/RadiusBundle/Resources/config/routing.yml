@@ -1,0 +1,6 @@
+lucie_radius_homepage:
+    type:     rest
+    resource: "LUCIE\\RadiusBundle\\Controller\\RadController"
+    name_prefix:   api_
+#    path:     /
+#    defaults: { _controller: LUCIERadiusBundle:Default:index }

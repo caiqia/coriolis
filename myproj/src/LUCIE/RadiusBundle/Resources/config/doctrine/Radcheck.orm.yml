@@ -1,0 +1,24 @@
+LUCIE\RadiusBundle\Entity\Radcheck:
+    type: entity
+    table: null
+    repositoryClass: LUCIE\RadiusBundle\Repository\RadcheckRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        username:
+            type: string
+            length: '64'
+        attribute:
+            type: string
+            length: '64'
+        op:
+            type: string
+            length: '2'
+        value:
+            type: string
+            length: '253'
+    lifecycleCallbacks: {  }
