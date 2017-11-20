@@ -87,6 +87,16 @@ class RadController extends FOSRestController
       public function postAction($version, $table, Request $request)
       {
         echo $version."\n";
+        
+        try{
+          $this->container->get('radius.compte')->jsonVeri($request->request->all(), $table);
+        }catch(InvalidFormException $exception){
+          $msg = $exception->getMessage();
+          $response = new Response();
+          $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+          $response->headers->set('Content-Type', 'application/json');
+         return $response;
+        }
 
         $this->container->get('radius.compte')->post($request->request->all(),$table);
 
@@ -128,7 +138,7 @@ class RadController extends FOSRestController
           }
 
           $response = new Response();
-          $response->setContent(json_encode(array('success' => TRUE,'msg' =>"TEST-DELETE")));
+          $response->setContent(json_encode(array('success' => TRUE,'msg' =>"DELETE-OK")));
           $response->headers->set('Content-Type', 'application/json');
           return $response;
       }
@@ -189,7 +199,7 @@ class RadController extends FOSRestController
           {
               new Radreply;
               $response = new Response();
-              $response->setContent(json_encode(array('success' => TRUE,'msg' =>"TEST-PUT")));
+              $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PUT-OK")));
               $response->headers->set('Content-Type', 'application/json');
               return $response;
 

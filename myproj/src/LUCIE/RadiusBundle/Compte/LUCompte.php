@@ -60,53 +60,42 @@ class LUCompte
       public function jsonVeri(array $parameters, $table) {
         switch($table){
           case "reply":
-            if( empty($parameters["data"]["username"]) ||
-                empty($parameters["data"]["attribute"]["ipv4"]) ||
-                empty($parameters["data"]["attribute"]["ipv6Prefix"]) ||
-                empty($parameters["data"]["attribute"]["ipv6PrefixDelegate"]) ||
-                empty($parameters["data"]["ipv4"]) ||
-                empty($parameters["data"]["op"]) ||
-                empty($parameters["data"]["ipv6"]["ipv6Prefix"])  ||
-                empty($parameters["data"]["ipv6"]["ipv6PrefixDelegate"])){
-                    throw new InvalidJsonException('Invalid submitted data');
-                }
-
+            if( empty($parameters["data"]["username"])){throw new InvalidJsonException('Invalid username');}
+            if( empty($parameters["data"]["attribute"]["ipv4"])){throw new InvalidJsonException('Invalid attribute ipv4');}
+            if( empty($parameters["data"]["attribute"]["ipv6Prefix"])){throw new InvalidJsonException('Invalid attribute ipv6Prefix');}
+            if( empty($parameters["data"]["attribute"]["ipv6PrefixDelegate"])){throw new InvalidJsonException('Invalid attribute ipv6PrefixDelegate');}
+            if( empty($parameters["data"]["ipv4"])){throw new InvalidJsonException('Invalid ipv4');}
+            if( empty($parameters["data"]["op"])){throw new InvalidJsonException('Invalid op');}
+            if( empty($parameters["data"]["ipv6"]["ipv6Prefix"])){throw new InvalidJsonException('Invalid ipv6Prefix');}
+            if( empty($parameters["data"]["ipv6"]["ipv6PrefixDelegate"])){throw new InvalidJsonException('Invalid ipv6PrefixDelegate');}
 
             break;
           case "check":
-            if (empty($parameters["data"]["username"]) ||
-                empty($parameters["data"]["attribute"]) ||
-                empty($parameters["data"]["ipv4"]) ||
-                empty($parameters["data"]["value"]) ||
-                empty($parameters["data"]["op"])){
-                    throw new InvalidJsonException('Invalid submitted data');
-                }
+            if (empty($parameters["data"]["username"])){throw new InvalidJsonException('Invalid username');}
+            if( empty($parameters["data"]["attribute"])){throw new InvalidJsonException('Invalid attribute');}
+            if( empty($parameters["data"]["ipv4"])){throw new InvalidJsonException('Invalid ipv4');}
+            if( empty($parameters["data"]["value"])){throw new InvalidJsonException('Invalid value');}
+            if( empty($parameters["data"]["op"])){throw new InvalidJsonException('Invalid op');}
 
             break;
           case "groupcheck":
-            if( empty($parameters["data"]["groupname"]) ||
-                empty($parameters["data"]["attribute"]) ||
-                empty($parameters["data"]["value"]) ||
-                empty($parameters["data"]["op"])){
-                    throw new InvalidJsonException('Invalid submitted data');
-                }
+            if( empty($parameters["data"]["groupname"])){throw new InvalidJsonException('Invalid groupname');}
+            if( empty($parameters["data"]["attribute"])){throw new InvalidJsonException('Invalid attribute');}
+            if( empty($parameters["data"]["value"])){throw new InvalidJsonException('Invalid value');}
+            if( empty($parameters["data"]["op"])){throw new InvalidJsonException('Invalid op');}
 
             break;
           case "groupreply":
-            if( empty($parameters["data"]["groupname"]) ||
-                empty($parameters["data"]["attribute"]) ||
-                empty($parameters["data"]["value"]) ||
-                empty($parameters["data"]["op"])){
-                    throw new InvalidJsonException('Invalid submitted data');
-                }
+            if( empty($parameters["data"]["groupname"])){throw new InvalidJsonException('Invalid groupname');}
+            if( empty($parameters["data"]["attribute"])){throw new InvalidJsonException('Invalid attribute');}
+            if( empty($parameters["data"]["value"])){throw new InvalidJsonException('Invalid value');}
+            if( empty($parameters["data"]["op"])){throw new InvalidJsonException('Invalid op');}
 
             break;
           case "usergroup":
-            if( empty($parameters["data"]["groupname"]) ||
-                empty($parameters["data"]["priority"]) ||
-                empty($parameters["data"]["username"])){
-                    throw new InvalidJsonException('Invalid submitted data');
-                }
+            if( empty($parameters["data"]["groupname"])){throw new InvalidJsonException('Invalid groupname');}
+            if( empty($parameters["data"]["priority"])){throw new InvalidJsonException('Invalid priority');}
+            if( empty($parameters["data"]["username"])){throw new InvalidJsonException('Invalid username');}
             break;
           case "userinfo":
             break;
@@ -225,13 +214,7 @@ class LUCompte
         public function post(array $parameters, $table) {
 
                 echo $table."\n";
-                try{
-                  echo "test-exception\n";
-                  $this->jsonVeri($parameters, $table);
-                }catch(InvalidFormException $exception){
-                  var_dump($exception->getMessage());
-                  return;
-                }
+            
                 switch($table){
                   case "reply":
                     $radreply1 = new Radreply;
