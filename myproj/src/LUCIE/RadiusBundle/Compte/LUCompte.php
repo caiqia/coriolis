@@ -45,15 +45,72 @@ class LUCompte
           $this->radgroupreply = $this->om->getRepository("LUCIERadiusBundle:Radgroupreply");
           $this->radcheck = $this->om->getRepository("LUCIERadiusBundle:Radcheck");
           $this->radusergroup = $this->om->getRepository("LUCIERadiusBundle:Radusergroup");
-          //$this->userinfo = $this->om->getRepository("LUCIERadiusBundle:Userinfo");
-          //$this->userbillinfo = $this->om->getRepository("LUCIERadiusBundle:Userbillinfo");
+          $this->userinfo = $this->om->getRepository("LUCIERadiusBundle:Userinfo");
+          $this->userbillinfo = $this->om->getRepository("LUCIERadiusBundle:Userbillinfo");
 
       }
+
+      /**
+       * ajoute userinfo et userbillinfo s'il n'exite pas
+       *
+       * @param string $username
+       *
+       *
+       *
+       */
+      public function addUser($username){
+
+            $get = $this->radreply->findByUsername($username);
+            if(!empty($get)){
+                return;
+              }
+
+            $infopost = new Userinfo;
+            $infopost->setUsername($username);//($compte->getUsername());
+            $infopost->setChangeuserinfo("0");
+            $day = date("Y-m-d H:i:s");
+            $infopost->setCreationdate(new \DateTime($day));
+            $infopost->setCreationby("newuser.pl");
+            $infopost->setUpdatedate(new \DateTime($day));
+            $this->om->persist($infopost);
+            $this->om->flush($infopost);
+
+            $billinfopost = new Userbillinfo;
+            $billinfopost->setUsername($username);//($compte->getUsername());
+            $billinfopost->setCreationdate(new \DateTime($day));
+            $billinfopost->setCreationby("newuser.pl");
+            $billinfopost->setLastbill(new \DateTime($day));
+            $billinfopost->setNextbill(new \DateTime($day));
+            $billinfopost->setUpdatedate(new \DateTime($day));
+            $billinfopost->setUpdateby("newuser.pl");
+            $this->om->persist($billinfopost);
+            $this->om->flush($billinfopost);
+            return;
+      }
+
+
+      /**
+       * verifier si username existe
+       *
+       * @param string $username filter search array
+       * @throws InvalidJsonException when usename doesn't existe
+       *
+       *
+       */
+      public function veriUser($username){
+
+          $get = $this->radcheck->findByUsername($username);
+          if(empty($get)){
+                throw new InvalidJsonException('Invalid username');
+            }
+      }
+
 
       /**
        * VERIFIER FORMAT JSON
        *
        * @param array $parameters filter search array
+       * @throws InvalidJsonException when json est vide
        *
        * @return
        */
@@ -61,19 +118,14 @@ class LUCompte
         switch($table){
           case "reply":
             if( empty($parameters["data"]["username"])){throw new InvalidJsonException('Invalid username');}
-            if( empty($parameters["data"]["attribute"]["ipv4"])){throw new InvalidJsonException('Invalid attribute ipv4');}
-            if( empty($parameters["data"]["attribute"]["ipv6Prefix"])){throw new InvalidJsonException('Invalid attribute ipv6Prefix');}
-            if( empty($parameters["data"]["attribute"]["ipv6PrefixDelegate"])){throw new InvalidJsonException('Invalid attribute ipv6PrefixDelegate');}
-            if( empty($parameters["data"]["ipv4"])){throw new InvalidJsonException('Invalid ipv4');}
+            if( empty($parameters["data"]["attribute"])){throw new InvalidJsonException('Invalid attribute ipv4');}
+            if( empty($parameters["data"]["value"])){throw new InvalidJsonException('Invalid ipv4');}
             if( empty($parameters["data"]["op"])){throw new InvalidJsonException('Invalid op');}
-            if( empty($parameters["data"]["ipv6"]["ipv6Prefix"])){throw new InvalidJsonException('Invalid ipv6Prefix');}
-            if( empty($parameters["data"]["ipv6"]["ipv6PrefixDelegate"])){throw new InvalidJsonException('Invalid ipv6PrefixDelegate');}
 
             break;
           case "check":
             if (empty($parameters["data"]["username"])){throw new InvalidJsonException('Invalid username');}
             if( empty($parameters["data"]["attribute"])){throw new InvalidJsonException('Invalid attribute');}
-            if( empty($parameters["data"]["ipv4"])){throw new InvalidJsonException('Invalid ipv4');}
             if( empty($parameters["data"]["value"])){throw new InvalidJsonException('Invalid value');}
             if( empty($parameters["data"]["op"])){throw new InvalidJsonException('Invalid op');}
 
@@ -98,8 +150,14 @@ class LUCompte
             if( empty($parameters["data"]["username"])){throw new InvalidJsonException('Invalid username');}
             break;
           case "userinfo":
+            //if( empty($parameters["data"]["changeuserinfo"])){throw new InvalidJsonException('Invalid changeuserinfo');}
+            if( empty($parameters["data"]["creationby"])){throw new InvalidJsonException('Invalid creationby');}
+            if( empty($parameters["data"]["username"])){throw new InvalidJsonException('Invalid username');}
             break;
           case "userbillinfo":
+            if( empty($parameters["data"]["creationby"])){throw new InvalidJsonException('Invalid creationby');}
+            if( empty($parameters["data"]["updateby"])){throw new InvalidJsonException('Invalid updateby');}
+            if( empty($parameters["data"]["username"])){throw new InvalidJsonException('Invalid username');}
             break;
         }
           return ;
@@ -150,35 +208,27 @@ class LUCompte
        */
       public function count($table, $search = array()) {
           var_dump($table);
-
           switch($table){
             case "reply":
               $entity_class = "LUCIERadiusBundle:Radreply";
-
               break;
             case "check":
               $entity_class = "LUCIERadiusBundle:Radcheck";
-
               break;
             case "groupcheck":
               $entity_class = "LUCIERadiusBundle:Radgroupcheck";
-
               break;
             case "groupreply":
               $entity_class = "LUCIERadiusBundle:Radgroupreply";
-
               break;
             case "usergroup":
               $entity_class = "LUCIERadiusBundle:Radusergroup";
-
               break;
             case "userinfo":
               $entity_class = "LUCIERadiusBundle:Userinfo";
-
               break;
             case "userbillinfo":
               $entity_class = "LUCIERadiusBundle:Userbillinfo";
-
               break;
           }
 
@@ -210,104 +260,57 @@ class LUCompte
        * @param array $parameters
        *
        *
+       * @return integer
        */
         public function post(array $parameters, $table) {
 
                 echo $table."\n";
-            
+
                 switch($table){
                   case "reply":
-                    $radreply1 = new Radreply;
-                    $radreply1->setUsername($parameters["data"]["username"]);//($compte->getUsername());
-                    $radreply1->setAttribute($parameters["data"]["attribute"]["ipv4"]);//"Framed-IP-Address"
-                    $radreply1->setOp($parameters["data"]["op"]);//":="
-                    $radreply1->setValue($parameters["data"]["ipv4"]);//($compte->getIPV4ADDR());
-                    $this->om->persist($radreply1);
-                    $this->om->flush($radreply1);
-
-                    $radreply2 = new Radreply;
-                    $radreply2->setUsername($parameters["data"]["username"]);//($compte->getUsername());
-                    $radreply2->setAttribute($parameters["data"]["attribute"]["ipv6Prefix"]);//"Framed-IPv6-Prefix"
-                    $radreply2->setOp($parameters["data"]["op"]);//":="
-                    $radreply2->setValue($parameters["data"]["ipv6"]["ipv6Prefix"]);
-                    $this->om->persist($radreply2);
-                    $this->om->flush($radreply2);
-                    $radreply3 = new Radreply;
-                    $radreply3->setUsername($parameters["data"]["username"]);//($compte->getUsername());
-                    $radreply3->setAttribute($parameters["data"]["attribute"]["ipv6PrefixDelegate"]);//"Delegated-IPv6-Prefix"
-                    $radreply3->setOp($parameters["data"]["op"]);//":="
-                    $radreply3->setValue($parameters["data"]["ipv6"]["ipv6PrefixDelegate"]);//($compte->getIPV4ADDR());
-                    $this->om->persist($radreply3);
-                    $this->om->flush($radreply3);
+                        echo "43\n";
+                        $post = new Radreply;
+                        $post->setUsername($parameters["data"]["username"]); //($compte->getUsername());
+                        $post->setAttribute($parameters["data"]["attribute"]); // NomAttribute
+                        $post->setOp($parameters["data"]["op"]);//":="
+                        $post->setValue($parameters["data"]["value"]);//ValueAttribute
+                        echo "432\n";
                     break;
 
                   case "check":
-                    $radcheck = new Radcheck;
-                    $radcheck->setUsername($parameters["data"]["username"]);//($compte->getUsername());
-                    $radcheck->setAttribute($parameters["data"]["attribute"]);//"Cleartext-Password"
-                    $radcheck->setOp($parameters["data"]["op"]);
-                    $radcheck->setValue($parameters["data"]["value"]);//"Redback"
-                    $this->om->persist($radcheck);
-                    $this->om->flush($radcheck);
+                    $post = new Radcheck;
+                    $post->setUsername($parameters["data"]["username"]);//($compte->getUsername());
+                    $post->setAttribute($parameters["data"]["attribute"]);//"Cleartext-Password"
+                    $post->setOp($parameters["data"]["op"]);
+                    $post->setValue($parameters["data"]["value"]);//"Redback"
                     break;
 
                   case "groupcheck":
-                    $radgroupcheck = new Radgroupcheck;
-                    $radgroupcheck->setGroupname($parameters["data"]["groupname"]);
-                    $radgroupcheck->setAttribute($parameters["data"]["attribute"]);//"TEST-GROUP-CHECK"
-                    $radgroupcheck->setValue($parameters["data"]["value"]);
-                    $radgroupcheck->setOp($parameters["data"]["op"]);
-                    $this->om->persist($radgroupcheck);
-                    $this->om->flush($radgroupcheck);
+                      $post = new Radgroupcheck;
+                      $post->setGroupname($parameters["data"]["groupname"]);
+                      $post->setAttribute($parameters["data"]["attribute"]);//"TEST-GROUP-CHECK"
+                      $post->setValue($parameters["data"]["value"]);
+                      $post->setOp($parameters["data"]["op"]);
                     break;
 
                   case "groupreply":
-                    $radgroupreply = new Radgroupreply;
-                    $radgroupreply->setGroupname($parameters["data"]["groupname"]);
-                    $radgroupreply->setAttribute($parameters["data"]["attribute"]);
-                    $radgroupreply->setValue($parameters["data"]["value"]);
-                    $radgroupreply->setOp($parameters["data"]["op"]);
-                    $this->om->persist($radgroupreply);
-                    $this->om->flush($radgroupreply);
+                      $post = new Radgroupreply;
+                      $post->setGroupname($parameters["data"]["groupname"]);
+                      $post->setAttribute($parameters["data"]["attribute"]);
+                      $post->setValue($parameters["data"]["value"]);
+                      $post->setOp($parameters["data"]["op"]);
                     break;
 
                   case "usergroup":
-                    $radusergroup = new Radusergroup;
-                    $radusergroup->setUsername($parameters["data"]["username"]);//($compte->getUsername());
-                    $radusergroup->setGroupname($parameters["data"]["groupname"]);//"ctx-GP-1G"
-                    $radusergroup->setPriority($parameters["data"]["priority"]);//0
-                    $this->om->persist($radusergroup);
-                    $this->om->flush($radusergroup);
+                      $post = new Radusergroup;
+                      $post->setUsername($parameters["data"]["username"]);//($compte->getUsername());
+                      $post->setGroupname($parameters["data"]["groupname"]);//"ctx-GP-1G"
+                      $post->setPriority($parameters["data"]["priority"]);//0
                     break;
-
-                  case "userinfo":
-                    $userinfo = new Userinfo;
-                    $userinfo->setUsername($parameters["data"]["mac"]);//($compte->getUsername());
-                    $userinfo->setChangeuserinfo("0");
-                    $day = date("Y-m-d H:i:s");
-                    $userinfo->setCreationdate(new \DateTime($day));
-                    $userinfo->setCreationby("newuser.pl");
-                    $userinfo->setUpdatedate(new \DateTime($day));
-                    $this->om->persist($userinfo);
-                    $this->om->flush($userinfo);
-                    break;
-
-                  case "userbillinfo":
-                    $day = date("Y-m-d H:i:s");
-                    $userbillinfo = new Userbillinfo;
-                    $userbillinfo->setUsername($parameters["data"]["mac"]);//($compte->getUsername());
-                    $userbillinfo->setCreationdate(new \DateTime($day));
-                    $userbillinfo->setCreationby("newuser.pl");
-                    $userbillinfo->setLastbill(new \DateTime($day));
-                    $userbillinfo->setNextbill(new \DateTime($day));
-                    $userbillinfo->setUpdatedate(new \DateTime($day));
-                    $userbillinfo->setUpdateby("newuser.pl");
-                    $this->om->persist($userbillinfo);
-                    $this->om->flush($userbillinfo);
-                    break;
-
                 }
-                return;
+                $this->om->persist($post);
+                $this->om->flush($post);
+                return $post->getId();
         }
 
         /**
@@ -323,7 +326,6 @@ class LUCompte
               $this->om->flush();
               return;
           }
-
 
 
           /**
@@ -353,15 +355,17 @@ class LUCompte
                   $get = $this->radusergroup->find($id);
                   break;
                 case "userinfo":
+                  $get = $this->userinfo->find($id);
                   break;
                 case "userbillinfo":
+                  $get = $this->userbillinfo->find($id);
                   break;
               }
               if(!$get){
                 throw new NotFoundHttpException(sprintf('LA LIGNE \'%s\' DANS \'%s\' EST VIDE.',$id,$table));
               }
               return $get ;
-              //$radreply = $this->radreply->find($id);
+
             }
 
 

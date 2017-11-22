@@ -1,0 +1,156 @@
+LUCIE\RadiusBundle\Entity\Userbillinfo:
+    type: entity
+    table: null
+    repositoryClass: LUCIE\RadiusBundle\Repository\UserbillinfoRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        username:
+            type: string
+            length: '128'
+            nullable: true
+        planName:
+            type: string
+            length: '128'
+            nullable: true
+        hotspotId:
+            type: integer
+            nullable: true
+            column: hotspot_id
+        hotspotlocation:
+            type: string
+            length: '32'
+            nullable: true
+        contactperson:
+            type: string
+            length: '200'
+            nullable: true
+        company:
+            type: string
+            length: '200'
+            nullable: true
+        email:
+            type: string
+            length: '200'
+            nullable: true
+        phone:
+            type: string
+            length: '200'
+            nullable: true
+        address:
+            type: string
+            length: '200'
+            nullable: true
+        city:
+            type: string
+            length: '200'
+            nullable: true
+        state:
+            type: string
+            length: '200'
+            nullable: true
+        country:
+            type: string
+            length: '100'
+            nullable: true
+        zip:
+            type: string
+            length: '200'
+            nullable: true
+        paymentmethod:
+            type: string
+            length: '200'
+            nullable: true
+        cash:
+            type: string
+            length: '200'
+            nullable: true
+        creditcardname:
+            type: string
+            length: '200'
+            nullable: true
+        creditcardnumber:
+            type: string
+            length: '200'
+            nullable: true
+        creditcardverification:
+            type: string
+            length: '200'
+            nullable: true
+        creditcardtype:
+            type: string
+            length: '200'
+            nullable: true
+        creditcardexp:
+            type: string
+            length: '200'
+            nullable: true
+        notes:
+            type: string
+            length: '200'
+            nullable: true
+        changeuserbillinfo:
+            type: string
+            length: '128'
+            nullable: true
+        lead:
+            type: string
+            length: '200'
+            nullable: true
+        coupon:
+            type: string
+            length: '200'
+            nullable: true
+        ordertaker:
+            type: string
+            length: '200'
+            nullable: true
+        billstatus:
+            type: string
+            length: '200'
+            nullable: true
+        lastbill:
+            type: datetime
+        nextbill:
+            type: datetime
+        nextinvoicedue:
+            type: integer
+            nullable: true
+        billdue:
+            type: integer
+            nullable: true
+        postalinvoice:
+            type: string
+            length: '8'
+            nullable: true
+        faxinvoice:
+            type: string
+            length: '8'
+            nullable: true
+        emailinvoice:
+            type: string
+            length: '8'
+            nullable: true
+        batchId:
+            type: integer
+            nullable: true
+            column: batch_id
+        creationdate:
+            type: datetime
+            nullable: true
+        creationby:
+            type: string
+            length: '128'
+            nullable: true
+        updatedate:
+            type: datetime
+            nullable: true
+        updateby:
+            type: string
+            length: '128'
+            nullable: true
+    lifecycleCallbacks: {  }

@@ -23,7 +23,7 @@ class RadController extends FOSRestController
 {
       /**
        * RETOURNE LE NOMBRE DE LIGNE.
-       * @Annotations\Get("/count/{table}",requirements = {"table"="check|reply|groupcheck|groupreply|usergroup|userinfo|userbillinfo"})
+       * @Annotations\Get("/count/{table}",requirements = {"table"="check|reply|groupcheck|groupreply|usergroup"})
        *
        * @ApiDoc(
        *   resource = true,
@@ -69,7 +69,7 @@ class RadController extends FOSRestController
       /**
        * CREE UNE NOUVELLE LIGNE A PARTIR DES DONNEE
        * @Annotations\Route(condition="request.attributes.get('version') == 'v1'")
-       * @Annotations\Post("/{table}",requirements = {"table"="check|reply|groupcheck|groupreply|usergroup|userinfo|userbillinfo"})
+       * @Annotations\Post("/{table}",requirements = {"table"="check|reply|groupcheck|groupreply|usergroup"})
        * @ApiDoc(
        *   resource = true,
        *   description = "CREE UNE NOUVELLE LIGNE A PARTIR DES DONNEE",
@@ -86,22 +86,32 @@ class RadController extends FOSRestController
        */
       public function postAction($version, $table, Request $request)
       {
-        echo $version."\n";
-        
         try{
-          $this->container->get('radius.compte')->jsonVeri($request->request->all(), $table);
-        }catch(InvalidFormException $exception){
+        //  $this->container->get('radius.compte')->jsonVeri($request->request->all(), $table);
+        }catch(InvalidJsonException $exception){
           $msg = $exception->getMessage();
           $response = new Response();
           $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
           $response->headers->set('Content-Type', 'application/json');
          return $response;
         }
+        if($table =="reply"){
+          try{
+            $this->container->get('radius.compte')->veriUser($request->request->all()["data"]["username"]);
+          }catch(InvalidJsonException $exception){
+            $msg = $exception->getMessage();
+            $response = new Response();
+            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+            $response->headers->set('Content-Type', 'application/json');
+           return $response;
+          }
+          $this->container->get('radius.compte')->addUser($request->request->all()["data"]["username"]);
 
-        $this->container->get('radius.compte')->post($request->request->all(),$table);
+        }
+        $id = $this->container->get('radius.compte')->post($request->request->all(),$table);
 
         $response = new Response();
-        $response->setContent(json_encode(array('success' => TRUE,'msg' =>"POST-OK")));
+        $response->setContent(json_encode(array('success' => TRUE,'msg' =>"POST-OK", 'id' => $id)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
       }
