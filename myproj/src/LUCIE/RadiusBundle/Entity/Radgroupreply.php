@@ -3,64 +3,53 @@
 namespace LUCIE\RadiusBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation as Jms;
 
 /**
  * Radgroupreply
  *
- * @ORM\Table(name="radgroupreply")
+ * @ORM\Table(name="radgroupreply", indexes={@ORM\Index(name="groupname", columns={"groupname"})})
  * @ORM\Entity
  */
 class Radgroupreply
 {
     /**
+     * @var string
+     *
+     * @ORM\Column(name="groupname", type="string", length=64, nullable=false)
+     */
+    private $groupname = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="attribute", type="string", length=64, nullable=false)
+     */
+    private $attribute = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="op", type="string", length=2, nullable=false)
+     */
+    private $op = '=';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="value", type="string", length=253, nullable=false)
+     */
+    private $value = '';
+
+    /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @Jms\Exclude()
      */
     private $id;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="groupname", type="string", nullable=false)
-     */
-    private $groupname;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="attribute", type="string", nullable=false)
-     */
-    private $attribute;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="op", type="string", nullable=false)
-     */
-    private $op;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="value", type="string", nullable=false)
-     */
-    private $value;
-
-
-    /**
-     * Get id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * Set groupname
@@ -156,5 +145,15 @@ class Radgroupreply
     public function getValue()
     {
         return $this->value;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 }

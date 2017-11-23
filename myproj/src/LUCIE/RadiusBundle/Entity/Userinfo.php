@@ -3,190 +3,179 @@
 namespace LUCIE\RadiusBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation as Jms;
 
 /**
  * Userinfo
  *
- * @ORM\Table(name="userinfo")
+ * @ORM\Table(name="userinfo", indexes={@ORM\Index(name="username", columns={"username"})})
  * @ORM\Entity
  */
 class Userinfo
 {
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @Jms\Exclude()
-     */
-    private $id;
-
-    /**
      * @var string
      *
-     * @ORM\Column(name="username", type="string")
+     * @ORM\Column(name="username", type="string", length=128, nullable=true)
      */
     private $username;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="firstname", type="string")
+     * @ORM\Column(name="firstname", type="string", length=200, nullable=true)
      */
     private $firstname;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="lastname", type="string")
+     * @ORM\Column(name="lastname", type="string", length=200, nullable=true)
      */
     private $lastname;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="string")
+     * @ORM\Column(name="email", type="string", length=200, nullable=true)
      */
     private $email;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="department", type="string")
+     * @ORM\Column(name="department", type="string", length=200, nullable=true)
      */
     private $department;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="company", type="string")
+     * @ORM\Column(name="company", type="string", length=200, nullable=true)
      */
     private $company;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="workphone", type="string")
+     * @ORM\Column(name="workphone", type="string", length=200, nullable=true)
      */
     private $workphone;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="homephone", type="string")
+     * @ORM\Column(name="homephone", type="string", length=200, nullable=true)
      */
     private $homephone;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="mobilephone", type="string")
+     * @ORM\Column(name="mobilephone", type="string", length=200, nullable=true)
      */
     private $mobilephone;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="address", type="string")
+     * @ORM\Column(name="address", type="string", length=200, nullable=true)
      */
     private $address;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="city", type="string")
+     * @ORM\Column(name="city", type="string", length=200, nullable=true)
      */
     private $city;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="state", type="string")
+     * @ORM\Column(name="state", type="string", length=200, nullable=true)
      */
     private $state;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="country", type="string")
+     * @ORM\Column(name="country", type="string", length=100, nullable=true)
      */
     private $country;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="zip", type="string")
+     * @ORM\Column(name="zip", type="string", length=200, nullable=true)
      */
     private $zip;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="notes", type="string")
+     * @ORM\Column(name="notes", type="string", length=200, nullable=true)
      */
     private $notes;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="changeuserinfo", type="string")
+     * @ORM\Column(name="changeuserinfo", type="string", length=128, nullable=true)
      */
     private $changeuserinfo;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="portalloginpassword", type="string")
+     * @ORM\Column(name="portalloginpassword", type="string", length=128, nullable=true)
      */
-    private $portalloginpassword;
+    private $portalloginpassword = '';
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="enableportallogin", type="string")
+     * @ORM\Column(name="enableportallogin", type="integer", nullable=true)
      */
-    private $enableportallogin;
+    private $enableportallogin = '0';
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="creationdate", type="datetime")
+     * @ORM\Column(name="creationdate", type="datetime", nullable=true)
      */
-    private $creationdate;
+    private $creationdate = '0000-00-00 00:00:00';
 
     /**
      * @var string
      *
-     * @ORM\Column(name="creationby", type="string")
+     * @ORM\Column(name="creationby", type="string", length=128, nullable=true)
      */
     private $creationby;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="updatedate", type="datetime")
+     * @ORM\Column(name="updatedate", type="datetime", nullable=true)
      */
-    private $updatedate;
+    private $updatedate = '0000-00-00 00:00:00';
 
     /**
      * @var string
      *
-     * @ORM\Column(name="updateby", type="string")
+     * @ORM\Column(name="updateby", type="string", length=128, nullable=true)
      */
     private $updateby;
 
-
     /**
-     * Get id
+     * @var integer
      *
-     * @return int
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    public function getId()
-    {
-        return $this->id;
-    }
+    private $id;
+
+
 
     /**
      * Set username
@@ -613,7 +602,7 @@ class Userinfo
     /**
      * Get enableportallogin
      *
-     * @return int
+     * @return integer
      */
     public function getEnableportallogin()
     {
@@ -714,5 +703,15 @@ class Userinfo
     public function getUpdateby()
     {
         return $this->updateby;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 }

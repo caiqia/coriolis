@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="LUCIE\RadiusBundle\Entity\BillingPlans" table="billing_plans">
+    <indexes>
+      <index name="planName" columns="planName"/>
+    </indexes>
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="planname" type="string" column="planName" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="planid" type="string" column="planId" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="plantype" type="string" column="planType" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="plantimebank" type="string" column="planTimeBank" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="plantimetype" type="string" column="planTimeType" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="plantimerefillcost" type="string" column="planTimeRefillCost" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="planbandwidthup" type="string" column="planBandwidthUp" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="planbandwidthdown" type="string" column="planBandwidthDown" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="plantraffictotal" type="string" column="planTrafficTotal" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="plantrafficup" type="string" column="planTrafficUp" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="plantrafficdown" type="string" column="planTrafficDown" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="plantrafficrefillcost" type="string" column="planTrafficRefillCost" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="planrecurring" type="string" column="planRecurring" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="planrecurringperiod" type="string" column="planRecurringPeriod" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="planrecurringbillingschedule" type="string" column="planRecurringBillingSchedule" length="128" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="default">Fixed</option>
+      </options>
+    </field>
+    <field name="plancost" type="string" column="planCost" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="plansetupcost" type="string" column="planSetupCost" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="plantax" type="string" column="planTax" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="plancurrency" type="string" column="planCurrency" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="plangroup" type="string" column="planGroup" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="planactive" type="string" column="planActive" length="32" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="default">yes</option>
+      </options>
+    </field>
+    <field name="creationdate" type="datetime" column="creationdate" nullable="true">
+      <options>
+        <option name="default">0000-00-00 00:00:00</option>
+      </options>
+    </field>
+    <field name="creationby" type="string" column="creationby" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="updatedate" type="datetime" column="updatedate" nullable="true">
+      <options>
+        <option name="default">0000-00-00 00:00:00</option>
+      </options>
+    </field>
+    <field name="updateby" type="string" column="updateby" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+  </entity>
+</doctrine-mapping>

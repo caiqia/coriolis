@@ -3,302 +3,291 @@
 namespace LUCIE\RadiusBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation as Jms;
 
 /**
  * Userbillinfo
  *
- * @ORM\Table(name="userbillinfo")
+ * @ORM\Table(name="userbillinfo", indexes={@ORM\Index(name="username", columns={"username"}), @ORM\Index(name="planname", columns={"planName"})})
  * @ORM\Entity
  */
 class Userbillinfo
 {
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @Jms\Exclude()
-     */
-    private $id;
-
-    /**
      * @var string
      *
-     * @ORM\Column(name="username", type="string")
+     * @ORM\Column(name="username", type="string", length=128, nullable=true)
      */
     private $username;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="planName", type="string")
+     * @ORM\Column(name="planName", type="string", length=128, nullable=true)
      */
-    private $planName;
+    private $planname;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="hotspotId", type="integer")
+     * @ORM\Column(name="hotspot_id", type="integer", nullable=true)
      */
     private $hotspotId;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="hotspotlocation", type="string")
+     * @ORM\Column(name="hotspotlocation", type="string", length=32, nullable=true)
      */
     private $hotspotlocation;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="contactperson", type="string")
+     * @ORM\Column(name="contactperson", type="string", length=200, nullable=true)
      */
     private $contactperson;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="company", type="string")
+     * @ORM\Column(name="company", type="string", length=200, nullable=true)
      */
     private $company;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="string")
+     * @ORM\Column(name="email", type="string", length=200, nullable=true)
      */
     private $email;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="phone", type="string")
+     * @ORM\Column(name="phone", type="string", length=200, nullable=true)
      */
     private $phone;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="address", type="string")
+     * @ORM\Column(name="address", type="string", length=200, nullable=true)
      */
     private $address;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="city", type="string")
+     * @ORM\Column(name="city", type="string", length=200, nullable=true)
      */
     private $city;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="state", type="string")
+     * @ORM\Column(name="state", type="string", length=200, nullable=true)
      */
     private $state;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="country", type="string")
+     * @ORM\Column(name="country", type="string", length=100, nullable=true)
      */
     private $country;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="zip", type="string")
+     * @ORM\Column(name="zip", type="string", length=200, nullable=true)
      */
     private $zip;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="paymentmethod", type="string")
+     * @ORM\Column(name="paymentmethod", type="string", length=200, nullable=true)
      */
     private $paymentmethod;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="cash", type="string")
+     * @ORM\Column(name="cash", type="string", length=200, nullable=true)
      */
     private $cash;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="creditcardname", type="string")
+     * @ORM\Column(name="creditcardname", type="string", length=200, nullable=true)
      */
     private $creditcardname;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="creditcardnumber", type="string")
+     * @ORM\Column(name="creditcardnumber", type="string", length=200, nullable=true)
      */
     private $creditcardnumber;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="creditcardverification", type="string")
+     * @ORM\Column(name="creditcardverification", type="string", length=200, nullable=true)
      */
     private $creditcardverification;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="creditcardtype", type="string")
+     * @ORM\Column(name="creditcardtype", type="string", length=200, nullable=true)
      */
     private $creditcardtype;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="creditcardexp", type="string")
+     * @ORM\Column(name="creditcardexp", type="string", length=200, nullable=true)
      */
     private $creditcardexp;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="notes", type="string")
+     * @ORM\Column(name="notes", type="string", length=200, nullable=true)
      */
     private $notes;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="changeuserbillinfo", type="string")
+     * @ORM\Column(name="changeuserbillinfo", type="string", length=128, nullable=true)
      */
     private $changeuserbillinfo;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="lead", type="string")
+     * @ORM\Column(name="lead", type="string", length=200, nullable=true)
      */
     private $lead;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="coupon", type="string")
+     * @ORM\Column(name="coupon", type="string", length=200, nullable=true)
      */
     private $coupon;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="ordertaker", type="string")
+     * @ORM\Column(name="ordertaker", type="string", length=200, nullable=true)
      */
     private $ordertaker;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="billstatus", type="string")
+     * @ORM\Column(name="billstatus", type="string", length=200, nullable=true)
      */
     private $billstatus;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="lastbill", type="datetime")
+     * @ORM\Column(name="lastbill", type="date", nullable=false)
      */
-    private $lastbill;
+    private $lastbill = '0000-00-00';
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="nextbill", type="datetime")
+     * @ORM\Column(name="nextbill", type="date", nullable=false)
      */
-    private $nextbill;
+    private $nextbill = '0000-00-00';
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="nextinvoicedue", type="integer")
+     * @ORM\Column(name="nextinvoicedue", type="integer", nullable=true)
      */
     private $nextinvoicedue;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="billdue", type="integer")
+     * @ORM\Column(name="billdue", type="integer", nullable=true)
      */
     private $billdue;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="postalinvoice", type="string")
+     * @ORM\Column(name="postalinvoice", type="string", length=8, nullable=true)
      */
     private $postalinvoice;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="faxinvoice", type="string")
+     * @ORM\Column(name="faxinvoice", type="string", length=8, nullable=true)
      */
     private $faxinvoice;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="emailinvoice", type="string")
+     * @ORM\Column(name="emailinvoice", type="string", length=8, nullable=true)
      */
     private $emailinvoice;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="batchId", type="integer")
+     * @ORM\Column(name="batch_id", type="integer", nullable=true)
      */
     private $batchId;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="creationdate", type="datetime")
+     * @ORM\Column(name="creationdate", type="datetime", nullable=true)
      */
-    private $creationdate;
+    private $creationdate = '0000-00-00 00:00:00';
 
     /**
      * @var string
      *
-     * @ORM\Column(name="creationby", type="string")
+     * @ORM\Column(name="creationby", type="string", length=128, nullable=true)
      */
     private $creationby;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="updatedate", type="datetime")
+     * @ORM\Column(name="updatedate", type="datetime", nullable=true)
      */
-    private $updatedate;
+    private $updatedate = '0000-00-00 00:00:00';
 
     /**
      * @var string
      *
-     * @ORM\Column(name="updateby", type="string")
+     * @ORM\Column(name="updateby", type="string", length=128, nullable=true)
      */
     private $updateby;
 
-
     /**
-     * Get id
+     * @var integer
      *
-     * @return int
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    public function getId()
-    {
-        return $this->id;
-    }
+    private $id;
+
+
 
     /**
      * Set username
@@ -325,27 +314,27 @@ class Userbillinfo
     }
 
     /**
-     * Set planName
+     * Set planname
      *
-     * @param string $planName
+     * @param string $planname
      *
      * @return Userbillinfo
      */
-    public function setPlanName($planName)
+    public function setPlanname($planname)
     {
-        $this->planName = $planName;
+        $this->planname = $planname;
 
         return $this;
     }
 
     /**
-     * Get planName
+     * Get planname
      *
      * @return string
      */
-    public function getPlanName()
+    public function getPlanname()
     {
-        return $this->planName;
+        return $this->planname;
     }
 
     /**
@@ -365,7 +354,7 @@ class Userbillinfo
     /**
      * Get hotspotId
      *
-     * @return int
+     * @return integer
      */
     public function getHotspotId()
     {
@@ -927,7 +916,7 @@ class Userbillinfo
     /**
      * Set lastbill
      *
-     * @param string $lastbill
+     * @param \DateTime $lastbill
      *
      * @return Userbillinfo
      */
@@ -941,7 +930,7 @@ class Userbillinfo
     /**
      * Get lastbill
      *
-     * @return string
+     * @return \DateTime
      */
     public function getLastbill()
     {
@@ -989,7 +978,7 @@ class Userbillinfo
     /**
      * Get nextinvoicedue
      *
-     * @return int
+     * @return integer
      */
     public function getNextinvoicedue()
     {
@@ -1013,7 +1002,7 @@ class Userbillinfo
     /**
      * Get billdue
      *
-     * @return int
+     * @return integer
      */
     public function getBilldue()
     {
@@ -1109,7 +1098,7 @@ class Userbillinfo
     /**
      * Get batchId
      *
-     * @return int
+     * @return integer
      */
     public function getBatchId()
     {
@@ -1210,5 +1199,15 @@ class Userbillinfo
     public function getUpdateby()
     {
         return $this->updateby;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 }

@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="LUCIE\RadiusBundle\Entity\Node" table="node">
+    <unique-constraints>
+      <unique-constraint name="mac" columns="mac"/>
+    </unique-constraints>
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="time" type="datetime" column="time" nullable="false">
+      <options>
+        <option name="comment">Time of last checkin</option>
+        <option name="default">0000-00-00 00:00:00</option>
+      </options>
+    </field>
+    <field name="netid" type="integer" column="netid" nullable="false">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+    <field name="name" type="string" column="name" length="100" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="description" type="string" column="description" length="100" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="latitude" type="string" column="latitude" length="20" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="longitude" type="string" column="longitude" length="20" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="ownerName" type="string" column="owner_name" length="50" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">node owner's name</option>
+      </options>
+    </field>
+    <field name="ownerEmail" type="string" column="owner_email" length="50" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">node owner's email address</option>
+      </options>
+    </field>
+    <field name="ownerPhone" type="string" column="owner_phone" length="25" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">node owner's phone number</option>
+      </options>
+    </field>
+    <field name="ownerAddress" type="string" column="owner_address" length="100" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">node owner's address</option>
+      </options>
+    </field>
+    <field name="approvalStatus" type="string" column="approval_status" length="1" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">approval status: A (accepted), R (rejected), P (pending)</option>
+      </options>
+    </field>
+    <field name="ip" type="string" column="ip" length="20" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">ROBIN</option>
+      </options>
+    </field>
+    <field name="mac" type="string" column="mac" length="20" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">ROBIN</option>
+      </options>
+    </field>
+    <field name="uptime" type="string" column="uptime" length="100" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">ROBIN</option>
+      </options>
+    </field>
+    <field name="robin" type="string" column="robin" length="20" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">ROBIN: robin version</option>
+      </options>
+    </field>
+    <field name="batman" type="string" column="batman" length="20" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">ROBIN: batman version</option>
+      </options>
+    </field>
+    <field name="memfree" type="string" column="memfree" length="20" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">ROBIN</option>
+      </options>
+    </field>
+    <field name="nbs" type="text" column="nbs" length="16777215" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">ROBIN: neighbor list</option>
+      </options>
+    </field>
+    <field name="gateway" type="string" column="gateway" length="20" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">ROBIN: nearest gateway</option>
+      </options>
+    </field>
+    <field name="gwQual" type="string" column="gw-qual" length="20" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">ROBIN: quality of nearest gateway</option>
+      </options>
+    </field>
+    <field name="routes" type="text" column="routes" length="16777215" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">ROBIN: route to nearest gateway</option>
+      </options>
+    </field>
+    <field name="users" type="string" column="users" length="3" nullable="false">
+      <options>
+        <option name="fixed">1</option>
+        <option name="comment">ROBIN: current number of users</option>
+      </options>
+    </field>
+    <field name="kbdown" type="string" column="kbdown" length="20" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">ROBIN: downloaded kb</option>
+      </options>
+    </field>
+    <field name="kbup" type="string" column="kbup" length="20" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">ROBIN: uploaded kb</option>
+      </options>
+    </field>
+    <field name="hops" type="string" column="hops" length="3" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">ROBIN: hops to gateway</option>
+      </options>
+    </field>
+    <field name="rank" type="string" column="rank" length="3" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">ROBIN: ???, not currently used for anything</option>
+      </options>
+    </field>
+    <field name="ssid" type="string" column="ssid" length="20" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">ROBIN: ssid, not currently used for anything</option>
+      </options>
+    </field>
+    <field name="pssid" type="string" column="pssid" length="20" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">ROBIN: pssid, not currently used for anything</option>
+      </options>
+    </field>
+    <field name="gatewayBit" type="boolean" column="gateway_bit" nullable="false">
+      <options>
+        <option name="comment">ROBIN derivation: is this node a gateway?</option>
+      </options>
+    </field>
+    <field name="memlow" type="string" column="memlow" length="20" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">ROBIN derivation: lowest reported memory on the node</option>
+      </options>
+    </field>
+    <field name="usershi" type="string" column="usershi" length="3" nullable="false">
+      <options>
+        <option name="fixed">1</option>
+        <option name="comment">ROBIN derivation: highest number of users</option>
+      </options>
+    </field>
+    <field name="cpu" type="float" column="cpu" precision="10" scale="0" nullable="false">
+      <options>
+        <option name="default">0</option>
+      </options>
+    </field>
+    <field name="wanIface" type="string" column="wan_iface" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="wanIp" type="string" column="wan_ip" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="wanMac" type="string" column="wan_mac" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="wanGateway" type="string" column="wan_gateway" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="wifiIface" type="string" column="wifi_iface" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="wifiIp" type="string" column="wifi_ip" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="wifiMac" type="string" column="wifi_mac" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="wifiSsid" type="string" column="wifi_ssid" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="wifiKey" type="string" column="wifi_key" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="wifiChannel" type="string" column="wifi_channel" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="lanIface" type="string" column="lan_iface" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="lanMac" type="string" column="lan_mac" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="lanIp" type="string" column="lan_ip" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="wanBup" type="string" column="wan_bup" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="wanBdown" type="string" column="wan_bdown" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="firmware" type="string" column="firmware" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="firmwareRevision" type="string" column="firmware_revision" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+  </entity>
+</doctrine-mapping>

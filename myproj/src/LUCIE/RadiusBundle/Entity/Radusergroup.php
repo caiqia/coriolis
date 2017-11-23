@@ -3,57 +3,43 @@
 namespace LUCIE\RadiusBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation as Jms;
 
 /**
  * Radusergroup
  *
- * @ORM\Table(name="radusergroup")
+ * @ORM\Table(name="radusergroup", indexes={@ORM\Index(name="username", columns={"username"})})
  * @ORM\Entity
  */
 class Radusergroup
 {
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @Jms\Exclude()
+     * @ORM\Column(name="username", type="string", length=64, nullable=false)
      */
-    private $id;
+    private $username = '';
 
     /**
      * @var string
      *
-     * @ORM\Column(name="username", type="string", nullable=false)
+     * @ORM\Column(name="groupname", type="string", length=64, nullable=false)
      */
-    private $username;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="groupname", type="string", nullable=false)
-     */
-    private $groupname;
+    private $groupname = '';
 
     /**
      * @var integer
      *
      * @ORM\Column(name="priority", type="integer", nullable=false)
      */
-    private $priority;
+    private $priority = '1';
 
 
     /**
-     * Get id
-     *
-     * @return int
+     * @var integer
+     * @ORM\Id
      */
-    public function getId()
-    {
-        return $this->id;
-    }
+    private $id;
+
 
     /**
      * Set username
@@ -120,10 +106,20 @@ class Radusergroup
     /**
      * Get priority
      *
-     * @return int
+     * @return integer
      */
     public function getPriority()
     {
         return $this->priority;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 }
