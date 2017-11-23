@@ -47,7 +47,6 @@ class LUCompte
           $this->radusergroup = $this->om->getRepository("LUCIERadiusBundle:Radusergroup");
           $this->userinfo = $this->om->getRepository("LUCIERadiusBundle:Userinfo");
           $this->userbillinfo = $this->om->getRepository("LUCIERadiusBundle:Userbillinfo");
-
       }
 
       /**
@@ -60,11 +59,14 @@ class LUCompte
        */
       public function addUser($username){
 
+            $check = $this->radcheck->findByUsername($username);
+            if(empty($check)){
+                  return;
+              }
             $get = $this->radreply->findByUsername($username);
             if(!empty($get)){
                 return;
               }
-
             $infopost = new Userinfo;
             $infopost->setUsername($username);//($compte->getUsername());
             $infopost->setChangeuserinfo("0");
@@ -74,7 +76,6 @@ class LUCompte
             $infopost->setUpdatedate(new \DateTime($day));
             $this->om->persist($infopost);
             $this->om->flush($infopost);
-
             $billinfopost = new Userbillinfo;
             $billinfopost->setUsername($username);//($compte->getUsername());
             $billinfopost->setCreationdate(new \DateTime($day));
@@ -118,8 +119,8 @@ class LUCompte
         switch($table){
           case "reply":
             if( empty($parameters["data"]["username"])){throw new InvalidJsonException('Invalid username');}
-            if( empty($parameters["data"]["attribute"])){throw new InvalidJsonException('Invalid attribute ipv4');}
-            if( empty($parameters["data"]["value"])){throw new InvalidJsonException('Invalid ipv4');}
+            if( empty($parameters["data"]["attribute"])){throw new InvalidJsonException('Invalid attribute');}
+            if( empty($parameters["data"]["value"])){throw new InvalidJsonException('Invalid value');}
             if( empty($parameters["data"]["op"])){throw new InvalidJsonException('Invalid op');}
 
             break;
@@ -147,16 +148,6 @@ class LUCompte
           case "usergroup":
             if( empty($parameters["data"]["groupname"])){throw new InvalidJsonException('Invalid groupname');}
             if( empty($parameters["data"]["priority"])){throw new InvalidJsonException('Invalid priority');}
-            if( empty($parameters["data"]["username"])){throw new InvalidJsonException('Invalid username');}
-            break;
-          case "userinfo":
-            //if( empty($parameters["data"]["changeuserinfo"])){throw new InvalidJsonException('Invalid changeuserinfo');}
-            if( empty($parameters["data"]["creationby"])){throw new InvalidJsonException('Invalid creationby');}
-            if( empty($parameters["data"]["username"])){throw new InvalidJsonException('Invalid username');}
-            break;
-          case "userbillinfo":
-            if( empty($parameters["data"]["creationby"])){throw new InvalidJsonException('Invalid creationby');}
-            if( empty($parameters["data"]["updateby"])){throw new InvalidJsonException('Invalid updateby');}
             if( empty($parameters["data"]["username"])){throw new InvalidJsonException('Invalid username');}
             break;
         }
@@ -190,10 +181,6 @@ class LUCompte
           case "usergroup":
             $all = $this->radusergroup->findBy($search, null, $limit, $offset);
             break;
-          case "userinfo":
-            break;
-          case "userbillinfo":
-            break;
         }
           return $all;
       }
@@ -223,12 +210,6 @@ class LUCompte
               break;
             case "usergroup":
               $entity_class = "LUCIERadiusBundle:Radusergroup";
-              break;
-            case "userinfo":
-              $entity_class = "LUCIERadiusBundle:Userinfo";
-              break;
-            case "userbillinfo":
-              $entity_class = "LUCIERadiusBundle:Userbillinfo";
               break;
           }
 
@@ -265,18 +246,14 @@ class LUCompte
         public function post(array $parameters, $table) {
 
                 echo $table."\n";
-
                 switch($table){
                   case "reply":
-                        echo "43\n";
                         $post = new Radreply;
                         $post->setUsername($parameters["data"]["username"]); //($compte->getUsername());
                         $post->setAttribute($parameters["data"]["attribute"]); // NomAttribute
                         $post->setOp($parameters["data"]["op"]);//":="
                         $post->setValue($parameters["data"]["value"]);//ValueAttribute
-                        echo "432\n";
                     break;
-
                   case "check":
                     $post = new Radcheck;
                     $post->setUsername($parameters["data"]["username"]);//($compte->getUsername());
@@ -284,7 +261,6 @@ class LUCompte
                     $post->setOp($parameters["data"]["op"]);
                     $post->setValue($parameters["data"]["value"]);//"Redback"
                     break;
-
                   case "groupcheck":
                       $post = new Radgroupcheck;
                       $post->setGroupname($parameters["data"]["groupname"]);
@@ -292,7 +268,6 @@ class LUCompte
                       $post->setValue($parameters["data"]["value"]);
                       $post->setOp($parameters["data"]["op"]);
                     break;
-
                   case "groupreply":
                       $post = new Radgroupreply;
                       $post->setGroupname($parameters["data"]["groupname"]);
@@ -300,7 +275,6 @@ class LUCompte
                       $post->setValue($parameters["data"]["value"]);
                       $post->setOp($parameters["data"]["op"]);
                     break;
-
                   case "usergroup":
                       $post = new Radusergroup;
                       $post->setUsername($parameters["data"]["username"]);//($compte->getUsername());
@@ -329,7 +303,7 @@ class LUCompte
 
 
           /**
-           * Get an Radreply.
+           * Get an OBJET
            *
            * @param mixed $id
            *
@@ -353,12 +327,6 @@ class LUCompte
                   break;
                 case "usergroup":
                   $get = $this->radusergroup->find($id);
-                  break;
-                case "userinfo":
-                  $get = $this->userinfo->find($id);
-                  break;
-                case "userbillinfo":
-                  $get = $this->userbillinfo->find($id);
                   break;
               }
               if(!$get){

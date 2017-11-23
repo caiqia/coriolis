@@ -87,7 +87,7 @@ class RadController extends FOSRestController
       public function postAction($version, $table, Request $request)
       {
         try{
-        //  $this->container->get('radius.compte')->jsonVeri($request->request->all(), $table);
+          $this->container->get('radius.compte')->jsonVeri($request->request->all(), $table);
         }catch(InvalidJsonException $exception){
           $msg = $exception->getMessage();
           $response = new Response();
@@ -104,9 +104,8 @@ class RadController extends FOSRestController
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
            return $response;
-          }
+         }
           $this->container->get('radius.compte')->addUser($request->request->all()["data"]["username"]);
-
         }
         $id = $this->container->get('radius.compte')->post($request->request->all(),$table);
 
@@ -136,7 +135,7 @@ class RadController extends FOSRestController
      */
       public function deleteAction($version, $id, $table)
       {
-          echo $version."\n";
+
           try{
             $msg = $this->container->get('radius.compte')->delete($table, $id);
           }catch(NotFoundHttpException $exception){
@@ -173,7 +172,6 @@ class RadController extends FOSRestController
        */
         public function getAction($version, $id,$table)
         {
-            echo $version."\n";
             try{
               $get = $this->container->get('radius.compte')->get($table, $id);
             }catch(NotFoundHttpException $exception){
@@ -184,7 +182,6 @@ class RadController extends FOSRestController
               return $response;
             }
             $data = $this->get('jms_serializer')->serialize($get, 'json');
-            //$msg = "VALUE EST '".$get->getValue()."'";
             $response = new Response();
             $response->setContent(json_encode(array('success' => TRUE,'msg' =>$data)));
             $response->headers->set('Content-Type', 'application/json');
