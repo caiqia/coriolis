@@ -4,21 +4,8 @@
     <indexes>
       <index name="username" columns="username"/>
     </indexes>
-     <id name="id" type="integer" column="id">
-      <generator strategy="IDENTITY"/>
-    </id>
-    <field name="username" type="string" column="username" length="64" nullable="false">
-      <options>
-        <option name="fixed"/>
-        <option name="default"/>
-      </options>
-    </field>
-    <field name="groupname" type="string" column="groupname" length="64" nullable="false">
-      <options>
-        <option name="fixed"/>
-        <option name="default"/>
-      </options>
-    </field>
+     <id name="username" type="string" column="username" />
+     <id name="groupname" type="string" column="groupname"/>     
     <field name="priority" type="integer" column="priority" nullable="false">
       <options>
         <option name="unsigned"/>

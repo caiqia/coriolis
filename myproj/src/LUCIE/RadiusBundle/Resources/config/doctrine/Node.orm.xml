@@ -10,7 +10,7 @@
     <field name="time" type="datetime" column="time" nullable="false">
       <options>
         <option name="comment">Time of last checkin</option>
-        <option name="default">0000-00-00 00:00:00</option>
+        <option name="default">1999-10-10 10:10:10</option>
       </options>
     </field>
     <field name="netid" type="integer" column="netid" nullable="false">
@@ -114,12 +114,6 @@
       <options>
         <option name="fixed"/>
         <option name="comment">ROBIN: nearest gateway</option>
-      </options>
-    </field>
-    <field name="gwQual" type="string" column="gw-qual" length="20" nullable="false">
-      <options>
-        <option name="fixed"/>
-        <option name="comment">ROBIN: quality of nearest gateway</option>
       </options>
     </field>
     <field name="routes" type="text" column="routes" length="16777215" nullable="false">

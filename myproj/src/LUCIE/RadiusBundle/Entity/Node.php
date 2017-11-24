@@ -17,7 +17,7 @@ class Node
      *
      * @ORM\Column(name="time", type="datetime", nullable=false)
      */
-    private $time = '0000-00-00 00:00:00';
+    private $time = '1999-10-10 10:10:10';
 
     /**
      * @var integer
@@ -145,12 +145,6 @@ class Node
      */
     private $gateway;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="gw-qual", type="string", length=20, nullable=false)
-     */
-    private $gwQual;
 
     /**
      * @var string

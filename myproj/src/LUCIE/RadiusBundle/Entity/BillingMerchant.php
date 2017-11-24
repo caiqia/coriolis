@@ -213,7 +213,7 @@ class BillingMerchant
      *
      * @ORM\Column(name="payment_date", type="datetime", nullable=false)
      */
-    private $paymentDate = '0000-00-00 00:00:00';
+    private $paymentDate = '1999-10-10 10:10:10';
 
     /**
      * @var string

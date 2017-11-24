@@ -17,7 +17,7 @@
     </field>
     <field name="lastaccounting" type="datetime" column="lastaccounting" nullable="false">
       <options>
-        <option name="default">0000-00-00 00:00:00</option>
+        <option name="default">1999-10-10 10:10:10</option>
       </options>
     </field>
   </entity>

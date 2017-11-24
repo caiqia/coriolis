@@ -3,18 +3,13 @@ LUCIE\RadiusBundle\Entity\Radusergroup:
     table: null
     repositoryClass: LUCIE\RadiusBundle\Repository\RadusergroupRepository
     id:
-        id:
-            type: integer
-            id: true
-            generator:
-                strategy: AUTO
-    fields:
         username:
             type: string
-            length: '64'
+            id: true
         groupname:
-            type: string
-            length: '64'
+	    type: string
+	    id: true        
+    fields:
         priority:
             type: integer
     lifecycleCallbacks: {  }

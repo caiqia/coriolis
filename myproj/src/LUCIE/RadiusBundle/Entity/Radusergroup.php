@@ -15,13 +15,14 @@ class Radusergroup
     /**
      * @var string
      *
+     * @ORM\Id
      * @ORM\Column(name="username", type="string", length=64, nullable=false)
      */
     private $username = '';
 
     /**
      * @var string
-     *
+     * @ORM\Id
      * @ORM\Column(name="groupname", type="string", length=64, nullable=false)
      */
     private $groupname = '';
@@ -33,12 +34,6 @@ class Radusergroup
      */
     private $priority = '1';
 
-
-    /**
-     * @var integer
-     * @ORM\Id
-     */
-    private $id;
 
 
     /**
@@ -113,13 +108,5 @@ class Radusergroup
         return $this->priority;
     }
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
+   
 }

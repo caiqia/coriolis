@@ -140,12 +140,12 @@
     </field>
     <field name="lastbill" type="date" column="lastbill" nullable="false">
       <options>
-        <option name="default">0000-00-00</option>
+        <option name="default">1999-10-10 10:10:10</option>
       </options>
     </field>
     <field name="nextbill" type="date" column="nextbill" nullable="false">
       <options>
-        <option name="default">0000-00-00</option>
+        <option name="default">1999-10-10 10:10:10</option>
       </options>
     </field>
     <field name="nextinvoicedue" type="integer" column="nextinvoicedue" nullable="true">
@@ -180,7 +180,7 @@
     </field>
     <field name="creationdate" type="datetime" column="creationdate" nullable="true">
       <options>
-        <option name="default">0000-00-00 00:00:00</option>
+        <option name="default">1999-10-10 10:10:10</option>
       </options>
     </field>
     <field name="creationby" type="string" column="creationby" length="128" nullable="true">
@@ -190,7 +190,7 @@
     </field>
     <field name="updatedate" type="datetime" column="updatedate" nullable="true">
       <options>
-        <option name="default">0000-00-00 00:00:00</option>
+        <option name="default">1999-10-10 10:10:10</option>
       </options>
     </field>
     <field name="updateby" type="string" column="updateby" length="128" nullable="true">

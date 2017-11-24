@@ -176,7 +176,7 @@
     </field>
     <field name="paymentDate" type="datetime" column="payment_date" nullable="false">
       <options>
-        <option name="default">0000-00-00 00:00:00</option>
+        <option name="default">1999-10-10 10:10:10</option>
       </options>
     </field>
     <field name="paymentStatus" type="string" column="payment_status" length="200" nullable="false">

@@ -59,7 +59,7 @@ class InvoiceItems
      *
      * @ORM\Column(name="creationdate", type="datetime", nullable=true)
      */
-    private $creationdate = '0000-00-00 00:00:00';
+    private $creationdate = '1999-10-10 10:10:10';
 
     /**
      * @var string
@@ -73,7 +73,7 @@ class InvoiceItems
      *
      * @ORM\Column(name="updatedate", type="datetime", nullable=true)
      */
-    private $updatedate = '0000-00-00 00:00:00';
+    private $updatedate = '1999-10-10 10:10:10';
 
     /**
      * @var string

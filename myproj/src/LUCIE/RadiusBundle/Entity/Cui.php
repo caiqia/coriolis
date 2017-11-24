@@ -31,7 +31,7 @@ class Cui
      *
      * @ORM\Column(name="lastaccounting", type="datetime", nullable=false)
      */
-    private $lastaccounting = '0000-00-00 00:00:00';
+    private $lastaccounting = '1999-10-10 10:10:10';
 
     /**
      * @var string
