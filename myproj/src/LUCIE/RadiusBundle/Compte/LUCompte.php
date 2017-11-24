@@ -59,14 +59,14 @@ class LUCompte
        */
       public function addUser($username){
 
-            $check = $this->radcheck->findByUsername($username);
-            if(empty($check)){
-                  return;
-              }
-            $get = $this->radreply->findByUsername($username);
-            if(!empty($get)){
+            $reply = $this->radreply->findByUsername($username);
+            if(!empty($reply)){
                 return;
               }
+            $check = $this->radcheck->findByUsername($username);
+            if(empty($check)){
+                    return;
+            }
             $infopost = new Userinfo;
             $infopost->setUsername($username);//($compte->getUsername());
             $infopost->setChangeuserinfo("0");
@@ -89,6 +89,37 @@ class LUCompte
             return;
       }
 
+
+
+
+      /**
+       * ajoute un nouveau entity
+       *
+       * @param string $table filter search array
+       * @throws InvalidJsonException when usename doesn't existe
+       *
+       *
+       */
+      public function put($table){
+          switch($table){
+            case "reply":
+               return new Radreply;
+              break;
+            case "check":
+              return new Radcheck;
+              break;
+            case "groupcheck":
+              return new Radgroupcheck;
+              break;
+            case "groupreply":
+              return new Radgroupreply;
+              break;
+            case "usergroup":
+              return new Radusergroup;
+              break;
+          }
+
+      }
 
       /**
        * verifier si username existe
@@ -194,7 +225,7 @@ class LUCompte
        * @return int
        */
       public function count($table, $search = array()) {
-          var_dump($table);
+
           switch($table){
             case "reply":
               $entity_class = "LUCIERadiusBundle:Radreply";
@@ -217,7 +248,7 @@ class LUCompte
           $qb = $this->om->createQueryBuilder();
           $qb->select($qb->expr()->count('t'))->from($entity_class, 't');
           $i = 0;
-          echo("test-count3\n");
+
           foreach ($search as $key => $value) {
               $i++;
               if (is_array($value)) {
@@ -245,7 +276,7 @@ class LUCompte
        */
         public function post(array $parameters, $table) {
 
-                echo $table."\n";
+
                 switch($table){
                   case "reply":
                         $post = new Radreply;
@@ -294,7 +325,7 @@ class LUCompte
          *
          */
           public function delete($table, $id) {
-              echo $table."\n";
+
               $delete = $this->get($table, $id);
               $this->om->remove($delete);
               $this->om->flush();
@@ -329,7 +360,7 @@ class LUCompte
                   $get = $this->radusergroup->find($id);
                   break;
               }
-              if(!$get){
+              if(empty($get)){
                 throw new NotFoundHttpException(sprintf('LA LIGNE \'%s\' DANS \'%s\' EST VIDE.',$id,$table));
               }
               return $get ;

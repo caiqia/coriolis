@@ -21,6 +21,8 @@ use LUCIE\RadiusBundle\Exception\InvalidJsonException;
 
 class RadController extends FOSRestController
 {
+
+
       /**
        * RETOURNE LE NOMBRE DE LIGNE.
        * @Annotations\Get("/count/{table}",requirements = {"table"="check|reply|groupcheck|groupreply|usergroup"})
@@ -58,7 +60,6 @@ class RadController extends FOSRestController
         	}
 
       	$total = $this->container->get('radius.compte')->count($table,$search) ;
-        var_dump($total);
         $response = new Response();
         $response->setContent(json_encode(array('success' => TRUE,'msg' =>"TEST-count")));
         $response->headers->set('Content-Type', 'application/json');
@@ -96,17 +97,17 @@ class RadController extends FOSRestController
          return $response;
         }
         if($table =="reply"){
-          try{
-            $this->container->get('radius.compte')->veriUser($request->request->all()["data"]["username"]);
-          }catch(InvalidJsonException $exception){
-            $msg = $exception->getMessage();
-            $response = new Response();
-            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
-            $response->headers->set('Content-Type', 'application/json');
-           return $response;
-         }
-          $this->container->get('radius.compte')->addUser($request->request->all()["data"]["username"]);
+         try{
+           $this->container->get('radius.compte')->veriUser($request->request->all()["data"]["username"]);
+         }catch(InvalidJsonException $exception){
+           $msg = $exception->getMessage();
+           $response = new Response();
+           $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+           $response->headers->set('Content-Type', 'application/json');
+          return $response;
         }
+         $this->container->get('radius.compte')->addUser($request->request->all()["data"]["username"]);
+       }
         $id = $this->container->get('radius.compte')->post($request->request->all(),$table);
 
         $response = new Response();
@@ -204,7 +205,8 @@ class RadController extends FOSRestController
          */
           public function putAction($table)
           {
-              new Radreply;
+
+              $put = $this->container->get('radius.compte')->put($table);
               $response = new Response();
               $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PUT-OK")));
               $response->headers->set('Content-Type', 'application/json');
