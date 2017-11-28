@@ -1,7 +1,9 @@
 services:
     radius.compte:
         class: LUCIE\RadiusBundle\Compte\LUCompte
-        arguments: [ "@doctrine.orm.entity_manager" , "@service_container" ]
+        arguments: [ "@doctrine.orm.entity_manager", "@form.factory", "@service_container" ]
+        tags:
+            - { name: form.type }
 
 #    lucie_radius.example:
 #        class: LUCIE\RadiusBundle\Example

@@ -23,6 +23,9 @@ framework:
     validation:      { enable_annotations: true }
     serializer:      { enable_annotations: true }
     templating:
+        form:
+            resources:
+                - ':form:fields.html.php'
         engines: ['twig']
     default_locale:  "%locale%"
     serializer:
@@ -41,6 +44,8 @@ framework:
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
+    form_themes:
+        - 'form/fields.html.twig'
 
 # Doctrine Configuration
 doctrine:

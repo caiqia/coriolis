@@ -4,16 +4,10 @@ namespace LUCIE\RadiusBundle\Compte;
 
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Form\FormTypeInterface;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Psr\Log\LoggerInterface;
-use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use FOS\RestBundle\Controller\FOSRestController;
-use FOS\RestBundle\Util\Codes;
-use FOS\RestBundle\Controller\Annotations;
-use FOS\RestBundle\View\View;
-use FOS\RestBundle\Request\ParamFetcherInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use LUCIE\RadiusBundle\Exception\InvalidJsonException;
 use LUCIE\RadiusBundle\Entity\Radreply;
@@ -23,11 +17,13 @@ use LUCIE\RadiusBundle\Entity\Radcheck;
 use LUCIE\RadiusBundle\Entity\Radusergroup;
 use LUCIE\RadiusBundle\Entity\Userinfo;
 use LUCIE\RadiusBundle\Entity\Userbillinfo;
+use LUCIE\RadiusBundle\Form\RadcheckType;
 
 class LUCompte
 {
 
   protected $om;
+  protected $formFactory;
   protected $radreply;
   protected $radgroupcheck;
   protected $radgroupreply;
@@ -37,9 +33,10 @@ class LUCompte
   protected $userbillinfo;
 
 
-      public function __construct(ObjectManager $om, $container) {
+      public function __construct(ObjectManager $om, FormFactoryInterface $formFactory, $container) {
           $this->container = $container;
           $this->om = $om;
+          $this->formFactory = $formFactory;
           $this->radreply = $this->om->getRepository("LUCIERadiusBundle:Radreply");
           $this->radgroupcheck = $this->om->getRepository("LUCIERadiusBundle:Radgroupcheck");
           $this->radgroupreply = $this->om->getRepository("LUCIERadiusBundle:Radgroupreply");
@@ -137,12 +134,30 @@ class LUCompte
             }
       }
 
+      /**
+       * verifier si username double
+       *
+       * @param string $username filter search array
+       * @throws InvalidJsonException when usename doesn't existe
+       *
+       *
+       */
+      public function veriCheck($username){
+
+          $get = $this->radcheck->findByUsername($username);
+          if(empty($get)){
+                return TRUE;
+            }else{
+              return FALSE;
+            }
+      }
+
 
       /**
        * VERIFIER FORMAT JSON
        *
        * @param array $parameters filter search array
-       * @throws InvalidJsonException when json est vide
+       * @throws InvalidJsonException when json format is not correct
        *
        * @return
        */
@@ -201,6 +216,7 @@ class LUCompte
             $all = $this->radreply->findBy($search, null, $limit, $offset);
             break;
           case "check":
+
             $all = $this->radcheck->findBy($search, null, $limit, $offset);
             break;
           case "groupcheck":
@@ -274,8 +290,7 @@ class LUCompte
        *
        * @return integer
        */
-        public function post(array $parameters, $table) {
-
+        public function post($parameters, $table) {
 
                 switch($table){
                   case "reply":
@@ -284,6 +299,7 @@ class LUCompte
                         $post->setAttribute($parameters["data"]["attribute"]); // NomAttribute
                         $post->setOp($parameters["data"]["op"]);//":="
                         $post->setValue($parameters["data"]["value"]);//ValueAttribute
+
                     break;
                   case "check":
                     $post = new Radcheck;
@@ -291,6 +307,7 @@ class LUCompte
                     $post->setAttribute($parameters["data"]["attribute"]);//"Cleartext-Password"
                     $post->setOp($parameters["data"]["op"]);
                     $post->setValue($parameters["data"]["value"]);//"Redback"
+                  //  return $this->processForm($post, $parameters, 'PATCH');
                     break;
                   case "groupcheck":
                       $post = new Radgroupcheck;
@@ -318,54 +335,118 @@ class LUCompte
                 return $post->getId();
         }
 
+
+
         /**
-         * Delete an Radreply.
+         * DELETE DANS UNE TABLE
          *
-         * @param mixed $id
+         * @param string $table
+         * @param string $username
          *
          */
-          public function delete($table, $id) {
+          public function delete($table, $username) {
 
-              $delete = $this->get($table, $id);
-              $this->om->remove($delete);
-              $this->om->flush();
+              $delete = $this->get($table, $username);
+              foreach ($delete as $value) {
+                $this->om->remove($value);
+                $this->om->flush();
+              }
+
               return;
           }
 
 
           /**
+           * DELETE DANS TOUTES LES TABLES
+           *
+           * @param string $username
+           *
+           */
+            public function deleteAll($username) {
+
+              $all = $this->radreply->findByUsername($username);
+              $all = array_merge($all,$this->radcheck->findByUsername($username));
+              $all = array_merge($all,$this->radusergroup->findByUsername($username));
+              $all = array_merge($all,$this->userinfo->findByUsername($username));
+              $all = array_merge($all,$this->userbillinfo->findByUsername($username));
+              if(empty($all)){
+                throw new NotFoundHttpException(sprintf('USERNAME \'%s\'N\'EXISTE PAS DANS RADIUS.',$username));
+                return;
+              }
+              foreach ($all as $value) {
+                $this->om->remove($value);
+                $this->om->flush();
+              }
+                return;
+            }
+
+
+          /**
            * Get an OBJET
            *
-           * @param mixed $id
+           * @param mixed $username
            *
-           * @return Radreply
+           * @return array
            * @throws NotFoundHttpException when row not exist
            */
-            public function get($table, $id) {
+            public function get($table, $username) {
 
               switch($table){
                 case "reply":
-                  $get = $this->radreply->find($id);
+                  $get = $this->radreply->findByUsername($username);
                   break;
                 case "check":
-                  $get = $this->radcheck->find($id);
+
+                  $get = $this->radcheck->findByUsername($username);
+                  break;
+
+                case "usergroup":
+                  $get = $this->radusergroup->findByUsername($username);
                   break;
                 case "groupcheck":
-                  $get = $this->radgroupcheck->find($id);
-                  break;
+                    $get = $this->radgroupcheck->findByGroupname($username);
+                    break;
                 case "groupreply":
-                  $get = $this->radgroupreply->find($id);
-                  break;
-                case "usergroup":
-                  $get = $this->radusergroup->find($id);
-                  break;
+                    $get = $this->radgroupreply->findByGroupname($username);
+                    break;
               }
               if(empty($get)){
-                throw new NotFoundHttpException(sprintf('LA LIGNE \'%s\' DANS \'%s\' EST VIDE.',$id,$table));
+                throw new NotFoundHttpException(sprintf('USERNAME \'%s\' DANS \'%s\' N\'EXISTE PAS.',$username,$table));
               }
               return $get ;
 
             }
+
+
+
+            /**
+             * Processes the form.
+             *
+             * @param VoicemailInterface $voicemail
+             * @param array         $parameters
+             * @param String        $method
+             *
+             * @throws InvalidJsonException when json format is not correct
+             * @return VoicemailInterface
+             *
+             */
+             protected function processForm($post, $parameters, $method = "PUT") {
+               var_dump($post);
+               $form = $this->formFactory->create('LUCIE\RadiusBundle\Form\RadcheckType', $post, array('method' => $method));
+               $form->submit($parameters, false);
+               var_dump($parameters);
+               //unset($parameters['_method']);
+               //$form->submit($parameters, 'PATCH' !== $method);
+               //var_dump($parameters);
+               //if ($form->isValid()) {
+                 $post2 = $form->getData();
+                  var_dump($post2);
+                 $this->om->persist($post2);
+                 $this->om->flush();
+                 return ;//$post;
+               //}
+               throw new InvalidJsonException('Invalid submitted data', $form);
+          }
 
 
 
