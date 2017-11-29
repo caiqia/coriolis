@@ -3,7 +3,6 @@
 namespace LUCIE\RadiusBundle\Compte;
 
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -97,7 +96,7 @@ class LUCompte
        *
        *
        */
-      public function put($table){
+      public function newObject($table){
           switch($table){
             case "reply":
                return new Radreply;
@@ -115,30 +114,15 @@ class LUCompte
               return new Radusergroup;
               break;
           }
-
+          return;
       }
 
-      /**
-       * verifier si username existe
-       *
-       * @param string $username filter search array
-       * @throws InvalidJsonException when usename doesn't existe
-       *
-       *
-       */
-      public function veriUser($username){
 
-          $get = $this->radcheck->findByUsername($username);
-          if(empty($get)){
-                throw new InvalidJsonException('Invalid username');
-            }
-      }
 
       /**
        * verifier si username double
        *
        * @param string $username filter search array
-       * @throws InvalidJsonException when usename doesn't existe
        *
        *
        */
@@ -162,40 +146,11 @@ class LUCompte
        * @return
        */
       public function jsonVeri(array $parameters, $table) {
-        switch($table){
-          case "reply":
-            if( empty($parameters["data"]["username"])){throw new InvalidJsonException('Invalid username');}
-            if( empty($parameters["data"]["attribute"])){throw new InvalidJsonException('Invalid attribute');}
-            if( empty($parameters["data"]["value"])){throw new InvalidJsonException('Invalid value');}
-            if( empty($parameters["data"]["op"])){throw new InvalidJsonException('Invalid op');}
-
-            break;
-          case "check":
-            if (empty($parameters["data"]["username"])){throw new InvalidJsonException('Invalid username');}
-            if( empty($parameters["data"]["attribute"])){throw new InvalidJsonException('Invalid attribute');}
-            if( empty($parameters["data"]["value"])){throw new InvalidJsonException('Invalid value');}
-            if( empty($parameters["data"]["op"])){throw new InvalidJsonException('Invalid op');}
-
-            break;
-          case "groupcheck":
-            if( empty($parameters["data"]["groupname"])){throw new InvalidJsonException('Invalid groupname');}
-            if( empty($parameters["data"]["attribute"])){throw new InvalidJsonException('Invalid attribute');}
-            if( empty($parameters["data"]["value"])){throw new InvalidJsonException('Invalid value');}
-            if( empty($parameters["data"]["op"])){throw new InvalidJsonException('Invalid op');}
-
-            break;
-          case "groupreply":
-            if( empty($parameters["data"]["groupname"])){throw new InvalidJsonException('Invalid groupname');}
-            if( empty($parameters["data"]["attribute"])){throw new InvalidJsonException('Invalid attribute');}
-            if( empty($parameters["data"]["value"])){throw new InvalidJsonException('Invalid value');}
-            if( empty($parameters["data"]["op"])){throw new InvalidJsonException('Invalid op');}
-
-            break;
-          case "usergroup":
-            if( empty($parameters["data"]["groupname"])){throw new InvalidJsonException('Invalid groupname');}
-            if( empty($parameters["data"]["priority"])){throw new InvalidJsonException('Invalid priority');}
-            if( empty($parameters["data"]["username"])){throw new InvalidJsonException('Invalid username');}
-            break;
+        $data = $parameters["data"];
+        foreach ($data as $key => $value) {
+          if(empty($value) ){
+            throw new InvalidJsonException('Invalid '.$key);
+          }
         }
           return ;
       }
@@ -262,6 +217,7 @@ class LUCompte
 
           $metadata = $this->om->getClassMetadata($entity_class);
           $qb = $this->om->createQueryBuilder();
+
           $qb->select($qb->expr()->count('t'))->from($entity_class, 't');
           $i = 0;
 
@@ -282,57 +238,49 @@ class LUCompte
 
       }
 
+
+
       /**
-       * Create a new Radreply.
+       * Create a new LIGNE
        *
        * @param array $parameters
        *
        *
        * @return integer
        */
-        public function post($parameters, $table) {
+        public function patch($username, $parameters, $table) {
+          if($username){
+            $patch = $this->get($table, $username);
+          }else{
+            $patch = $this->newObject($table);
+          }
+          $data = $parameters["data"];
+          foreach ($data as $key => $value) {
+            switch($key){
+              case "username":
+                $patch->setUsername($value);
+              break;
+              case "groupname":
+                $patch->setGroupname($value);
+              break;
+              case "attribute":
+                $patch->setAttribute($value);
+              break;
+              case "op":
+                $patch->setOp($value);
+              break;
+              case "value":
+                $patch->setValue($value);
+              break;
+              case "priority":
+                $patch->setPriority($value);
+              break;
+            }
 
-                switch($table){
-                  case "reply":
-                        $post = new Radreply;
-                        $post->setUsername($parameters["data"]["username"]); //($compte->getUsername());
-                        $post->setAttribute($parameters["data"]["attribute"]); // NomAttribute
-                        $post->setOp($parameters["data"]["op"]);//":="
-                        $post->setValue($parameters["data"]["value"]);//ValueAttribute
-
-                    break;
-                  case "check":
-                    $post = new Radcheck;
-                    $post->setUsername($parameters["data"]["username"]);//($compte->getUsername());
-                    $post->setAttribute($parameters["data"]["attribute"]);//"Cleartext-Password"
-                    $post->setOp($parameters["data"]["op"]);
-                    $post->setValue($parameters["data"]["value"]);//"Redback"
-                  //  return $this->processForm($post, $parameters, 'PATCH');
-                    break;
-                  case "groupcheck":
-                      $post = new Radgroupcheck;
-                      $post->setGroupname($parameters["data"]["groupname"]);
-                      $post->setAttribute($parameters["data"]["attribute"]);//"TEST-GROUP-CHECK"
-                      $post->setValue($parameters["data"]["value"]);
-                      $post->setOp($parameters["data"]["op"]);
-                    break;
-                  case "groupreply":
-                      $post = new Radgroupreply;
-                      $post->setGroupname($parameters["data"]["groupname"]);
-                      $post->setAttribute($parameters["data"]["attribute"]);
-                      $post->setValue($parameters["data"]["value"]);
-                      $post->setOp($parameters["data"]["op"]);
-                    break;
-                  case "usergroup":
-                      $post = new Radusergroup;
-                      $post->setUsername($parameters["data"]["username"]);//($compte->getUsername());
-                      $post->setGroupname($parameters["data"]["groupname"]);//"ctx-GP-1G"
-                      $post->setPriority($parameters["data"]["priority"]);//0
-                    break;
-                }
-                $this->om->persist($post);
-                $this->om->flush($post);
-                return $post->getId();
+          }
+          $this->om->persist($patch);
+          $this->om->flush($patch);
+          return $patch->getId();
         }
 
 
@@ -369,8 +317,10 @@ class LUCompte
               $all = array_merge($all,$this->radusergroup->findByUsername($username));
               $all = array_merge($all,$this->userinfo->findByUsername($username));
               $all = array_merge($all,$this->userbillinfo->findByUsername($username));
+              $all = array_merge($all,$this->radgroupcheck->findByGroupname($username));
+              $all = array_merge($all,$this->radgroupreply->findByGroupname($username));
               if(empty($all)){
-                throw new NotFoundHttpException(sprintf('USERNAME \'%s\'N\'EXISTE PAS DANS RADIUS.',$username));
+                throw new NotFoundHttpException(sprintf('\'%s\'N\'EXISTE PAS DANS RADIUS.',$username));
                 return;
               }
               foreach ($all as $value) {
@@ -411,42 +361,12 @@ class LUCompte
                     break;
               }
               if(empty($get)){
-                throw new NotFoundHttpException(sprintf('USERNAME \'%s\' DANS \'%s\' N\'EXISTE PAS.',$username,$table));
+                throw new NotFoundHttpException(sprintf('\'%s\' DANS \'%s\' N\'EXISTE PAS.',$username,$table));
               }
-              return $get ;
+              return $get;
 
             }
 
-
-
-            /**
-             * Processes the form.
-             *
-             * @param VoicemailInterface $voicemail
-             * @param array         $parameters
-             * @param String        $method
-             *
-             * @throws InvalidJsonException when json format is not correct
-             * @return VoicemailInterface
-             *
-             */
-             protected function processForm($post, $parameters, $method = "PUT") {
-               var_dump($post);
-               $form = $this->formFactory->create('LUCIE\RadiusBundle\Form\RadcheckType', $post, array('method' => $method));
-               $form->submit($parameters, false);
-               var_dump($parameters);
-               //unset($parameters['_method']);
-               //$form->submit($parameters, 'PATCH' !== $method);
-               //var_dump($parameters);
-               //if ($form->isValid()) {
-                 $post2 = $form->getData();
-                  var_dump($post2);
-                 $this->om->persist($post2);
-                 $this->om->flush();
-                 return ;//$post;
-               //}
-               throw new InvalidJsonException('Invalid submitted data', $form);
-          }
 
 
 

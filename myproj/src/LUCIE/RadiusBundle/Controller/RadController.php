@@ -3,13 +3,10 @@
 namespace LUCIE\RadiusBundle\Controller;
 
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Util\Codes;
 use FOS\RestBundle\Controller\Annotations;
@@ -17,11 +14,7 @@ use FOS\RestBundle\View\View;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use LUCIE\RadiusBundle\Exception\InvalidJsonException;
-use LUCIE\RadiusBundle\Entity\Radreply;
-use LUCIE\RadiusBundle\Entity\Radgroupcheck;
-use LUCIE\RadiusBundle\Entity\Radgroupreply;
-use LUCIE\RadiusBundle\Entity\Radcheck;
-use LUCIE\RadiusBundle\Entity\Radusergroup;
+
 
 
 
@@ -69,9 +62,9 @@ class RadController extends FOSRestController
         	}
 
       	$total = $this->container->get('radius.compte')->count($table,$search);
-
+        $msg = "IL Y A ".$total." LIGNES DANS rad".$table;
         $response = new Response();
-        $response->setContent(json_encode(array('success' => TRUE,'msg' => $total)));
+        $response->setContent(json_encode(array('success' => TRUE,'msg' => $msg)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
           //return $this->container->get('mystream.voicemail.handler')->all($limit, $offset, $search);
@@ -145,43 +138,40 @@ class RadController extends FOSRestController
        * @return Response
        *
        */
-      public function postAction($version, $table, Request $request)
+
+      public function postAction( $table, Request $request)
       {
 
-        try{
-          $this->container->get('radius.compte')->jsonVeri($request->request->all(), $table);
-        }catch(InvalidJsonException $exception){
-          $msg = $exception->getMessage();
-          $response = new Response();
-          $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
-          $response->headers->set('Content-Type', 'application/json');
-         return $response;
-        }
-        if($table =="check"){
-           $flag = $this->container->get('radius.compte')->veriCheck($request->request->all()["data"]["username"]);
-           if(!$flag){
-             $msg = "username existe déjà dans radcheck";
-             $response = new Response();
-             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
-             $response->headers->set('Content-Type', 'application/json');
-            return $response;
-           }
-       }else{
-         if($table =="reply"){
           try{
-            $this->container->get('radius.compte')->veriUser($request->request->all()["data"]["username"]);
+            $this->container->get('radius.compte')->jsonVeri($request->request->all(), $table);
           }catch(InvalidJsonException $exception){
             $msg = $exception->getMessage();
             $response = new Response();
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
            return $response;
-         }
-          $this->container->get('radius.compte')->addUser($request->request->all()["data"]["username"]);
-        }
-       }
-
-        $id = $this->container->get('radius.compte')->post($request->request->all(),$table);
+          }
+          $flag = $this->container->get('radius.compte')->veriCheck($request->request->all()["data"]["username"]);
+          if($table == "check"){
+             if(!$flag){
+               $msg = "username existe deja dans radcheck";
+               $response = new Response();
+               $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+               $response->headers->set('Content-Type', 'application/json');
+              return $response;
+             }
+           }
+          if($table == "reply"){
+              if($flag){
+              $msg = "USERNAME N'EXISTE PAS DANS RADCHECK";
+              $response = new Response();
+              $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+              $response->headers->set('Content-Type', 'application/json');
+             return $response;
+              }
+            $this->container->get('radius.compte')->addUser($request->request->all()["data"]["username"]);
+          }
+        $id = $this->container->get('radius.compte')->patch(null, $request->request->all(),$table);
         $response = new Response();
         $response->setContent(json_encode(array('success' => TRUE,'msg' =>"POST-OK", 'id' => $id)));
         $response->headers->set('Content-Type', 'application/json');
@@ -191,12 +181,12 @@ class RadController extends FOSRestController
 
 
       /**
-       * CREE UNE NOUVELLE LIGNE A PARTIR DES DONNEE
+       * UPDATE UNE NOUVELLE LIGNE A PARTIR DES DONNEE
        * @Annotations\Route(condition="request.attributes.get('version') == 'v1'")
        * @Annotations\Patch("/{username}/{table}",requirements = {"table"="check|reply|groupcheck|groupreply|usergroup"})
        * @ApiDoc(
        *   resource = true,
-       *   description = "CREE UNE NOUVELLE LIGNE A PARTIR DES DONNEE",
+       *   description = "UPDATE UNE NOUVELLE LIGNE A PARTIR DES DONNEE",
        *   statusCodes = {
        *     200 = "Returned when successful",
        *     400 = "Returned when the form has errors"
@@ -208,20 +198,55 @@ class RadController extends FOSRestController
        * @return Response
        *
        */
-      public function patchAction($version,$username,$table, Request $request)
+
+      public function patchAction( $username, $table, Request $request)
       {
 
-        $formFactory = Forms::createFormFactory();
-        $this->container->get('radius.compte');
-
-        $id = $this->container->get('radius.compte')->post($request->request->all(),$table);
+        $method = $request->getMethod();
+        echo $method."\n";
+        if($method == "PATCH"){
+          $id = $this->container->get('radius.compte')->patch($username,$request->request->all(),$table);
+        }
 
         $response = new Response();
-        $response->setContent(json_encode(array('success' => TRUE,'msg' =>"POST-OK", 'id' => $id)));
+        $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PATCH-OK", 'id' => $id)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
       }
 
+      /**
+       * UPDATE UNE NOUVELLE LIGNE A PARTIR DES DONNEE
+       * @Annotations\Route(condition="request.attributes.get('version') == 'v1'")
+       * @Annotations\Put("/{table}",requirements = {"table"="check|reply|groupcheck|groupreply|usergroup"})
+       * @ApiDoc(
+       *   resource = true,
+       *   description = "UPDATE UNE NOUVELLE LIGNE A PARTIR DES DONNEE",
+       *   statusCodes = {
+       *     200 = "Returned when successful",
+       *     400 = "Returned when the form has errors"
+       *   }
+       * )
+       *
+       * @param Request $request the request object
+       *
+       * @return Response
+       *
+       */
+
+      public function putAction( $table, Request $request)
+      {
+
+        $method = $request->getMethod();
+        echo $method."\n";
+        if($method == "PUT"){
+          $id = $this->container->get('radius.compte')->patch(null,$request->request->all(),$table);
+        }
+
+        $response = new Response();
+        $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PUT-OK", 'id' => $id)));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+      }
 
     /**
      * SUPPRIME DANS UNE TABLE
@@ -345,6 +370,7 @@ class RadController extends FOSRestController
          *@return Response
          *
          */
+         /*
           public function putAction($table)
           {
 
@@ -355,5 +381,5 @@ class RadController extends FOSRestController
               return $response;
 
           }
-
+          */
 }
