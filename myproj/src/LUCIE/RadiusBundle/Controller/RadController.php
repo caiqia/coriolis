@@ -14,6 +14,9 @@ use FOS\RestBundle\View\View;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use LUCIE\RadiusBundle\Exception\InvalidJsonException;
+use LUCIE\RadiusBundle\Entity\Radcheck;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 
 
@@ -110,7 +113,6 @@ class RadController extends FOSRestController
           }
 
         $total = $this->container->get('radius.compte')->all($table,$limit,$offset,$search);
-
         $data = $this->get('jms_serializer')->serialize($total, 'json');
         $response = new Response();
         $response->setContent(json_encode(array('success' => TRUE,'msg' =>$data)));
@@ -143,7 +145,7 @@ class RadController extends FOSRestController
       {
 
           try{
-            $this->container->get('radius.compte')->jsonVeri($request->request->all(), $table);
+            //$this->container->get('radius.compte')->jsonVeri($request->request->all(), $table);
           }catch(InvalidJsonException $exception){
             $msg = $exception->getMessage();
             $response = new Response();
@@ -151,8 +153,8 @@ class RadController extends FOSRestController
             $response->headers->set('Content-Type', 'application/json');
            return $response;
           }
-          $flag = $this->container->get('radius.compte')->veriCheck($request->request->all()["data"]["username"]);
           if($table == "check"){
+              $flag = $this->container->get('radius.compte')->veriCheck($request->request->all()["data"]["username"]);
              if(!$flag){
                $msg = "username existe deja dans radcheck";
                $response = new Response();
@@ -162,6 +164,7 @@ class RadController extends FOSRestController
              }
            }
           if($table == "reply"){
+              $flag = $this->container->get('radius.compte')->veriCheck($request->request->all()["data"]["username"]);
               if($flag){
               $msg = "USERNAME N'EXISTE PAS DANS RADCHECK";
               $response = new Response();
@@ -173,7 +176,7 @@ class RadController extends FOSRestController
           }
         $id = $this->container->get('radius.compte')->patch(null, $request->request->all(),$table);
         $response = new Response();
-        $response->setContent(json_encode(array('success' => TRUE,'msg' =>"POST-OK", 'id' => $id)));
+        $response->setContent(json_encode(array('success' => TRUE,'msg' =>"POST-OK", 'id ou username' => $id)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
       }
@@ -337,6 +340,7 @@ class RadController extends FOSRestController
        */
         public function getAction($version, $username, $table)
         {
+
             try{
               $get = $this->container->get('radius.compte')->get($table, $username);
             }catch(NotFoundHttpException $exception){
@@ -353,33 +357,17 @@ class RadController extends FOSRestController
             return $response;
         }
 
+  /*
+  $patch = new Radcheck;
+  $patch->setUsername('Writeablogpost');
+  $patch->setAttribute("attribute");
+  $form = $this->createFormBuilder($patch)
+   ->add('username', TextType::class)
+   ->add('attribute', TextType::class)
+   ->add('save', SubmitType::class, array('label' => 'Create Task'))
+   ->getForm();
+  return $this->render('LUCIERadiusBundle:Radcheck:menu.html.twig', array('form' => $form->createView(),));
+  */
 
 
-
-        /**
-         * CREE UN NOUVEAU OBJET
-         * @Annotations\Put("/put/{table}")
-         *
-         * @ApiDoc(
-         *   resource = true,
-         *   statusCodes = {
-         *     200 = "Returned when successful"
-         *   }
-         * )
-         *
-         *@return Response
-         *
-         */
-         /*
-          public function putAction($table)
-          {
-
-              $put = $this->container->get('radius.compte')->put($table);
-              $response = new Response();
-              $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PUT-OK")));
-              $response->headers->set('Content-Type', 'application/json');
-              return $response;
-
-          }
-          */
 }

@@ -124,11 +124,12 @@ class LUCompte
        *
        * @param string $username filter search array
        *
-       *
+       *@return boolean
        */
       public function veriCheck($username){
 
           $get = $this->radcheck->findByUsername($username);
+
           if(empty($get)){
                 return TRUE;
             }else{
@@ -148,7 +149,7 @@ class LUCompte
       public function jsonVeri(array $parameters, $table) {
         $data = $parameters["data"];
         foreach ($data as $key => $value) {
-          if(empty($value) ){
+          if($value == null ){
             throw new InvalidJsonException('Invalid '.$key);
           }
         }
@@ -186,6 +187,7 @@ class LUCompte
         }
           return $all;
       }
+
 
       /**
        * Get the count of Radreply.
@@ -231,9 +233,7 @@ class LUCompte
                           ->setParameter($i, $value);
               }
           }
-
           $query = $qb->getQuery();
-
           return $query->getSingleScalarResult();
 
       }
@@ -279,10 +279,12 @@ class LUCompte
 
           }
           $this->om->persist($patch);
-          $this->om->flush($patch);
+          $this->om->flush();
+          if($table == "usergroup"){
+            return $patch->getUsername();
+          }
           return $patch->getId();
         }
-
 
 
         /**
@@ -295,6 +297,10 @@ class LUCompte
           public function delete($table, $username) {
 
               $delete = $this->get($table, $username);
+              if($table == "reply"){
+                $delete = array_merge($delete,$this->userinfo->findByUsername($username));
+                $delete = array_merge($delete,$this->userbillinfo->findByUsername($username));
+              }
               foreach ($delete as $value) {
                 $this->om->remove($value);
                 $this->om->flush();
@@ -329,7 +335,6 @@ class LUCompte
               }
                 return;
             }
-
 
           /**
            * Get an OBJET
@@ -367,6 +372,25 @@ class LUCompte
 
             }
 
+
+        /**
+         * Processes the form.
+         *
+         * @param array         $parameters
+         * @param String        $method
+         *
+         * @return Radcheck
+         *
+         * @throws InvalidJsonException
+         */
+         public function processForm( array $parameters, $method = "PUT") {
+
+           $form = $this->formFactory->create("LUCIE\RadiusBundle\Form\RadcheckType", $patch, array('method' => $method));
+
+           $form->submit($parameters, false);
+           return $form;
+           //throw new InvalidJsonException('Invalid submitted data', $form);
+         }
 
 
 
