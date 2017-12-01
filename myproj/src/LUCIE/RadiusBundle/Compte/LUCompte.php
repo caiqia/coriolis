@@ -171,11 +171,57 @@ class LUCompte
        */
       public function jsonVeri(array $parameters, $table) {
         $data = $parameters["data"];
-        foreach ($data as $key => $value) {
-          if(empty($value)){
-            throw new InvalidJsonException('Invalid '.$key);
-          }
-        }
+	switch($table){
+		case "reply":
+			if($data["username"]){
+				if($data["attribute"]){
+					if($data["value"]){
+						return true;
+					}
+				}	
+			}
+		break;
+		case "check":
+			 if($data["username"]){
+                                 if($data["attribute"]){
+                                         if($data["value"]){
+                                                 return true;
+                                         }
+                                 }
+                        }
+
+                break;
+		case "groupreply":
+			 if($data["groupname"]){
+                                 if($data["attribute"]){
+                                         if($data["value"]){
+                                                 return true;
+                                         }
+                                 }
+                         }
+
+                break;
+		case "groupcheck":
+			 if($data["groupname"]){
+                                 if($data["attribute"]){
+                                         if($data["value"]){
+                                                 return true;
+                                         }
+                                 }
+                         }
+		
+                break;
+		case "usergroup":
+			 if($data["groupname"]){
+                                 if($data["username"]){
+                                         if($data["priority"]){
+                                                 return true;
+                                         }
+                                 }
+                         }
+                break;	
+	}
+	 throw new InvalideJsonException("invalide json");
           return ;
       }
 
@@ -275,11 +321,11 @@ class LUCompte
        *
        * @return integer
        */
-        public function patch($username, $parameters, $table) {
+        public function patch($id, $parameters, $table) {
           $patch =  null;
           $post = null;
-          if($username){
-            $patch = $this->get($table, $username);
+          if($id){
+            $patch = $this->getId($table, $id);
           }else{
             $post = $this->newObject($table);
           }
@@ -374,7 +420,7 @@ class LUCompte
          */
           public function delete($table, $username) {
 
-              $delete = $this->get($table, $username);
+              $delete = $this->getUsername($table, $username);
               if($table == "reply"){
                 $delete = array_merge($delete,$this->userinfo->findByUsername($username));
                 $delete = array_merge($delete,$this->userbillinfo->findByUsername($username));
@@ -414,6 +460,47 @@ class LUCompte
                 return;
             }
 
+
+
+
+
+	  /**
+           * Get an OBJET
+           *
+           * @param mixed $username
+           *
+           * @return array
+           * @throws NotFoundHttpException when row not exist
+           */
+            public function getId($table, $id) {
+              switch($table){
+                case "reply":
+                  $get = $this->radreply->findById($id);
+                  break;
+                case "check":
+                  $get = $this->radcheck->findById($id);
+                  break;
+                case "usergroup":
+                  $get = $this->radusergroup->findById($id);
+                  break;
+                case "groupcheck":
+                    $get = $this->radgroupcheck->findById($id);
+                    break;
+                case "groupreply":
+                    $get = $this->radgroupreply->findById($id);
+                    break;
+              }
+              if(empty($get)){
+                throw new NotFoundHttpException(sprintf('\'%s\' DANS \'%s\' N\'EXISTE PAS.',$id,$table));
+              }
+              return $get;
+
+            }
+
+
+
+
+
           /**
            * Get an OBJET
            *
@@ -422,7 +509,7 @@ class LUCompte
            * @return array
            * @throws NotFoundHttpException when row not exist
            */
-            public function get($table, $username) {
+            public function getUsername($table, $username) {
 
               switch($table){
                 case "reply":

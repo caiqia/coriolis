@@ -37,10 +37,13 @@ class RadController extends FOSRestController
        *   }
        * )
        *
-       * @Annotations\QueryParam(name="id", requirements="\d+", nullable=true, description="entities id ")
-       * @Annotations\QueryParam(name="username",  nullable=true, description="entity: username=x")
-       * @Annotations\QueryParam(name="offset", requirements="\d+", nullable=true, description="Offset from which to start listing voicemails.")
-       * @Annotations\QueryParam(name="limit", requirements="\d+", nullable=true, default="10", description="How many voicemails to return.")
+       * @Annotations\QueryParam(name="id", requirements="\d+", nullable=true, description="object id ")
+       * @Annotations\QueryParam(name="username",  nullable=true, description="username ")
+       * @Annotations\QueryParam(name="groupname",  nullable=true, description="groupname ")
+       * @Annotations\QueryParam(name="attribute",  nullable=true, description="object attribute")
+       * @Annotations\QueryParam(name="value",  nullable=true, description="object value ")
+       * @Annotations\QueryParam(name="offset", requirements="\d+", nullable=true, description="Offset from which to start listing object.")
+       * @Annotations\QueryParam(name="limit", requirements="\d+", nullable=true, default="10", description="How many objects to return.")
        *
        *
        * @param Request               $request      the request object
@@ -85,10 +88,13 @@ class RadController extends FOSRestController
        *   }
        * )
        *
-       * @Annotations\QueryParam(name="id", requirements="\d+", nullable=true, description="Array of voicemail ids : id[]=x&id[]=x")
-       * @Annotations\QueryParam(name="username",  nullable=true, description="mailbox number: mailbox=x")
-       * @Annotations\QueryParam(name="offset", requirements="\d+", nullable=true, description="Offset from which to start listing voicemails.")
-       * @Annotations\QueryParam(name="limit", requirements="\d+", nullable=true, default="10", description="How many voicemails to return.")
+       * @Annotations\QueryParam(name="id", requirements="\d+", nullable=true, description="object id ")
+       * @Annotations\QueryParam(name="username",  nullable=true, description="username ")
+       * @Annotations\QueryParam(name="groupname",  nullable=true, description="groupname ")
+       * @Annotations\QueryParam(name="attribute",  nullable=true, description="object attribute")
+       * @Annotations\QueryParam(name="value",  nullable=true, description="object value ")
+       * @Annotations\QueryParam(name="offset", requirements="\d+", nullable=true, description="Offset from which to start listing object.")
+       * @Annotations\QueryParam(name="limit", requirements="\d+", nullable=true, default="10", description="How many objects to return.")
        *
        *
        * @param Request               $request      the request object
@@ -111,7 +117,6 @@ class RadController extends FOSRestController
               unset($search[$key]);
             }
           }
-        var_dump($search);
         $total = $this->container->get('radius.compte')->all($table,$limit,$offset,$search);
         $data = $this->get('jms_serializer')->serialize($total, 'json');
         $response = new Response();
@@ -205,7 +210,7 @@ class RadController extends FOSRestController
       /**
        * UPDATE UNE NOUVELLE LIGNE A PARTIR DES DONNEE
        * @Annotations\Route(condition="request.attributes.get('version') == 'v1'")
-       * @Annotations\Patch("/{username}/{table}",requirements = {"table"="check|reply|groupcheck|groupreply|usergroup"})
+       * @Annotations\Patch("/{id}/{table}",requirements = {"id"="\d+","table"="check|reply|groupcheck|groupreply|usergroup"})
        * @ApiDoc(
        *   resource = true,
        *   description = "UPDATE UNE NOUVELLE LIGNE A PARTIR DES DONNEE",
@@ -220,16 +225,14 @@ class RadController extends FOSRestController
        * @return Response
        *
        */
-
-      public function patchAction( $username, $table, Request $request)
+      public function patchAction( $id, $table, Request $request)
       {
 
         $method = $request->getMethod();
         echo $method."\n";
         if($method == "PATCH"){
-          $id = $this->container->get('radius.compte')->patch($username,$request->request->all(),$table);
+          $id = $this->container->get('radius.compte')->patch($id,$request->request->all(),$table);
         }
-        var_dump($id);
         $response = new Response();
         $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PATCH-OK", 'id ou username' => $id)));
         $response->headers->set('Content-Type', 'application/json');
@@ -238,7 +241,7 @@ class RadController extends FOSRestController
 
 
       /**
-       * UPDATE UNE NOUVELLE LIGNE A PARTIR DES DONNEE
+       * PUT UN NOUVEAU OBJECT
        * @Annotations\Route(condition="request.attributes.get('version') == 'v1'")
        * @Annotations\Put("/{table}",requirements = {"table"="check|reply|groupcheck|groupreply|usergroup"})
        * @ApiDoc(
@@ -259,11 +262,9 @@ class RadController extends FOSRestController
       {
 
         $method = $request->getMethod();
-        echo $method."\n";
         if($method == "PUT"){
           $id = $this->container->get('radius.compte')->patch(null,null,$table);
         }
-
         $response = new Response();
         $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PUT-OK" )));
         $response->headers->set('Content-Type', 'application/json');
@@ -298,7 +299,6 @@ class RadController extends FOSRestController
             $response->headers->set('Content-Type', 'application/json');
             return $response;
           }
-
           $response = new Response();
           $response->setContent(json_encode(array('success' => TRUE,'msg' =>"DELETE-OK")));
           $response->headers->set('Content-Type', 'application/json');
@@ -333,7 +333,6 @@ class RadController extends FOSRestController
               $response->headers->set('Content-Type', 'application/json');
               return $response;
             }
-
             $response = new Response();
             $response->setContent(json_encode(array('success' => TRUE,'msg' =>"DELETE-OK")));
             $response->headers->set('Content-Type', 'application/json');
@@ -341,9 +340,10 @@ class RadController extends FOSRestController
         }
 
 
+
       /**
        * @Annotations\Route(condition="request.attributes.get('version') == 'v1'")
-       * @Annotations\Get("/{username}/{table}",requirements = {"table"="check|reply|usergroup|groupcheck|groupreply"})
+       * @Annotations\Get("/name/{username}/{table}",requirements = {"table"="check|reply|usergroup|groupcheck|groupreply"})
        * get les objects par username
        * @ApiDoc(
        *   resource = true,
@@ -359,11 +359,11 @@ class RadController extends FOSRestController
        *
        * @return Response
        */
-        public function getAction($version, $username, $table)
+        public function getUserAction($version, $username, $table)
         {
 
             try{
-              $get = $this->container->get('radius.compte')->get($table, $username);
+              $get = $this->container->get('radius.compte')->getUsername($table, $username);
             }catch(NotFoundHttpException $exception){
               $msg = $exception->getMessage();
               $response = new Response();
@@ -377,6 +377,47 @@ class RadController extends FOSRestController
             $response->headers->set('Content-Type', 'application/json');
             return $response;
         }
+
+
+
+
+      /**
+       * @Annotations\Route(condition="request.attributes.get('version') == 'v1'")
+       * @Annotations\Get("/{id}/{table}",requirements = {"id"="\d+","table"="check|reply|usergroup|groupcheck|groupreply"})
+       * get les objects par id
+       * @ApiDoc(
+       *   resource = true,
+       *   description = "RECUPERER UNE LIGNE",
+       *   statusCodes = {
+       *     200 = "Returned when successful",
+       *     404 = "Returned when the radreply is not found"
+       *   }
+       * )
+       *
+       * @param integer     $id      the object id
+       * @throws NotFoundHttpException when object not exist
+       *
+       * @return Response
+       */
+        public function getIdAction($version, $id, $table)
+        {
+
+            try{
+              $get = $this->container->get('radius.compte')->getId($table, $id);
+            }catch(NotFoundHttpException $exception){
+              $msg = $exception->getMessage();
+              $response = new Response();
+              $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
+              $response->headers->set('Content-Type', 'application/json');
+              return $response;
+            }
+            $data = $this->get('jms_serializer')->serialize($get, 'json');
+            $response = new Response();
+            $response->setContent(json_encode(array('success' => TRUE,'msg' =>$data)));
+            $response->headers->set('Content-Type', 'application/json');
+            return $response;
+        }
+
 
 
 }
