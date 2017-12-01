@@ -111,7 +111,7 @@ class RadController extends FOSRestController
               unset($search[$key]);
             }
           }
-
+        var_dump($search);
         $total = $this->container->get('radius.compte')->all($table,$limit,$offset,$search);
         $data = $this->get('jms_serializer')->serialize($total, 'json');
         $response = new Response();
@@ -140,12 +140,11 @@ class RadController extends FOSRestController
        * @return Response
        *
        */
-
       public function postAction( $table, Request $request)
       {
 
           try{
-            //$this->container->get('radius.compte')->jsonVeri($request->request->all(), $table);
+            $this->container->get('radius.compte')->jsonVeri($request->request->all(), $table);
           }catch(InvalidJsonException $exception){
             $msg = $exception->getMessage();
             $response = new Response();
@@ -173,6 +172,26 @@ class RadController extends FOSRestController
              return $response;
               }
             $this->container->get('radius.compte')->addUser($request->request->all()["data"]["username"]);
+          }
+          if($table == "groupcheck"){
+              $flag = $this->container->get('radius.compte')->veriGroupcheck($request->request->all()["data"]["groupname"]);
+             if(!$flag){
+               $msg = "groupname existe deja dans radgroupcheck";
+               $response = new Response();
+               $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+               $response->headers->set('Content-Type', 'application/json');
+              return $response;
+             }
+           }
+          if($table == "groupreply"){
+              $flag = $this->container->get('radius.compte')->veriGroupcheck($request->request->all()["data"]["groupname"]);
+              if($flag){
+                $msg = "GROUPNAME N'EXISTE PAS DANS RADGROUPCHECK";
+                $response = new Response();
+                $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+                $response->headers->set('Content-Type', 'application/json');
+               return $response;
+              }
           }
         $id = $this->container->get('radius.compte')->patch(null, $request->request->all(),$table);
         $response = new Response();
@@ -210,12 +229,13 @@ class RadController extends FOSRestController
         if($method == "PATCH"){
           $id = $this->container->get('radius.compte')->patch($username,$request->request->all(),$table);
         }
-
+        var_dump($id);
         $response = new Response();
-        $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PATCH-OK", 'id' => $id)));
+        $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PATCH-OK", 'id ou username' => $id)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
       }
+
 
       /**
        * UPDATE UNE NOUVELLE LIGNE A PARTIR DES DONNEE
@@ -235,21 +255,21 @@ class RadController extends FOSRestController
        * @return Response
        *
        */
-
       public function putAction( $table, Request $request)
       {
 
         $method = $request->getMethod();
         echo $method."\n";
         if($method == "PUT"){
-          $id = $this->container->get('radius.compte')->patch(null,$request->request->all(),$table);
+          $id = $this->container->get('radius.compte')->patch(null,null,$table);
         }
 
         $response = new Response();
-        $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PUT-OK", 'id' => $id)));
+        $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PUT-OK" )));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
       }
+
 
     /**
      * SUPPRIME DANS UNE TABLE
@@ -284,6 +304,7 @@ class RadController extends FOSRestController
           $response->headers->set('Content-Type', 'application/json');
           return $response;
       }
+
 
       /**
        * SUPPRIME DANS TOUTES LES TABLES
@@ -356,18 +377,6 @@ class RadController extends FOSRestController
             $response->headers->set('Content-Type', 'application/json');
             return $response;
         }
-
-  /*
-  $patch = new Radcheck;
-  $patch->setUsername('Writeablogpost');
-  $patch->setAttribute("attribute");
-  $form = $this->createFormBuilder($patch)
-   ->add('username', TextType::class)
-   ->add('attribute', TextType::class)
-   ->add('save', SubmitType::class, array('label' => 'Create Task'))
-   ->getForm();
-  return $this->render('LUCIERadiusBundle:Radcheck:menu.html.twig', array('form' => $form->createView(),));
-  */
 
 
 }

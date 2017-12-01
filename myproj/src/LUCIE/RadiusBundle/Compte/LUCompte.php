@@ -45,6 +45,8 @@ class LUCompte
           $this->userbillinfo = $this->om->getRepository("LUCIERadiusBundle:Userbillinfo");
       }
 
+
+
       /**
        * ajoute userinfo et userbillinfo s'il n'exite pas
        *
@@ -71,7 +73,7 @@ class LUCompte
             $infopost->setCreationby("newuser.pl");
             $infopost->setUpdatedate(new \DateTime($day));
             $this->om->persist($infopost);
-            $this->om->flush($infopost);
+            $this->om->flush();
             $billinfopost = new Userbillinfo;
             $billinfopost->setUsername($username);//($compte->getUsername());
             $billinfopost->setCreationdate(new \DateTime($day));
@@ -81,9 +83,10 @@ class LUCompte
             $billinfopost->setUpdatedate(new \DateTime($day));
             $billinfopost->setUpdateby("newuser.pl");
             $this->om->persist($billinfopost);
-            $this->om->flush($billinfopost);
+            $this->om->flush();
             return;
       }
+
 
 
 
@@ -138,6 +141,26 @@ class LUCompte
       }
 
 
+
+      /**
+       * verifier si username double
+       *
+       * @param string $username filter search array
+       *
+       *@return boolean
+       */
+      public function veriGroupcheck($groupname){
+
+          $get = $this->radgroupcheck->findByGroupname($groupname);
+
+          if(empty($get)){
+                return TRUE;
+            }else{
+              return FALSE;
+            }
+      }
+
+
       /**
        * VERIFIER FORMAT JSON
        *
@@ -149,12 +172,13 @@ class LUCompte
       public function jsonVeri(array $parameters, $table) {
         $data = $parameters["data"];
         foreach ($data as $key => $value) {
-          if($value == null ){
+          if(empty($value)){
             throw new InvalidJsonException('Invalid '.$key);
           }
         }
           return ;
       }
+
 
 
       /**
@@ -172,10 +196,10 @@ class LUCompte
             $all = $this->radreply->findBy($search, null, $limit, $offset);
             break;
           case "check":
-
             $all = $this->radcheck->findBy($search, null, $limit, $offset);
             break;
           case "groupcheck":
+            //array('groupname' => 'ctx-GP-324324')
             $all = $this->radgroupcheck->findBy($search, null, $limit, $offset);
             break;
           case "groupreply":
@@ -187,6 +211,7 @@ class LUCompte
         }
           return $all;
       }
+
 
 
       /**
@@ -243,47 +268,100 @@ class LUCompte
       /**
        * Create a new LIGNE
        *
+       * @param array $username
        * @param array $parameters
+       * @param array $table
        *
        *
        * @return integer
        */
         public function patch($username, $parameters, $table) {
+          $patch =  null;
+          $post = null;
           if($username){
             $patch = $this->get($table, $username);
           }else{
-            $patch = $this->newObject($table);
+            $post = $this->newObject($table);
           }
+          if(!$parameters)return;
           $data = $parameters["data"];
-          foreach ($data as $key => $value) {
-            switch($key){
-              case "username":
-                $patch->setUsername($value);
-              break;
-              case "groupname":
-                $patch->setGroupname($value);
-              break;
-              case "attribute":
-                $patch->setAttribute($value);
-              break;
-              case "op":
-                $patch->setOp($value);
-              break;
-              case "value":
-                $patch->setValue($value);
-              break;
-              case "priority":
-                $patch->setPriority($value);
-              break;
+          if($patch){
+            foreach ($data as $key => $value){
+              switch($key){
+                case "username":
+                    foreach ($patch as $element){
+                      $element->setUsername($value);
+                      }
+                break;
+                case "groupname":
+                    foreach ($patch as $element){
+                      $element->setGroupname($value);
+                    }
+                break;
+                case "attribute":
+                    foreach ($patch as $element){
+                      $element->setAttribute($value);
+                    }
+                break;
+                case "op":
+                    foreach ($patch as $element){
+                      $element->setOp($value);
+                    }
+                break;
+                case "value":
+                    foreach ($patch as $element){
+                      $element->setValue($value);
+                    }
+                break;
+                case "priority":
+                    foreach ($patch as $element){
+                      $element->setPriority($value);
+                    }
+                break;
+              }
             }
+            $list = array();
+            foreach ($patch as $element){
+              $this->om->persist($element);
+              $this->om->flush();
+              if($table == "usergroup"){
+                $list[] = $element->getUsername();
+              }
+              $list[] = $element->getId();
+            }
+            return $list;
+          }
+          if($post){
+            foreach ($data as $key => $value){
+              switch($key){
+                case "username":
+                  $post->setUsername($value);
+                break;
+                case "groupname":
+                  $post->setGroupname($value);
+                break;
+                case "attribute":
+                  $post->setAttribute($value);
+                break;
+                case "op":
+                  $post->setOp($value);
+                break;
+                case "value":
+                  $post->setValue($value);
+                break;
+                case "priority":
+                  $post->setPriority($value);
+                break;
+              }
+            }
+            $this->om->persist($post);
+            $this->om->flush();
+            if($table == "usergroup"){
+              return $post->getUsername();
+            }
+            return $post->getId();
+          }
 
-          }
-          $this->om->persist($patch);
-          $this->om->flush();
-          if($table == "usergroup"){
-            return $patch->getUsername();
-          }
-          return $patch->getId();
         }
 
 
@@ -351,10 +429,8 @@ class LUCompte
                   $get = $this->radreply->findByUsername($username);
                   break;
                 case "check":
-
                   $get = $this->radcheck->findByUsername($username);
                   break;
-
                 case "usergroup":
                   $get = $this->radusergroup->findByUsername($username);
                   break;
