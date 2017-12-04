@@ -483,18 +483,18 @@ class LUCompte
          *
          */
           public function delete($table, $username) {
-
+              $id = array();
               $delete = $this->getUsername($table, $username);
               if($table == "reply"){
                 $delete = array_merge($delete,$this->userinfo->findByUsername($username));
                 $delete = array_merge($delete,$this->userbillinfo->findByUsername($username));
               }
               foreach ($delete as $value) {
+                $id[] = $value->getId();
                 $this->om->remove($value);
                 $this->om->flush();
               }
-
-              return;
+              return $id;
           }
 
 
@@ -505,7 +505,7 @@ class LUCompte
            *
            */
             public function deleteAll($username) {
-
+              $id = array();
               $all = $this->radreply->findByUsername($username);
               $all = array_merge($all,$this->radcheck->findByUsername($username));
               $all = array_merge($all,$this->radusergroup->findByUsername($username));
@@ -518,10 +518,11 @@ class LUCompte
                 return;
               }
               foreach ($all as $value) {
+                $id[] = $value->getId();
                 $this->om->remove($value);
                 $this->om->flush();
               }
-                return;
+                return $id;
             }
 
 

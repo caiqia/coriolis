@@ -299,7 +299,7 @@ class RadController extends FOSRestController
       {
 
           try{
-            $msg = $this->container->get('radius.compte')->delete($table, $username);
+            $id = $this->container->get('radius.compte')->delete($table, $username);
           }catch(NotFoundHttpException $exception){
             $msg = $exception->getMessage();
             $response = new Response();
@@ -308,7 +308,7 @@ class RadController extends FOSRestController
             return $response;
           }
           $response = new Response();
-          $response->setContent(json_encode(array('success' => TRUE,'msg' =>"DELETE-OK")));
+          $response->setContent(json_encode(array('success' => TRUE,'msg' =>"DELETE-OK",'id ou username' => $id)));
           $response->headers->set('Content-Type', 'application/json');
           return $response;
       }
@@ -333,7 +333,7 @@ class RadController extends FOSRestController
         {
 
             try{
-              $msg = $this->container->get('radius.compte')->deleteAll($username);
+              $id = $this->container->get('radius.compte')->deleteAll($username);
             }catch(NotFoundHttpException $exception){
               $msg = $exception->getMessage();
               $response = new Response();
@@ -342,7 +342,7 @@ class RadController extends FOSRestController
               return $response;
             }
             $response = new Response();
-            $response->setContent(json_encode(array('success' => TRUE,'msg' =>"DELETE-OK")));
+            $response->setContent(json_encode(array('success' => TRUE,'msg' =>"DELETE-OK",'id ou username' => $id)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
         }
