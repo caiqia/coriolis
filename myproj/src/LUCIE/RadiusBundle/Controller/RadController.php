@@ -229,7 +229,15 @@ class RadController extends FOSRestController
       {
 
         $method = $request->getMethod();
-        echo $method."\n";
+        try{
+          $this->container->get('radius.compte')->jsonVeri($request->request->all(), $table);
+        }catch(InvalidJsonException $exception){
+          $msg = $exception->getMessage();
+          $response = new Response();
+          $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+          $response->headers->set('Content-Type', 'application/json');
+         return $response;
+        }
         if($method == "PATCH"){
           $id = $this->container->get('radius.compte')->patch($id,$request->request->all(),$table);
         }

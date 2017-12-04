@@ -170,59 +170,123 @@ class LUCompte
        * @return
        */
       public function jsonVeri(array $parameters, $table) {
-        $data = $parameters["data"];
-	switch($table){
-		case "reply":
-			if($data["username"]){
-				if($data["attribute"]){
-					if($data["value"]){
-						return true;
-					}
-				}	
-			}
-		break;
-		case "check":
-			 if($data["username"]){
-                                 if($data["attribute"]){
-                                         if($data["value"]){
-                                                 return true;
-                                         }
-                                 }
+
+            $msg = "incorrect data json";
+            $data = $parameters["data"];
+            $cpt = array();
+            switch($table){
+              case "reply":
+                $cpt = array(1,1,1,1);
+                foreach ($data as $key => $value){
+                    if(!empty($data[$key])){
+                        if($key == "username"){
+                          $cpt[0] -=1 ;
                         }
+                        if($key == "attribute"){
+                          $cpt[1] -=1 ;
+                        }
+                        if($key == "value"){
+                          $cpt[2] -=1 ;
+                        }
+                        if($key == "op"){
+                          $cpt[3] -=1 ;
+                        }
+                    }else{
+                      $msg = $msg. ": invalid ".$key;
+                    }
+                }
+                break;
+              case "check":
+                $cpt = array(1,1,1,1);
+                foreach ($data as $key => $value){
+                  if(!empty($data[$key])){
+                      if($key == "username"){
+                        $cpt[0] -=1 ;
+                      }
+                      if($key == "attribute"){
+                        $cpt[1] -=1 ;
+                      }
+                      if($key == "value"){
+                        $cpt[2] -=1 ;
+                      }
+                      if($key == "op"){
+                        $cpt[3] -=1 ;
+                      }
+                  }else{
+                    $msg = $msg. ": invalid ".$key;
+                  }
+                }
 
                 break;
-		case "groupreply":
-			 if($data["groupname"]){
-                                 if($data["attribute"]){
-                                         if($data["value"]){
-                                                 return true;
-                                         }
-                                 }
-                         }
-
+              case "groupcheck":
+              $cpt = array(1,1,1,1);
+                foreach ($data as $key => $value){
+                  if(!empty($data[$key])){
+                      if($key == "groupname"){
+                        $cpt[0] -= 1;
+                      }
+                      if($key == "attribute"){
+                        $cpt[1] -= 1;
+                      }
+                      if($key == "value"){
+                        $cpt[2] -= 1;
+                      }
+                      if($key == "op"){
+                        $cpt[3] -= 1;
+                      }
+                  }else{
+                    $msg = $msg. ": invalid ".$key;
+                  }
+                }
                 break;
-		case "groupcheck":
-			 if($data["groupname"]){
-                                 if($data["attribute"]){
-                                         if($data["value"]){
-                                                 return true;
-                                         }
-                                 }
-                         }
-		
+              case "groupreply":
+                $cpt = array(1,1,1,1);
+                foreach ($data as $key => $value){
+                  if(!empty($data[$key])){
+                      if($key == "groupname"){
+                        $cpt[0] -= 1;
+                      }
+                      if($key == "attribute"){
+                        $cpt[1] -= 1;
+                      }
+                      if($key == "value"){
+                        $cpt[2] -= 1;
+                      }
+                      if($key == "op"){
+                        $cpt[3] -= 1;
+                      }
+                  }else{
+                    $msg = $msg. ": invalid ".$key;
+                  }
+                }
                 break;
-		case "usergroup":
-			 if($data["groupname"]){
-                                 if($data["username"]){
-                                         if($data["priority"]){
-                                                 return true;
-                                         }
-                                 }
-                         }
-                break;	
-	}
-	 throw new InvalideJsonException("invalide json");
-          return ;
+              case "usergroup":
+              $cpt = array(1,1,1);
+              foreach ($data as $key => $value){
+                    if($key == "groupname"){
+                      if(!empty($data[$key])){
+                        $cpt[0] -= 1;
+                      }else{
+                        $msg = $msg. ": invalid ".$key;
+                      }
+                    }
+                    if($key == "username"){
+                      if(!empty($data[$key])){
+                        $cpt[1] -= 1;
+                      }else{
+                        $msg = $msg. ": invalid ".$key;
+                      }
+                    }
+                    if($key == "priority"){
+                      $cpt[2] -= 1;
+                    }
+                }
+                break;
+            }
+            if(array_sum($cpt) != 0){
+                throw new InvalidJsonException($msg);
+            }
+            return;
       }
 
 
