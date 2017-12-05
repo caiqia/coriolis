@@ -180,16 +180,16 @@ class LUCompte
                 foreach ($data as $key => $value){
                     if(!empty($data[$key])){
                         if($key == "username"){
-                          $cpt[0] -=1 ;
+                          $cpt[0] =0;
                         }
                         if($key == "attribute"){
-                          $cpt[1] -=1 ;
+                          $cpt[1] =0;
                         }
                         if($key == "value"){
-                          $cpt[2] -=1 ;
+                          $cpt[2] =0;
                         }
                         if($key == "op"){
-                          $cpt[3] -=1 ;
+                          $cpt[3] =0;
                         }
                     }else{
                       $msg = $msg. ": invalid ".$key;
@@ -201,16 +201,16 @@ class LUCompte
                 foreach ($data as $key => $value){
                   if(!empty($data[$key])){
                       if($key == "username"){
-                        $cpt[0] -=1 ;
+                        $cpt[0] =0;
                       }
                       if($key == "attribute"){
-                        $cpt[1] -=1 ;
+                        $cpt[1] =0;
                       }
                       if($key == "value"){
-                        $cpt[2] -=1 ;
+                        $cpt[2] =0;
                       }
                       if($key == "op"){
-                        $cpt[3] -=1 ;
+                        $cpt[3] =0;
                       }
                   }else{
                     $msg = $msg. ": invalid ".$key;
@@ -223,16 +223,16 @@ class LUCompte
                 foreach ($data as $key => $value){
                   if(!empty($data[$key])){
                       if($key == "groupname"){
-                        $cpt[0] -= 1;
+                        $cpt[0] =0;
                       }
                       if($key == "attribute"){
-                        $cpt[1] -= 1;
+                        $cpt[1] =0;
                       }
                       if($key == "value"){
-                        $cpt[2] -= 1;
+                        $cpt[2] =0;
                       }
                       if($key == "op"){
-                        $cpt[3] -= 1;
+                        $cpt[3] =0;
                       }
                   }else{
                     $msg = $msg. ": invalid ".$key;
@@ -244,16 +244,16 @@ class LUCompte
                 foreach ($data as $key => $value){
                   if(!empty($data[$key])){
                       if($key == "groupname"){
-                        $cpt[0] -= 1;
+                        $cpt[0] =0;
                       }
                       if($key == "attribute"){
-                        $cpt[1] -= 1;
+                        $cpt[1] =0;
                       }
                       if($key == "value"){
-                        $cpt[2] -= 1;
+                        $cpt[2] =0;
                       }
                       if($key == "op"){
-                        $cpt[3] -= 1;
+                        $cpt[3] =0;
                       }
                   }else{
                     $msg = $msg. ": invalid ".$key;
@@ -261,27 +261,27 @@ class LUCompte
                 }
                 break;
               case "usergroup":
-              $cpt = array(1,1,1);
-              foreach ($data as $key => $value){
-                    if($key == "groupname"){
-                      if(!empty($data[$key])){
-                        $cpt[0] -= 1;
-                      }else{
-                        $msg = $msg. ": invalid ".$key;
+                $cpt = array(1,1,1);
+                foreach ($data as $key => $value){
+                      if($key == "groupname"){
+                        if(!empty($data[$key])){
+                          $cpt[0] =0;
+                        }else{
+                          $msg = $msg. ": invalid ".$key;
+                        }
                       }
-                    }
-                    if($key == "username"){
-                      if(!empty($data[$key])){
-                        $cpt[1] -= 1;
-                      }else{
-                        $msg = $msg. ": invalid ".$key;
+                      if($key == "username"){
+                        if(!empty($data[$key])){
+                          $cpt[1] =0;
+                        }else{
+                          $msg = $msg. ": invalid ".$key;
+                        }
                       }
-                    }
-                    if($key == "priority"){
-                      $cpt[2] -= 1;
-                    }
+                      if($key == "priority"){
+                        $cpt[2] =0;
+                      }
                 }
-                break;
+              break;
             }
             if(array_sum($cpt) != 0){
                 throw new InvalidJsonException($msg);
@@ -398,16 +398,6 @@ class LUCompte
           if($patch){
             foreach ($data as $key => $value){
               switch($key){
-                case "username":
-                    foreach ($patch as $element){
-                      $element->setUsername($value);
-                      }
-                break;
-                case "groupname":
-                    foreach ($patch as $element){
-                      $element->setGroupname($value);
-                    }
-                break;
                 case "attribute":
                     foreach ($patch as $element){
                       $element->setAttribute($value);

@@ -9,7 +9,7 @@ parameters:
     locale: en
 
 nelmio_api_doc:
-    name: API-RADIUS-LUCIE
+    name: API-RADIUS-V1
 
 framework:
     #esi:             ~

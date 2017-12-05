@@ -127,6 +127,7 @@ class RadController extends FOSRestController
       }
 
 
+
       /**
        * CREE UNE NOUVELLE LIGNE A PARTIR DES DONNEE
        * @Annotations\Route(condition="request.attributes.get('version') == 'v1'")
@@ -147,7 +148,6 @@ class RadController extends FOSRestController
        */
       public function postAction( $table, Request $request)
       {
-
           try{
             $this->container->get('radius.compte')->jsonVeri($request->request->all(), $table);
           }catch(InvalidJsonException $exception){
@@ -158,8 +158,8 @@ class RadController extends FOSRestController
            return $response;
           }
           if($table == "check"){
-              $flag = $this->container->get('radius.compte')->veriCheck($request->request->all()["data"]["username"]);
-             if(!$flag){
+             $flag1 = $this->container->get('radius.compte')->veriCheck($request->request->all()["data"]["username"]);
+             if(!$flag1){
                $msg = "username existe deja dans radcheck";
                $response = new Response();
                $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
@@ -168,8 +168,8 @@ class RadController extends FOSRestController
              }
            }
           if($table == "reply"){
-              $flag = $this->container->get('radius.compte')->veriCheck($request->request->all()["data"]["username"]);
-              if($flag){
+              $flag1 = $this->container->get('radius.compte')->veriCheck($request->request->all()["data"]["username"]);
+              if($flag1){
               $msg = "USERNAME N'EXISTE PAS DANS RADCHECK";
               $response = new Response();
               $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
@@ -179,8 +179,8 @@ class RadController extends FOSRestController
             $this->container->get('radius.compte')->addUser($request->request->all()["data"]["username"]);
           }
           if($table == "groupcheck"){
-              $flag = $this->container->get('radius.compte')->veriGroupcheck($request->request->all()["data"]["groupname"]);
-             if(!$flag){
+             $flag2 = $this->container->get('radius.compte')->veriGroupcheck($request->request->all()["data"]["groupname"]);
+             if(!$flag2){
                $msg = "groupname existe deja dans radgroupcheck";
                $response = new Response();
                $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
@@ -189,8 +189,8 @@ class RadController extends FOSRestController
              }
            }
           if($table == "groupreply"){
-              $flag = $this->container->get('radius.compte')->veriGroupcheck($request->request->all()["data"]["groupname"]);
-              if($flag){
+              $flag2 = $this->container->get('radius.compte')->veriGroupcheck($request->request->all()["data"]["groupname"]);
+              if($flag2){
                 $msg = "GROUPNAME N'EXISTE PAS DANS RADGROUPCHECK";
                 $response = new Response();
                 $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
@@ -208,7 +208,7 @@ class RadController extends FOSRestController
 
 
       /**
-       * UPDATE UNE NOUVELLE LIGNE A PARTIR DES DONNEE
+       * UPDATE UNE LIGNE EXISTE A PARTIR DES DONNEE
        * @Annotations\Route(condition="request.attributes.get('version') == 'v1'")
        * @Annotations\Patch("/{id}/{table}",requirements = {"id"="\d+","table"="check|reply|groupcheck|groupreply|usergroup"})
        * @ApiDoc(
@@ -227,7 +227,6 @@ class RadController extends FOSRestController
        */
       public function patchAction( $id, $table, Request $request)
       {
-
         $method = $request->getMethod();
         try{
           $this->container->get('radius.compte')->jsonVeri($request->request->all(), $table);
@@ -238,6 +237,19 @@ class RadController extends FOSRestController
           $response->headers->set('Content-Type', 'application/json');
          return $response;
         }
+        if($table == "check" || $table == "reply"){
+            $flag = $this->container->get('radius.compte')->veriCheck($request->request->all()["data"]["username"]);
+         }
+        if($table == "groupcheck" || $table == "groupreply"){
+            $flag = $this->container->get('radius.compte')->veriGroupcheck($request->request->all()["data"]["groupname"]);
+         }
+        if($flag){
+             $msg = "USERNAME N'EXISTE PAS DANS RADCHECK";
+             $response = new Response();
+             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+             $response->headers->set('Content-Type', 'application/json');
+            return $response;
+         }
         if($method == "PATCH"){
           $id = $this->container->get('radius.compte')->patch($id,$request->request->all(),$table);
         }
@@ -355,7 +367,7 @@ class RadController extends FOSRestController
        * get les objects par username
        * @ApiDoc(
        *   resource = true,
-       *   description = "RECUPERER UNE LIGNE",
+       *   description = "RECUPERER UNE LIGNE AVEC USERNAME OU GROUPNAME",
        *   statusCodes = {
        *     200 = "Returned when successful",
        *     404 = "Returned when the radreply is not found"
@@ -395,7 +407,7 @@ class RadController extends FOSRestController
        * get les objects par id
        * @ApiDoc(
        *   resource = true,
-       *   description = "RECUPERER UNE LIGNE",
+       *   description = "RECUPERER UNE LIGNE AVEC ID",
        *   statusCodes = {
        *     200 = "Returned when successful",
        *     404 = "Returned when the radreply is not found"
