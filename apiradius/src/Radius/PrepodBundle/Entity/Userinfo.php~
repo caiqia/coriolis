@@ -1,0 +1,180 @@
+<?php
+
+namespace Radius\PrepodBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Userinfo
+ *
+ * @ORM\Table(name="userinfo", indexes={@ORM\Index(name="username", columns={"username"})})
+ * @ORM\Entity
+ */
+class Userinfo
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="username", type="string", length=128, nullable=true)
+     */
+    private $username;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="firstname", type="string", length=200, nullable=true)
+     */
+    private $firstname;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="lastname", type="string", length=200, nullable=true)
+     */
+    private $lastname;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="email", type="string", length=200, nullable=true)
+     */
+    private $email;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="department", type="string", length=200, nullable=true)
+     */
+    private $department;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="company", type="string", length=200, nullable=true)
+     */
+    private $company;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="workphone", type="string", length=200, nullable=true)
+     */
+    private $workphone;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="homephone", type="string", length=200, nullable=true)
+     */
+    private $homephone;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mobilephone", type="string", length=200, nullable=true)
+     */
+    private $mobilephone;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="address", type="string", length=200, nullable=true)
+     */
+    private $address;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="city", type="string", length=200, nullable=true)
+     */
+    private $city;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="state", type="string", length=200, nullable=true)
+     */
+    private $state;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="country", type="string", length=100, nullable=true)
+     */
+    private $country;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="zip", type="string", length=200, nullable=true)
+     */
+    private $zip;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="notes", type="string", length=200, nullable=true)
+     */
+    private $notes;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="changeuserinfo", type="string", length=128, nullable=true)
+     */
+    private $changeuserinfo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="portalloginpassword", type="string", length=128, nullable=true)
+     */
+    private $portalloginpassword = '';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="enableportallogin", type="integer", nullable=true)
+     */
+    private $enableportallogin = '0';
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="creationdate", type="datetime", nullable=true)
+     */
+    private $creationdate = '1999-10-10 10:10:10';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="creationby", type="string", length=128, nullable=true)
+     */
+    private $creationby;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="updatedate", type="datetime", nullable=true)
+     */
+    private $updatedate = '1999-10-10 10:10:10';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="updateby", type="string", length=128, nullable=true)
+     */
+    private $updateby;
+
+
+}
+

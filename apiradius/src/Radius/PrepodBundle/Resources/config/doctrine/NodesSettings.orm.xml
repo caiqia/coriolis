@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Radius\PrepodBundle\Entity\NodesSettings" table="nodes_settings">
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="softCheckinTime" type="string" column="soft_checkin_time" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">time in minutes which hotspot is considered late/down (soft limit)</option>
+      </options>
+    </field>
+    <field name="hardCheckinTime" type="string" column="hard_checkin_time" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">time in minutes which hotspot is considered late/down (hard limit)</option>
+      </options>
+    </field>
+    <field name="creationdate" type="datetime" column="creationdate" nullable="true">
+      <options>
+        <option name="default">0000-00-00 00:00:00</option>
+      </options>
+    </field>
+    <field name="creationby" type="string" column="creationby" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="updatedate" type="datetime" column="updatedate" nullable="true">
+      <options>
+        <option name="default">0000-00-00 00:00:00</option>
+      </options>
+    </field>
+    <field name="updateby" type="string" column="updateby" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+  </entity>
+</doctrine-mapping>

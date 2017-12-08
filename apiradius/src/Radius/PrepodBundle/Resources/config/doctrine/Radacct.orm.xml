@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Radius\PrepodBundle\Entity\Radacct" table="radacct">
+    <indexes>
+      <index name="username" columns="username"/>
+      <index name="framedipaddress" columns="framedipaddress"/>
+      <index name="acctsessionid" columns="acctsessionid"/>
+      <index name="acctsessiontime" columns="acctsessiontime"/>
+      <index name="acctuniqueid" columns="acctuniqueid"/>
+      <index name="acctstarttime" columns="acctstarttime"/>
+      <index name="acctstoptime" columns="acctstoptime"/>
+      <index name="nasipaddress" columns="nasipaddress"/>
+    </indexes>
+    <id name="radacctid" type="bigint" column="radacctid">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="acctsessionid" type="string" column="acctsessionid" length="64" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="default"/>
+      </options>
+    </field>
+    <field name="acctuniqueid" type="string" column="acctuniqueid" length="32" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="default"/>
+      </options>
+    </field>
+    <field name="username" type="string" column="username" length="64" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="default"/>
+      </options>
+    </field>
+    <field name="groupname" type="string" column="groupname" length="64" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="default"/>
+      </options>
+    </field>
+    <field name="realm" type="string" column="realm" length="64" nullable="true">
+      <options>
+        <option name="fixed"/>
+        <option name="default"/>
+      </options>
+    </field>
+    <field name="nasipaddress" type="string" column="nasipaddress" length="15" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="default"/>
+      </options>
+    </field>
+    <field name="nasportid" type="string" column="nasportid" length="15" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="nasporttype" type="string" column="nasporttype" length="32" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="acctstarttime" type="datetime" column="acctstarttime" nullable="true"/>
+    <field name="acctstoptime" type="datetime" column="acctstoptime" nullable="true"/>
+    <field name="acctsessiontime" type="integer" column="acctsessiontime" nullable="true">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+    <field name="acctauthentic" type="string" column="acctauthentic" length="32" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="connectinfoStart" type="string" column="connectinfo_start" length="50" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="connectinfoStop" type="string" column="connectinfo_stop" length="50" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="acctinputoctets" type="bigint" column="acctinputoctets" nullable="true">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+    <field name="acctoutputoctets" type="bigint" column="acctoutputoctets" nullable="true">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+    <field name="calledstationid" type="string" column="calledstationid" length="50" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="default"/>
+      </options>
+    </field>
+    <field name="callingstationid" type="string" column="callingstationid" length="50" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="default"/>
+      </options>
+    </field>
+    <field name="acctterminatecause" type="string" column="acctterminatecause" length="32" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="default"/>
+      </options>
+    </field>
+    <field name="servicetype" type="string" column="servicetype" length="32" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="framedprotocol" type="string" column="framedprotocol" length="32" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="framedipaddress" type="string" column="framedipaddress" length="15" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="default"/>
+      </options>
+    </field>
+    <field name="acctstartdelay" type="integer" column="acctstartdelay" nullable="true">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+    <field name="acctstopdelay" type="integer" column="acctstopdelay" nullable="true">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+    <field name="xascendsessionsvrkey" type="string" column="xascendsessionsvrkey" length="10" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+  </entity>
+</doctrine-mapping>

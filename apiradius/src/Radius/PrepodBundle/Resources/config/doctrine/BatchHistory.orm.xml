@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Radius\PrepodBundle\Entity\BatchHistory" table="batch_history">
+    <indexes>
+      <index name="batch_name" columns="batch_name"/>
+    </indexes>
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="batchName" type="string" column="batch_name" length="64" nullable="true">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">an identifier name of the batch instance</option>
+      </options>
+    </field>
+    <field name="batchDescription" type="string" column="batch_description" length="256" nullable="true">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">general description of the entry</option>
+      </options>
+    </field>
+    <field name="hotspotId" type="integer" column="hotspot_id" nullable="true">
+      <options>
+        <option name="unsigned"/>
+        <option name="comment">the hotspot business id associated with this batch instance</option>
+        <option name="default">0</option>
+      </options>
+    </field>
+    <field name="batchStatus" type="string" column="batch_status" length="128" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">the batch status</option>
+        <option name="default">Pending</option>
+      </options>
+    </field>
+    <field name="creationdate" type="datetime" column="creationdate" nullable="true">
+      <options>
+        <option name="default">1999-10-10 10:10:10</option>
+      </options>
+    </field>
+    <field name="creationby" type="string" column="creationby" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="updatedate" type="datetime" column="updatedate" nullable="true">
+      <options>
+        <option name="default">1999-10-10 10:10:10</option>
+      </options>
+    </field>
+    <field name="updateby" type="string" column="updateby" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+  </entity>
+</doctrine-mapping>

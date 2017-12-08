@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Radius\PrepodBundle\Entity\Invoice" table="invoice">
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="userId" type="integer" column="user_id" nullable="true">
+      <options>
+        <option name="unsigned"/>
+        <option name="comment">user id of the userbillinfo table</option>
+      </options>
+    </field>
+    <field name="batchId" type="integer" column="batch_id" nullable="true">
+      <options>
+        <option name="unsigned"/>
+        <option name="comment">batch id of the batch_history table</option>
+      </options>
+    </field>
+    <field name="date" type="datetime" column="date" nullable="false">
+      <options>
+        <option name="default">1999-10-10 10:10:10</option>
+      </options>
+    </field>
+    <field name="statusId" type="integer" column="status_id" nullable="false">
+      <options>
+        <option name="unsigned"/>
+        <option name="comment">the status of the invoice from invoice_status</option>
+        <option name="default">1</option>
+      </options>
+    </field>
+    <field name="typeId" type="integer" column="type_id" nullable="false">
+      <options>
+        <option name="unsigned"/>
+        <option name="comment">the type of the invoice from invoice_type</option>
+        <option name="default">1</option>
+      </options>
+    </field>
+    <field name="notes" type="string" column="notes" length="128" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">general notes/description</option>
+      </options>
+    </field>
+    <field name="creationdate" type="datetime" column="creationdate" nullable="true">
+      <options>
+        <option name="default">1999-10-10 10:10:10</option>
+      </options>
+    </field>
+    <field name="creationby" type="string" column="creationby" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="updatedate" type="datetime" column="updatedate" nullable="true">
+      <options>
+        <option name="default">1999-10-10 10:10:10</option>
+      </options>
+    </field>
+    <field name="updateby" type="string" column="updateby" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+  </entity>
+</doctrine-mapping>

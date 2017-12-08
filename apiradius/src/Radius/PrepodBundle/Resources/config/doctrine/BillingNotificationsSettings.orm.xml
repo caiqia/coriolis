@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Radius\PrepodBundle\Entity\BillingNotificationsSettings" table="billing_notifications_settings">
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="notificationName" type="string" column="notification_name" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">the notification name - an identifier to distinguish</option>
+      </options>
+    </field>
+    <field name="notificationDelay" type="string" column="notification_delay" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">notification delay in days after-which to send a notification</option>
+      </options>
+    </field>
+    <field name="notificationLimittype" type="string" column="notification_limittype" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">percent</option>
+      </options>
+    </field>
+    <field name="notificationSoftlimit" type="string" column="notification_softlimit" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">a soft limit</option>
+      </options>
+    </field>
+    <field name="notificationHardlimit" type="string" column="notification_hardlimit" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">a hard limit</option>
+      </options>
+    </field>
+    <field name="creationdate" type="datetime" column="creationdate" nullable="true">
+      <options>
+        <option name="default">0000-00-00 00:00:00</option>
+      </options>
+    </field>
+    <field name="creationby" type="string" column="creationby" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="updatedate" type="datetime" column="updatedate" nullable="true">
+      <options>
+        <option name="default">0000-00-00 00:00:00</option>
+      </options>
+    </field>
+    <field name="updateby" type="string" column="updateby" length="128" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+  </entity>
+</doctrine-mapping>

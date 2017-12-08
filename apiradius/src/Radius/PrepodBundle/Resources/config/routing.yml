@@ -1,0 +1,6 @@
+radius_prepod_homepage:
+    type:     rest
+    resource:   "Radius\\PrepodBundle\\Controller\\RadiusController"
+    name_prefix:  api_
+#    path:     /
+#    defaults: { _controller: RadiusPrepodBundle:Default:index }
