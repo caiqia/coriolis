@@ -47,6 +47,7 @@ class LUCompte
 
 
 
+
       /**
        * ajoute userinfo et userbillinfo s'il n'exite pas
        *
@@ -122,12 +123,81 @@ class LUCompte
 
 
 
+
+     /**
+      * verifier si table existe
+      * @param array $search
+      * @param string $table
+      * @param boolean $flag
+      *
+      * @throws InvalidJsonException
+      *
+      * @return 
+      */
+      public function searchVeri($search,$table,$flag){   
+          $msg = 'invalid url paramettre';
+          if(empty($search)){
+            if($flag){
+                return;
+            }else{
+                throw new InvalidJsonException($msg);
+            }
+          }
+          if($table == "check" ||$table == "reply" ){
+             foreach ($search as $key => $value){
+                if(($key != 'id')&&($key != 'username')&&($key != 'op')&&($key != 'value')&&($key != 'attribute') ){                        
+                    throw new InvalidJsonException($msg);     
+                 }
+             }
+          }
+          if($table == "groupcheck" ||$table == "groupreply" ){
+               foreach ($search as $key => $value){
+                    if(($key != 'id')&&($key != 'groupname')&&($key != 'op')&&($key != 'value')&&($key != 'attribute') ){     
+                        throw new InvalidJsonException($msg);     
+                    }    
+               } 
+            }
+          if($table == "usergroup"  ){
+              foreach ($search as $key => $value){
+                  if(($key != 'groupname')&&($key != 'username')&&($key != 'priority') ){
+                        throw new InvalidJsonException($msg);
+                  }   
+              }
+          }
+           return;     
+      }
+
+
+
+      /**
+       * verifier pour radusergroup
+       * 
+       * @param string $username
+       * 
+       * @param string $groupname
+       *
+       * @throws InvalidJsonException
+       *
+       * @return
+       */
+      public function veriUsergroup($username, $groupname){
+            $use = $this->radusergroup->findByUsername($username);
+            $group = $this->radusergroup->findByGroupname($groupname);
+            if(empty($use)){return;}
+            if(empty($group)){return;}
+            $msg = 'username et groupname existe deja';
+            throw new InvalidJsonException($msg);     
+      
+      }
+
+
+
       /**
        * verifier si username double
        *
        * @param string $username filter search array
        *
-       *@return boolean
+       * @return boolean
        */
       public function veriCheck($username){
 
@@ -139,6 +209,7 @@ class LUCompte
               return FALSE;
             }
       }
+
 
 
 
@@ -159,6 +230,7 @@ class LUCompte
               return FALSE;
             }
       }
+
 
 
       /**
@@ -306,10 +378,11 @@ class LUCompte
             $all = $this->radreply->findBy($search, null, $limit, $offset);
             break;
           case "check":
+           
             $all = $this->radcheck->findBy($search, null, $limit, $offset);
             break;
           case "groupcheck":
-            //array('groupname' => 'ctx-GP-324324')
+            
             $all = $this->radgroupcheck->findBy($search, null, $limit, $offset);
             break;
           case "groupreply":
@@ -376,7 +449,7 @@ class LUCompte
 
 
       /**
-       * Create a new LIGNE
+       * fonction pour post patch et put
        *
        * @param array $username
        * @param array $parameters
@@ -488,6 +561,7 @@ class LUCompte
           }
 
 
+
           /**
            * DELETE DANS TOUTES LES TABLES
            *
@@ -534,9 +608,6 @@ class LUCompte
                   break;
                 case "check":
                   $get = $this->radcheck->findById($id);
-                  break;
-                case "usergroup":
-                  $get = $this->radusergroup->findById($id);
                   break;
                 case "groupcheck":
                     $get = $this->radgroupcheck->findById($id);
@@ -589,6 +660,22 @@ class LUCompte
               return $get;
 
             }
+
+
+            /**
+             * Processes the form.
+             *      
+             * @param array         $list
+             *  
+             * @return 
+             *  
+             *      
+             **/
+            public function authUser( array $list) {
+                
+                       
+             }
+                            
 
 
         /**

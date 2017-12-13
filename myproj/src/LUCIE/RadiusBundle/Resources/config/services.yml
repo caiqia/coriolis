@@ -5,6 +5,11 @@ services:
         tags:
             - { name: form.type }
 
+    radius.listener:
+        class: LUCIE\RadiusBundle\EventListener\ExceptionListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }
+
 #    lucie_radius.example:
 #        class: LUCIE\RadiusBundle\Example
 #        arguments: ["@service_id", "plain_value", %parameter%]
