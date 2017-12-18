@@ -53,44 +53,33 @@ class RadController extends FOSRestController
        */
       public function getCountAction($table, Request $request, ParamFetcherInterface $paramFetcher)
       {
-          $string = $request->getRequestUri();
-          $list = explode( '?', $string ); 
-          $flag = empty($list[1]);
-          $offset = $paramFetcher->get('offset');
-          $offset = null == $offset ? 0 : $offset;
-          $limit = $paramFetcher->get('limit');
-          $limit = null == $limit ? 0 : $limit;
-          if((!$offset)||(!$limit)){
-            $flag = true;
-          }
-        	$search =  $paramFetcher->all();
-        	unset($search['offset']);
-        	unset($search['limit']);
-        	foreach($search as $key => $value )
+          $string = $request->getRequestUri(); 
+          $search =  $paramFetcher->all();
+          foreach($search as $key => $value )
+          {
+        	if(empty($value))
         	{
-        		if(empty($value))
-        		{
-        			unset($search[$key]);
-        		}
-                }
-                
+        	    unset($search[$key]);
+        	}
+          }       
          try{
-                $this->container->get('radius.compte')->searchVeri($search,$table,$flag);
-            }catch(InvalidJsonException $exception){
+            $this->container->get('radius.compte')->requestUri($string,$search,$table);
+        }catch(InvalidJsonException $exception){
                 $msg = $exception->getMessage();
                 $response = new Response();
                 $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
                 $response->headers->set('Content-Type', 'application/json');
                 return $response;
-            } 
+        }
+        unset($search['offset']);
+        unset($search['limit']);
       	$total = $this->container->get('radius.compte')->count($table,$search);
         $msg = "IL Y A ".$total." LIGNES DANS rad".$table;
         $response = new Response();
         $response->setContent(json_encode(array('success' => TRUE,'msg' => $msg)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
-          //return $this->container->get('mystream.voicemail.handler')->all($limit, $offset, $search); 
-   
+          //return $this->container->get('mystream.voicemail.handler')->all($limit, $offset, $search);  
     }
 
 
@@ -122,28 +111,21 @@ class RadController extends FOSRestController
        */
       public function getSearchAction($table, Request $request, ParamFetcherInterface $paramFetcher)
       {
-           $string = $request->getRequestUri();
-           $list = explode( '?', $string );
-           $flag = empty($list[1]);
+          $string = $request->getRequestUri();
            $offset = $paramFetcher->get('offset');
            $offset = null == $offset ? 0 : $offset;
            $limit = $paramFetcher->get('limit');
            $limit = null == $limit ? 0 : $limit;
-           if((!$offset)||(!$limit)){
-                    $flag = true;
-            }
-          $search =  $paramFetcher->all();
-          unset($search['offset']);
-          unset($search['limit']);
+           $search =  $paramFetcher->all();
           foreach($search as $key => $value )
           {
             if(empty($value))
             {
               unset($search[$key]);
             }
-          }
+          } 
         try{
-            $this->container->get('radius.compte')->searchVeri($search,$table,$flag);
+            $this->container->get('radius.compte')->requestUri($string,$search,$table);
         }catch(InvalidJsonException $exception){
             $msg = $exception->getMessage();
             $response = new Response();
@@ -151,6 +133,8 @@ class RadController extends FOSRestController
             $response->headers->set('Content-Type', 'application/json');
             return $response;
         }
+        unset($search['offset']);
+        unset($search['limit']);
         $total = $this->container->get('radius.compte')->all($table,$limit,$offset,$search);
         $data = $this->get('jms_serializer')->serialize($total, 'json');
         $response = new Response();
@@ -162,37 +146,12 @@ class RadController extends FOSRestController
 
 
 
-         /**
-          * authentification avec jeton json
-          * @Annotations\Route(condition="request.attributes.get('version') == 'v1'")
-          * @Annotations\Post("/authenticate")
-          * @ApiDoc(
-          *    resource = true,
-          *    description = "authentification avec jeton json",
-          *    statusCodes = {
-          *       200 = "Returned when successful",
-          *       400 = "Returned when the form has errors"
-          *    }
-          *  )
-          *                                                                             
-          * @param Request $request the request object
-          *         
-          * @return Response
-          *                                                                                                                 
-          */
-          public function authAction(Request $request){
-               $string = $request->getRequestUri();
-               $list1 = explode( '?', $string );
-               $list2 = explode( '&', $list1 );
-               var_dump($list2);                
-              $id = $this->container->get('radius.compte')->authUser($list2);
-
-          }
+         
 
 
 
       /**
-       * CREE UNE NOUVELLE LIGNE A PARTIR DES DONNEE
+       * CREE UNE NOUVELLE LIGNE A PARTIR DES DONNEES
        * @Annotations\Route(condition="request.attributes.get('version') == 'v1'")
        * @Annotations\Post("/{table}",requirements = {"table"="check|reply|groupcheck|groupreply|usergroup"})
        * @ApiDoc(
@@ -369,7 +328,7 @@ class RadController extends FOSRestController
 
     /**
      * SUPPRIME DANS UNE TABLE
-     * @Annotations\Delete("/{username}/{table}",requirements = {"table"="check|reply|groupcheck|groupreply|usergroup"})
+     * @Annotations\Delete("/{username}/{table}",requirements = {"table"="check|reply|groupcheck|groupreply"})
      * @ApiDoc(
      *   resource = true,
      *   statusCodes = {
@@ -401,6 +360,7 @@ class RadController extends FOSRestController
       }
 
 
+
       /**
        * SUPPRIME DANS TOUTES LES TABLES
        * @Annotations\Delete("/{username}")
@@ -429,17 +389,55 @@ class RadController extends FOSRestController
               return $response;
             }
             $response = new Response();
-            $response->setContent(json_encode(array('success' => TRUE,'msg' =>"DELETE-OK",'id ou username' => $id)));
+            $response->setContent(json_encode(array('success' => TRUE,'msg' =>"DELETE-ALL-OK",'id ou username' => $id)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
         }
 
 
+      /**
+       * @Annotations\Get("/group/{username}/{groupname}")
+       * operation get pour usergroup
+       * @ApiDoc(
+       *    resource = true,
+       *    description= "operation get pour usergroup",
+       *    statusCodes= {
+       *        200 = "returned when successful",
+       *        404 = "returned when usergroup is not found"
+       *    }
+       * )
+       *
+       * @param string $username element username
+       * @param string $groupname element groupname
+       * @throws NotFoundHttpException when element not existe
+       *
+       * @return Response
+       *
+       */
+       public function getUsergroupAction($username,$groupname){
+            try{
+                $get = $this->container->get('radius.compte')->getUsergroup($username, $groupname);         
+            }catch(NotFoundHttpException $exception){
+                $msg = $exception->getMessage();
+                $response = new Response();
+                $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
+                $response->headers->set('Content-Type', 'application/json');
+                return $response;
+            }
+            $data = $this->get('jms_serializer')->serialize($get, 'json');
+            $response = new Response();
+            $response->setContent(json_encode(array('success' => TRUE,'msg' =>$data)));
+            $response->headers->set('Content-Type', 'application/json');
+            return $response;
+
+
+       }
+
 
       /**
        * @Annotations\Route(condition="request.attributes.get('version') == 'v1'")
-       * @Annotations\Get("/name/{username}/{table}",requirements = {"table"="check|reply|usergroup|groupcheck|groupreply"})
-       * get les objects par username
+       * @Annotations\Get("/name/{username}/{table}",requirements = {"table"="check|reply|groupcheck|groupreply"})
+       * recupere les elements par username
        * @ApiDoc(
        *   resource = true,
        *   description = "RECUPERER UNE LIGNE AVEC USERNAME OU GROUPNAME",
@@ -449,7 +447,7 @@ class RadController extends FOSRestController
        *   }
        * )
        *
-       * @param string     $username      the object username
+       * @param string     $username      the element username
        * @throws NotFoundHttpException when object not exist
        *
        * @return Response
