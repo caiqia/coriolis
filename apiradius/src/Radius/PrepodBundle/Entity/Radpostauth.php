@@ -13,15 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Radpostauth
 {
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="username", type="string", length=64, nullable=false)
@@ -48,6 +39,15 @@ class Radpostauth
      * @ORM\Column(name="authdate", type="datetime", nullable=false)
      */
     private $authdate = 'CURRENT_TIMESTAMP';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
 
 
 }

@@ -7,15 +7,36 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Radgroupreply
  *
- * @ORM\Table(name="radgroupreply", indexes={@ORM\Index(name="groupname", columns={"groupname"})})
+ * @ORM\Table(name="radgroupreply", indexes={@ORM\Index(name="fk_group_reply", columns={"groupname"})})
  * @ORM\Entity
  */
 class Radgroupreply
 {
     /**
+     * @var string
+     *
+     * @ORM\Column(name="attribute", type="string", length=64, nullable=false)
+     */
+    private $attribute;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="op", type="string", length=2, nullable=false)
+     */
+    private $op = '==';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="value", type="string", length=253, nullable=false)
+     */
+    private $value;
+
+    /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -24,56 +45,14 @@ class Radgroupreply
     /**
      * @var string
      *
-     * @ORM\Column(name="groupname", type="string", length=64, nullable=false)
+     * @ORM\ManyToOne(targetEntity="Radius\PrepodBundle\Entity\Radiusgroup")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="groupname", referencedColumnName="groupname")
+     * })
      */
-    private $groupname = '';
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="attribute", type="string", length=64, nullable=false)
-     */
-    private $attribute = '';
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="op", type="string", length=2, nullable=false)
-     */
-    private $op = '=';
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="value", type="string", length=253, nullable=false)
-     */
-    private $value = '';
+    private $groupname;
 
 
-
-    /**
-     * Set groupname
-     *
-     * @param string $groupname
-     *
-     * @return Radgroupreply
-     */
-    public function setGroupname($groupname)
-    {
-        $this->groupname = $groupname;
-
-        return $this;
-    }
-
-    /**
-     * Get groupname
-     *
-     * @return string
-     */
-    public function getGroupname()
-    {
-        return $this->groupname;
-    }
 
     /**
      * Set attribute
@@ -155,5 +134,29 @@ class Radgroupreply
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set groupname
+     *
+     * @param string $groupname
+     *
+     * @return Radgroupreply
+     */
+    public function setGroupname( $groupname = null)
+    {
+        $this->groupname = $groupname;
+
+        return $this;
+    }
+
+    /**
+     * Get groupname
+     *
+     * @return \Radius\PrepodBundle\Entity\Radiusgroup
+     */
+    public function getGroupname()
+    {
+        return $this->groupname;
     }
 }

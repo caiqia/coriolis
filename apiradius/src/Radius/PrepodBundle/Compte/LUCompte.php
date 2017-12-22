@@ -15,6 +15,7 @@ use Radius\PrepodBundle\Entity\Radgroupreply;
 use Radius\PrepodBundle\Entity\Radcheck;
 use Radius\PrepodBundle\Entity\Radusergroup;
 use Radius\PrepodBundle\Entity\Userinfo;
+use Radius\PrepodBundle\Entity\Radiusgroup;
 use Radius\PrepodBundle\Entity\Userbillinfo;
 use Radius\PrepodBundle\Form\RadcheckType;
 
@@ -29,6 +30,7 @@ class LUCompte
   protected $radcheck;
   protected $radusergroup;
   protected $userinfo;
+  protected $radiusgroup;
   protected $userbillinfo;
 
 
@@ -42,54 +44,90 @@ class LUCompte
           $this->radcheck = $this->om->getRepository("RadiusPrepodBundle:Radcheck");
           $this->radusergroup = $this->om->getRepository("RadiusPrepodBundle:Radusergroup");
           $this->userinfo = $this->om->getRepository("RadiusPrepodBundle:Userinfo");
+		  $this->radiusgroup = $this->om->getRepository("RadiusPrepodBundle:Radiusgroup");
           $this->userbillinfo = $this->om->getRepository("RadiusPrepodBundle:Userbillinfo");
       }
 
 
 
-      /**
-       * ajoute userinfo et userbillinfo s'il n'exite pas
-       *
-       * @param string $username
-       *
-       *
-       *
+
+
+	  /**
+       * creation d'un utilisateur
+       * @param array parametre
+       * @return 
        */
-      public function addUser($username){
+       public function users($parameters){	 
+           $post = new Userinfo;
+           $post->setUsername($parameters["data"]["username"]);
+           $post->setChangeuserinfo("0");
+           $day = date("Y-m-d H:i:s");
+           $post->setCreationdate(new \DateTime($day));
+           $post->setCreationby("newuser.pl");
+           $post->setUpdatedate(new \DateTime($day));        
+		    $this->om->persist($post);
+			$this->om->flush();
+		   return $post->getId();
+       }
+	
 
-            $reply = $this->radreply->findByUsername($username);
-            if(!empty($reply)){
-                return;
-              }
-            $check = $this->radcheck->findByUsername($username);
-            if(empty($check)){
-                    return;
-            }
-            $infopost = new Userinfo;
-            $infopost->setUsername($username);//($compte->getUsername());
-            $infopost->setChangeuserinfo("0");
-            $day = date("Y-m-d H:i:s");
-            $infopost->setCreationdate(new \DateTime($day));
-            $infopost->setCreationby("newuser.pl");
-            $infopost->setUpdatedate(new \DateTime($day));
-            $this->om->persist($infopost);
-            $this->om->flush();
-            $billinfopost = new Userbillinfo;
-            $billinfopost->setUsername($username);//($compte->getUsername());
-            $billinfopost->setCreationdate(new \DateTime($day));
-            $billinfopost->setCreationby("newuser.pl");
-            $billinfopost->setLastbill(new \DateTime($day));
-            $billinfopost->setNextbill(new \DateTime($day));
-            $billinfopost->setUpdatedate(new \DateTime($day));
-            $billinfopost->setUpdateby("newuser.pl");
-            $this->om->persist($billinfopost);
-            $this->om->flush();
-            return;
-      }
+			  
+  	  /**
+       * creation d'un group
+       * @param array parametre
+       * @return 
+       */
+       public function groups($parameters){	 
+           $post = new Radiusgroup;
+           $post->setGroupname($parameters["data"]["groupname"]);
+		    $this->om->persist($post);
+			$this->om->flush();
+		   return $post->getId();
+       }
 
 
 
+      /**
+       * post dans radcheck, radreply, radgroupcheck et radgroupreply
+       * @param array parametre
+       * @return 
+       */
+       public function checkReply($table,$parameters){
+			if($table != null){
+				 if($table=="check"){
+					$post = new Radcheck;
+					$post->setUsername($parameters["data"]["username"]);	
+				}
+			   if($table=="reply"){
+					$post = new Radreply;
+					$post->setUsername($parameters["data"]["username"]);	
+				}
+			   if($table=="groupcheck"){
+					$post = new Radgroupcheck;
+					$post->setGroupname($parameters["data"]["groupname"]);	
+				}
+			   if($table=="groupreply"){
+					$post = new Radgroupreply;
+					$post->setGroupname($parameters["data"]["groupname"]);	
+				}
+				$post->setAttribute($parameters["data"]["attribute"]);
+		   		$post->setOp($parameters["data"]["op"]);
+		   		$post->setValue($parameters["data"]["value"]);
+				$ret = $post->getId();
+			}else{
+				$post = new Radusergroup;
+				$post->setUsername($parameters["data"]["username"]);
+				$post->setGroupname($parameters["data"]["groupname"]);	
+				$post->setPriority($parameters["data"]["priority"]);
+				$ret = $post->getUsername();
+			}		   	   	
+		   $this->om->persist($post);
+           $this->om->flush();
+		   return $ret;
+       }
 
+
+   
 
       /**
        * ajoute un nouveau entity

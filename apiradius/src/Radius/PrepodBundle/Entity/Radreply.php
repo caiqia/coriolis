@@ -7,15 +7,36 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Radreply
  *
- * @ORM\Table(name="radreply", indexes={@ORM\Index(name="username", columns={"username"})})
+ * @ORM\Table(name="radreply", indexes={@ORM\Index(name="fk_user_reply", columns={"username"})})
  * @ORM\Entity
  */
 class Radreply
 {
     /**
+     * @var string
+     *
+     * @ORM\Column(name="attribute", type="string", length=64, nullable=false)
+     */
+    private $attribute;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="op", type="string", length=2, nullable=false)
+     */
+    private $op = '==';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="value", type="string", length=253, nullable=false)
+     */
+    private $value;
+
+    /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -24,30 +45,12 @@ class Radreply
     /**
      * @var string
      *
-     * @ORM\Column(name="username", type="string", length=64, nullable=false)
+     * @ORM\ManyToOne(targetEntity="Radius\PrepodBundle\Entity\Userinfo")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="username", referencedColumnName="username")
+     * })
      */
-    private $username = '';
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="attribute", type="string", length=64, nullable=false)
-     */
-    private $attribute = '';
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="op", type="string", length=2, nullable=false)
-     */
-    private $op = '=';
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="value", type="string", length=253, nullable=false)
-     */
-    private $value = '';
+    private $username;
 
 
 

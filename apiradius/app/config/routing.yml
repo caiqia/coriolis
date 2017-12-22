@@ -1,7 +1,7 @@
 radius_prepod:
     resource: "@RadiusPrepodBundle/Resources/config/routing.yml"
     type: rest
-    prefix:   /api/{version}/users
+    prefix:   /api/{version}
 
 app:
     resource: '@AppBundle/Controller/'

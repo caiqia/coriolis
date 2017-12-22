@@ -15,15 +15,6 @@ class OperatorsAcl
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var integer
-     *
      * @ORM\Column(name="operator_id", type="integer", nullable=false)
      */
     private $operatorId;
@@ -41,6 +32,15 @@ class OperatorsAcl
      * @ORM\Column(name="access", type="boolean", nullable=false)
      */
     private $access = '0';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
 
 
 }

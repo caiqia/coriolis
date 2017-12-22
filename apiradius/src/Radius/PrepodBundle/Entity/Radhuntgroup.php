@@ -13,15 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Radhuntgroup
 {
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="groupname", type="string", length=64, nullable=false)
@@ -41,6 +32,15 @@ class Radhuntgroup
      * @ORM\Column(name="nasportid", type="string", length=15, nullable=true)
      */
     private $nasportid;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
 
 
 }

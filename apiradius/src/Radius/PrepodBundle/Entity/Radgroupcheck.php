@@ -7,33 +7,17 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Radgroupcheck
  *
- * @ORM\Table(name="radgroupcheck", indexes={@ORM\Index(name="groupname", columns={"groupname"})})
+ * @ORM\Table(name="radgroupcheck", uniqueConstraints={@ORM\UniqueConstraint(name="groupname", columns={"groupname"})})
  * @ORM\Entity
  */
 class Radgroupcheck
 {
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="groupname", type="string", length=64, nullable=false)
-     */
-    private $groupname = '';
-
-    /**
      * @var string
      *
      * @ORM\Column(name="attribute", type="string", length=64, nullable=false)
      */
-    private $attribute = '';
+    private $attribute;
 
     /**
      * @var string
@@ -47,33 +31,28 @@ class Radgroupcheck
      *
      * @ORM\Column(name="value", type="string", length=253, nullable=false)
      */
-    private $value = '';
-
-
+    private $value;
 
     /**
-     * Set groupname
+     * @var integer
      *
-     * @param string $groupname
-     *
-     * @return Radgroupcheck
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    public function setGroupname($groupname)
-    {
-        $this->groupname = $groupname;
-
-        return $this;
-    }
+    private $id;
 
     /**
-     * Get groupname
+     * @var string
      *
-     * @return string
+     * @ORM\ManyToOne(targetEntity="Radius\PrepodBundle\Entity\Radiusgroup")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="groupname", referencedColumnName="groupname")
+     * })
      */
-    public function getGroupname()
-    {
-        return $this->groupname;
-    }
+    private $groupname;
+
+
 
     /**
      * Set attribute
@@ -155,5 +134,29 @@ class Radgroupcheck
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set groupname
+     *
+     * @param string $groupname
+     *
+     * @return Radgroupcheck
+     */
+    public function setGroupname($groupname)
+    {
+        $this->groupname = $groupname;
+
+        return $this;
+    }
+
+    /**
+     * Get groupname
+     *
+     * @return string
+     */
+    public function getGroupname()
+    {
+        return $this->groupname;
     }
 }

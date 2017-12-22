@@ -13,15 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
 class BillingPaypal
 {
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="username", type="string", length=128, nullable=true)
@@ -216,6 +207,15 @@ class BillingPaypal
      * @ORM\Column(name="payer_status", type="string", length=200, nullable=true)
      */
     private $payerStatus;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
 
 
 }

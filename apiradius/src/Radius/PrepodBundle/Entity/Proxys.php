@@ -13,15 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Proxys
 {
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="bigint", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="proxyname", type="string", length=128, nullable=true)
@@ -83,6 +74,15 @@ class Proxys
      * @ORM\Column(name="updateby", type="string", length=128, nullable=true)
      */
     private $updateby;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="bigint")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
 
 
 }

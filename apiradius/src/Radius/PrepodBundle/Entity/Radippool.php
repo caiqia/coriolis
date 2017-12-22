@@ -13,15 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Radippool
 {
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="pool_name", type="string", length=30, nullable=false)
@@ -76,6 +67,15 @@ class Radippool
      * @ORM\Column(name="pool_key", type="string", length=30, nullable=false)
      */
     private $poolKey;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
 
 
 }

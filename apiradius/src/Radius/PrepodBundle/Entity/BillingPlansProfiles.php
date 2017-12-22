@@ -13,15 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
 class BillingPlansProfiles
 {
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="plan_name", type="string", length=128, nullable=false)
@@ -34,6 +25,15 @@ class BillingPlansProfiles
      * @ORM\Column(name="profile_name", type="string", length=256, nullable=true)
      */
     private $profileName;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
 
 
 }

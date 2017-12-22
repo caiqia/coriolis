@@ -13,15 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Node
 {
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="time", type="datetime", nullable=true)
@@ -363,6 +354,15 @@ class Node
      * @ORM\Column(name="firmware_revision", type="string", length=128, nullable=true)
      */
     private $firmwareRevision;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
 
 
 }

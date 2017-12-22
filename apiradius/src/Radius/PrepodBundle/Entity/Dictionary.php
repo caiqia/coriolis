@@ -13,15 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Dictionary
 {
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="Type", type="string", length=30, nullable=true)
@@ -83,6 +74,15 @@ class Dictionary
      * @ORM\Column(name="RecommendedTooltip", type="string", length=512, nullable=true)
      */
     private $recommendedtooltip;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
 
 
 }

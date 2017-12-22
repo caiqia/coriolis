@@ -15,15 +15,6 @@ class Payment
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var integer
-     *
      * @ORM\Column(name="invoice_id", type="integer", nullable=false)
      */
     private $invoiceId;
@@ -83,6 +74,15 @@ class Payment
      * @ORM\Column(name="updateby", type="string", length=128, nullable=true)
      */
     private $updateby;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
 
 
 }

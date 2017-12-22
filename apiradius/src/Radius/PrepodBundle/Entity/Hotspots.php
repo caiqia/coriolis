@@ -13,15 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Hotspots
 {
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="bigint", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=200, nullable=true)
@@ -160,6 +151,15 @@ class Hotspots
      * @ORM\Column(name="updateby", type="string", length=128, nullable=true)
      */
     private $updateby;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="bigint")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
 
 
 }

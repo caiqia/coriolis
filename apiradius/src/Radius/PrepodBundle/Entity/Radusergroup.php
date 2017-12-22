@@ -7,35 +7,35 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Radusergroup
  *
- * @ORM\Table(name="radusergroup", indexes={@ORM\Index(name="username", columns={"username"})})
+ * @ORM\Table(name="radusergroup")
  * @ORM\Entity
  */
 class Radusergroup
 {
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="username", type="string", length=64, nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $username = '';
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="groupname", type="string", length=64, nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $groupname = '';
-
     /**
      * @var integer
      *
      * @ORM\Column(name="priority", type="integer", nullable=false)
      */
     private $priority = '1';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="username", type="string", length=64)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     */
+    private $username;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="groupname", type="string", length=64)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     */
+    private $groupname;
 
 
 

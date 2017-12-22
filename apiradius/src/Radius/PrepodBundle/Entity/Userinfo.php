@@ -7,24 +7,15 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Userinfo
  *
- * @ORM\Table(name="userinfo", indexes={@ORM\Index(name="username", columns={"username"})})
+ * @ORM\Table(name="userinfo", uniqueConstraints={@ORM\UniqueConstraint(name="username", columns={"username"})})
  * @ORM\Entity
  */
 class Userinfo
 {
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
      * @var string
      *
-     * @ORM\Column(name="username", type="string", length=128, nullable=true)
+     * @ORM\Column(name="username", type="string", length=128, nullable=false)
      */
     private $username;
 
@@ -108,7 +99,7 @@ class Userinfo
     /**
      * @var string
      *
-     * @ORM\Column(name="country", type="string", length=100, nullable=true)
+     * @ORM\Column(name="country", type="string", length=200, nullable=true)
      */
     private $country;
 
@@ -138,14 +129,14 @@ class Userinfo
      *
      * @ORM\Column(name="portalloginpassword", type="string", length=128, nullable=true)
      */
-    private $portalloginpassword = '';
+    private $portalloginpassword;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="enableportallogin", type="integer", nullable=true)
      */
-    private $enableportallogin = '0';
+    private $enableportallogin;
 
     /**
      * @var \DateTime
@@ -174,6 +165,15 @@ class Userinfo
      * @ORM\Column(name="updateby", type="string", length=128, nullable=true)
      */
     private $updateby;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
 
 
 

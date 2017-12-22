@@ -7,33 +7,17 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Radcheck
  *
- * @ORM\Table(name="radcheck", indexes={@ORM\Index(name="username", columns={"username"})})
+ * @ORM\Table(name="radcheck", uniqueConstraints={@ORM\UniqueConstraint(name="username", columns={"username"})})
  * @ORM\Entity
  */
 class Radcheck
 {
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="username", type="string", length=64, nullable=false)
-     */
-    private $username = '';
-
-    /**
      * @var string
      *
      * @ORM\Column(name="attribute", type="string", length=64, nullable=false)
      */
-    private $attribute = '';
+    private $attribute;
 
     /**
      * @var string
@@ -47,33 +31,29 @@ class Radcheck
      *
      * @ORM\Column(name="value", type="string", length=253, nullable=false)
      */
-    private $value = '';
+    private $value;
 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
 
 
     /**
-     * Set username
+     * @var string
      *
-     * @param string $username
-     *
-     * @return Radcheck
+     * @ORM\ManyToOne(targetEntity="Radius\PrepodBundle\Entity\Radiusgroup")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="groupname", referencedColumnName="groupname")
+     * })
      */
-    public function setUsername($username)
-    {
-        $this->username = $username;
+    private $username;
 
-        return $this;
-    }
 
-    /**
-     * Get username
-     *
-     * @return string
-     */
-    public function getUsername()
-    {
-        return $this->username;
-    }
 
     /**
      * Set attribute
@@ -155,5 +135,37 @@ class Radcheck
     public function getId()
     {
         return $this->id;
+    }
+
+
+
+
+
+	/**
+     * Set username
+     *
+     * @param string $username
+     *
+     * @return Radcheck
+     */
+    public function setUsername($username)
+    {
+		
+        $this->username = $username;
+
+        return $this;
+    }
+
+
+
+
+    /**
+     * Get username
+     *
+     * @return string
+     */
+    public function getUsername()
+    {
+        return $this->username;
     }
 }

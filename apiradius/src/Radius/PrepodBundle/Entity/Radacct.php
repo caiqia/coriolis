@@ -13,15 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Radacct
 {
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="radacctid", type="bigint", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $radacctid;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="acctsessionid", type="string", length=64, nullable=false)
@@ -195,6 +186,15 @@ class Radacct
      * @ORM\Column(name="xascendsessionsvrkey", type="string", length=10, nullable=true)
      */
     private $xascendsessionsvrkey;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="radacctid", type="bigint")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $radacctid;
 
 
 }

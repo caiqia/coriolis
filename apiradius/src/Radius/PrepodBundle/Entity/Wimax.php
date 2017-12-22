@@ -13,15 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Wimax
 {
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="username", type="string", length=64, nullable=false)
@@ -55,6 +46,15 @@ class Wimax
      * @ORM\Column(name="lifetime", type="integer", nullable=true)
      */
     private $lifetime;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
 
 
 }
