@@ -24,6 +24,228 @@ class RadiusController extends FOSRestController
 {
 
 
+	   /**
+       * get pour entity userinfo.
+       * @Annotations\Get("/users/{username}")
+       *
+       * @ApiDoc(
+       *   resource = true,
+       *   statusCodes = {
+       *     200 = "Returned when successful"
+       *   }
+       * )
+       *
+       *
+       * @param string               $username     username of a user
+       * @param Request              $request      the request object
+       *
+       * @return Response
+       */
+	  public function getUserAction( $username, Request $request)
+      {
+            try{
+              $get = $this->container->get('radius.compte')->getbyUsername("userinfo", $username);
+            }catch(NotFoundHttpException $exception){
+              $msg = $exception->getMessage();
+              $response = new Response();
+              $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
+              $response->headers->set('Content-Type', 'application/json');
+              return $response;
+            }
+            $data = $this->get('jms_serializer')->serialize($get, 'json');
+            $response = new Response();
+            $response->setContent(json_encode(array('success' => TRUE,'msg' =>$data)));
+            $response->headers->set('Content-Type', 'application/json');
+            return $response;
+      }
+
+
+
+	  /**
+       * get pour entity radiusgroup
+       * @Annotations\Get("/groups/{groupname}")
+       *
+       * @ApiDoc(
+       *   resource = true,
+       *   statusCodes = {
+       *     200 = "Returned when successful"
+       *   }
+       * )
+       *
+       *
+       * @param string                $groupname    groupname of a group
+       * @param Request               $request      the request object
+       *
+       * @return Response
+       */
+      public function getGroupAction( $groupname, Request $request)
+      {
+            try{
+              $get = $this->container->get('radius.compte')->getbyUsername("radiusgroup", $groupname);
+            }catch(NotFoundHttpException $exception){
+              $msg = $exception->getMessage();
+              $response = new Response();
+              $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
+              $response->headers->set('Content-Type', 'application/json');
+              return $response;
+            }
+            $data = $this->get('jms_serializer')->serialize($get, 'json');
+            $response = new Response();
+            $response->setContent(json_encode(array('success' => TRUE,'msg' =>$data)));
+            $response->headers->set('Content-Type', 'application/json');
+            return $response;
+      }
+
+
+
+      /**
+       * get pour entity radcheck.
+       * @Annotations\Get("/users/{username}/check")
+       *
+       * @ApiDoc(
+       *   resource = true,
+       *   statusCodes = {
+       *     200 = "Returned when successful"
+       *   }
+       * )
+       *
+       *
+       * @param string               $username     username of radcheck
+       * @param Request              $request      the request object
+       *
+       * @return Response
+       */
+	  public function getCheckAction( $username, Request $request)
+      {
+            try{
+              $get = $this->container->get('radius.compte')->getbyUsername("check", $username);
+            }catch(NotFoundHttpException $exception){
+              $msg = $exception->getMessage();
+              $response = new Response();
+              $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
+              $response->headers->set('Content-Type', 'application/json');
+              return $response;
+            }
+            $data = $this->get('jms_serializer')->serialize($get, 'json');
+            $response = new Response();
+            $response->setContent(json_encode(array('success' => TRUE,'msg' =>$data)));
+            $response->headers->set('Content-Type', 'application/json');
+            return $response;
+      }
+
+
+
+
+      /**
+       * get pour entity radgroupcheck.
+       * @Annotations\Get("/groups/{groupname}/check")
+       *
+       * @ApiDoc(
+       *   resource = true,
+       *   statusCodes = {
+       *     200 = "Returned when successful"
+       *   }
+       * )
+       *
+       *
+       * @param string               $groupname    groupname of radgroupcheck
+       * @param Request              $request      the request object
+       *
+       * @return Response
+       */
+	  public function getGroupcheckAction( $groupname, Request $request)
+      {
+            try{
+              $get = $this->container->get('radius.compte')->getbyUsername("groupcheck", $groupname);
+            }catch(NotFoundHttpException $exception){
+              $msg = $exception->getMessage();
+              $response = new Response();
+              $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
+              $response->headers->set('Content-Type', 'application/json');
+              return $response;
+            }
+            $data = $this->get('jms_serializer')->serialize($get, 'json');
+            $response = new Response();
+            $response->setContent(json_encode(array('success' => TRUE,'msg' =>$data)));
+            $response->headers->set('Content-Type', 'application/json');
+            return $response;
+      }
+
+
+
+      /**
+       * get pour entity radreply.
+       * @Annotations\Get("/users/{username}/reply")
+       *
+       * @ApiDoc(
+       *   resource = true,
+       *   statusCodes = {
+       *     200 = "Returned when successful"
+       *   }
+       * )
+       *
+       *
+       * @param string               $username     username of radreply
+       * @param Request              $request      the request object
+       *
+       * @return Response
+       */
+	  public function getReplyAction( $username, Request $request)
+      {
+            try{
+              $get = $this->container->get('radius.compte')->getbyUsername("reply", $username);
+            }catch(NotFoundHttpException $exception){
+              $msg = $exception->getMessage();
+              $response = new Response();
+              $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
+              $response->headers->set('Content-Type', 'application/json');
+              return $response;
+            }
+            $data = $this->get('jms_serializer')->serialize($get, 'json');
+            $response = new Response();
+            $response->setContent(json_encode(array('success' => TRUE,'msg' =>$data)));
+            $response->headers->set('Content-Type', 'application/json');
+            return $response;
+      }
+
+
+      /**
+       * get pour entity radgroupreply.
+       * @Annotations\Get("/groups/{groupname}/reply")
+       *
+       * @ApiDoc(
+       *   resource = true,
+       *   statusCodes = {
+       *     200 = "Returned when successful"
+       *   }
+       * )
+       *
+       *
+       * @param string               $groupname    groupname of radgroupreply
+       * @param Request              $request      the request object
+       *
+       * @return Response
+       */
+	  public function getGroupreplyAction( $groupname, Request $request)
+      {
+            try{
+              $get = $this->container->get('radius.compte')->getbyUsername("groupreply", $groupname);
+            }catch(NotFoundHttpException $exception){
+              $msg = $exception->getMessage();
+              $response = new Response();
+              $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
+              $response->headers->set('Content-Type', 'application/json');
+              return $response;
+            }
+            $data = $this->get('jms_serializer')->serialize($get, 'json');
+            $response = new Response();
+            $response->setContent(json_encode(array('success' => TRUE,'msg' =>$data)));
+            $response->headers->set('Content-Type', 'application/json');
+            return $response;
+      }
+
+
+
    	  /**
        * RETOURNE LE NOMBRE DE LIGNE.
        * @Annotations\Get("/users/count")
@@ -37,8 +259,8 @@ class RadiusController extends FOSRestController
        *
        * @Annotations\QueryParam(name="id", requirements="\d+", nullable=true, description="object id ")
        * @Annotations\QueryParam(name="username",  nullable=true, description="username ")
-       * @Annotations\QueryParam(name="attribute",  nullable=true, description="object attribute")
-       * @Annotations\QueryParam(name="value",  nullable=true, description="object value ")
+       * @Annotations\QueryParam(name="creationdate",  nullable=true, description="object creationdate")
+       * @Annotations\QueryParam(name="updatedate",  nullable=true, description="object updatedate ")
        * @Annotations\QueryParam(name="offset", requirements="\d+", nullable=true, description="Offset from which to start listing object.")
        * @Annotations\QueryParam(name="limit", requirements="\d+", nullable=true, default="10", description="How many objects to return.")
        *
@@ -92,8 +314,8 @@ class RadiusController extends FOSRestController
        *
        * @Annotations\QueryParam(name="id", requirements="\d+", nullable=true, description="object id ")
        * @Annotations\QueryParam(name="username",  nullable=true, description="groupname ")
-       * @Annotations\QueryParam(name="attribute",  nullable=true, description="object attribute")
-       * @Annotations\QueryParam(name="value",  nullable=true, description="object value ")
+       * @Annotations\QueryParam(name="creationdate",  nullable=true, description="object creationdate")
+       * @Annotations\QueryParam(name="updatedate",  nullable=true, description="object updatedate ")
        * @Annotations\QueryParam(name="offset", requirements="\d+", nullable=true, description="Offset from which to start listing object.")
        * @Annotations\QueryParam(name="limit", requirements="\d+", nullable=true, default="10", description="How many objects to return.")
        *
@@ -515,7 +737,7 @@ class RadiusController extends FOSRestController
 
 	  /**
        * creation d'un utilisateur
-       * @Annotations\Post("/users")
+       * @Annotations\Post("/users/{username}")
        * @ApiDoc(
        *    resource = true,
        *    description = "creation d'un utilisateur",
@@ -524,11 +746,19 @@ class RadiusController extends FOSRestController
        *        400 = "returned when the data has errors"
        *    }
        * )
-       * @param Request $request the request object
+	   * @param string  $username username of object
+       * @param Request $request  the request object
        * @return Response
        */
-      public function UserAction(Request $request)
+      public function UserAction( $username, Request $request)
       {
+		if($username != $request->request->all()["data"]["username"]){
+			$msg = "incorrect url username ";
+			$response = new Response();
+            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+            $response->headers->set('Content-Type', 'application/json');
+           return $response;
+		}
 		try{
 			$string = $request->getRequestUri(); 
 			$this->container->get('radius.compte')->jsonVeri($request->request->all(), "userinfo");
@@ -556,7 +786,7 @@ class RadiusController extends FOSRestController
 
  	  /**
        * creation d'un group
-       * @Annotations\Post("/groups")
+       * @Annotations\Post("/groups/{groupname}")
        * @ApiDoc(
        *    resource = true,
        *    description = "creation d'un group",
@@ -565,11 +795,19 @@ class RadiusController extends FOSRestController
        *        400 = "returned when the data has errors"
        *    }
        * )
-       * @param Request $request the request object
+	   * @param string  $groupname groupname of object
+       * @param Request $request   the request object
        * @return Response
        */
-      public function GroupAction(Request $request)
-      {   
+      public function GroupAction( $groupname, Request $request)
+      {
+		if( $groupname != $request->request->all()["data"]["groupname"]){
+			$msg = "incorrect url groupname ";
+			$response = new Response();
+            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+            $response->headers->set('Content-Type', 'application/json');
+           return $response;
+		}   
 		try{
 			$string = $request->getRequestUri(); 
 			$this->container->get('radius.compte')->jsonVeri($request->request->all(), "radiusgroup");
@@ -593,7 +831,231 @@ class RadiusController extends FOSRestController
         return $response;
       }
 
+		
 
+	  /**
+       * post dans radcheck
+       * @Annotations\Post("/users/{username}/check")
+       * @ApiDoc(
+       *    resource = true,
+       *    description = "post dans radcheck",
+       *    statusCodes = {
+       *        200 = "returned when successful",
+       *        400 = "returned when the data has errors"
+       *    }
+       * )
+ 	   * @param string  $username the username of object
+       * @param Request $request the request object
+       * @return Response
+       */
+      public function postCheckAction($username,Request $request)
+      {
+		if($username != $request->request->all()["data"]["username"]){
+			$msg = "incorrect url username ";
+			$response = new Response();
+            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+            $response->headers->set('Content-Type', 'application/json');
+           return $response;
+		}
+		try{
+			$string = $request->getRequestUri(); 
+			$this->container->get('radius.compte')->jsonVeri($request->request->all(), "check");
+			$id = $this->container->get('radius.compte')->checkReply(null,"check",$request->request->all());
+ 		}catch(UniqueConstraintViolationException $exception){
+			$msg = "UniqueConstraintViolation : ".$exception->getErrorCode();
+            $response = new Response();
+            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+            $response->headers->set('Content-Type', 'application/json');
+            return $response;
+		}
+		catch(ForeignKeyConstraintViolationException $exception){
+			$msg = "ForeignKeyConstraintViolation : ".$exception->getErrorCode();
+            $response = new Response();
+            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+            $response->headers->set('Content-Type', 'application/json');
+            return $response;
+		}catch(InvalidJsonException $exception){
+            $msg = $exception->getMessage();
+            $response = new Response();
+            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+            $response->headers->set('Content-Type', 'application/json');
+           return $response;
+          }
+		$response = new Response();
+        $response->setContent(json_encode(array('success' => TRUE,'msg' =>"POST-radcheck-OK", 'id' => $string .'/'.$id)));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+      }
+
+
+
+
+      /**
+       * post dans radreply
+       * @Annotations\Post("/users/{username}/reply")
+       * @ApiDoc(
+       *    resource = true,
+       *    description = "post dans radreply",
+       *    statusCodes = {
+       *        200 = "returned when successful",
+       *        400 = "returned when the data has errors"
+       *    }
+       * )
+ 	   * @param string  $username the username of object
+       * @param Request $request the request object
+       * @return Response
+       */
+      public function postReplyAction($username,Request $request)
+      {
+		if($username != $request->request->all()["data"]["username"]){
+			$msg = "incorrect url username ";
+			$response = new Response();
+            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+            $response->headers->set('Content-Type', 'application/json');
+           return $response;
+		}
+		try{
+			$string = $request->getRequestUri(); 
+			$this->container->get('radius.compte')->jsonVeri($request->request->all(), "reply");
+			$id = $this->container->get('radius.compte')->checkReply(null,"reply",$request->request->all());
+ 		}catch(UniqueConstraintViolationException $exception){
+			$msg = "UniqueConstraintViolation : ".$exception->getErrorCode();
+            $response = new Response();
+            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+            $response->headers->set('Content-Type', 'application/json');
+            return $response;
+		}
+		catch(ForeignKeyConstraintViolationException $exception){
+			$msg = "ForeignKeyConstraintViolation : ".$exception->getErrorCode();
+            $response = new Response();
+            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+            $response->headers->set('Content-Type', 'application/json');
+            return $response;
+		}catch(InvalidJsonException $exception){
+            $msg = $exception->getMessage();
+            $response = new Response();
+            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+            $response->headers->set('Content-Type', 'application/json');
+           return $response;
+          }
+		$response = new Response();
+        $response->setContent(json_encode(array('success' => TRUE,'msg' =>"POST-radreply-OK", 'id' => $string .'/'.$id)));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+      }
+
+
+
+      /**
+       * post dans radgroupcheck
+       * @Annotations\Post("/groups/{groupname}/check")
+       * @ApiDoc(
+       *    resource = true,
+       *    description = "post dans radgroupcheck",
+       *    statusCodes = {
+       *        200 = "returned when successful",
+       *        400 = "returned when the data has errors"
+       *    }
+       * )
+ 	   * @param string  $groupname the groupname of object
+       * @param Request $request the request object
+       * @return Response
+       */
+      public function postgroupCheckAction($groupname,Request $request)
+      {
+		if( $groupname != $request->request->all()["data"]["groupname"]){
+			$msg = "incorrect url groupname ";
+			$response = new Response();
+            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+            $response->headers->set('Content-Type', 'application/json');
+           return $response;
+		}
+		try{
+			$string = $request->getRequestUri(); 
+			$this->container->get('radius.compte')->jsonVeri($request->request->all(), "groupcheck");
+			$id = $this->container->get('radius.compte')->checkReply(null,"groupcheck",$request->request->all());
+ 		}catch(UniqueConstraintViolationException $exception){
+			$msg = "UniqueConstraintViolation : ".$exception->getErrorCode();
+            $response = new Response();
+            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+            $response->headers->set('Content-Type', 'application/json');
+            return $response;
+		}
+		catch(ForeignKeyConstraintViolationException $exception){
+			$msg = "ForeignKeyConstraintViolation : ".$exception->getErrorCode();
+            $response = new Response();
+            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+            $response->headers->set('Content-Type', 'application/json');
+            return $response;
+		}catch(InvalidJsonException $exception){
+            $msg = $exception->getMessage();
+            $response = new Response();
+            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+            $response->headers->set('Content-Type', 'application/json');
+           return $response;
+          }
+		$response = new Response();
+        $response->setContent(json_encode(array('success' => TRUE,'msg' =>"POST-radgroupcheck-OK", 'id' => $string .'/'.$id)));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+      }
+
+
+
+
+      /**
+       * post dans radgroupreply
+       * @Annotations\Post("/groups/{groupname}/reply")
+       * @ApiDoc(
+       *    resource = true,
+       *    description = "post dans radgroupreply",
+       *    statusCodes = {
+       *        200 = "returned when successful",
+       *        400 = "returned when the data has errors"
+       *    }
+       * )
+ 	   * @param string  $groupname the groupname of object
+       * @param Request $request the request object
+       * @return Response
+       */
+      public function postgroupReplyAction($groupname,Request $request)
+      {
+		if( $groupname != $request->request->all()["data"]["groupname"]){
+			$msg = "incorrect url groupname ";
+			$response = new Response();
+            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+            $response->headers->set('Content-Type', 'application/json');
+           return $response;
+		}
+		try{
+			$string = $request->getRequestUri(); 
+			$this->container->get('radius.compte')->jsonVeri($request->request->all(), "groupreply");
+			$id = $this->container->get('radius.compte')->checkReply(null,"groupreply",$request->request->all());
+ 		}catch(UniqueConstraintViolationException $exception){
+			$msg = "UniqueConstraintViolation : ".$exception->getErrorCode();
+            $response = new Response();
+            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+            $response->headers->set('Content-Type', 'application/json');
+            return $response;
+		}
+		catch(ForeignKeyConstraintViolationException $exception){
+			$msg = "ForeignKeyConstraintViolation : ".$exception->getErrorCode();
+            $response = new Response();
+            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+            $response->headers->set('Content-Type', 'application/json');
+            return $response;
+		}catch(InvalidJsonException $exception){
+            $msg = $exception->getMessage();
+            $response = new Response();
+            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+            $response->headers->set('Content-Type', 'application/json');
+           return $response;
+          }
+		$response = new Response();
+        $response->setContent(json_encode(array('success' => TRUE,'msg' =>"POST-radgroupreply-OK", 'id' => $string .'/'.$id)));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+      }
 
 	  /**
        * post dans racheck et radreply
@@ -611,6 +1073,13 @@ class RadiusController extends FOSRestController
        */
       public function CheckAction($username, $table, Request $request)
       {
+		if($username != $request->request->all()["data"]["username"]){
+			$msg = "incorrect url username ";
+			$response = new Response();
+            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+            $response->headers->set('Content-Type', 'application/json');
+           return $response;
+		}
 		try{
 			$string = $request->getRequestUri(); 
 			$this->container->get('radius.compte')->jsonVeri($request->request->all(), $table);
@@ -636,12 +1105,12 @@ class RadiusController extends FOSRestController
            return $response;
           }
 		$response = new Response();
-        $response->setContent(json_encode(array('success' => TRUE,'msg' =>"POST-OK", 'id' => $string .'/'.id)));
+        $response->setContent(json_encode(array('success' => TRUE,'msg' =>"POST-OK", 'id' => $string .'/'.$id)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
       }
 
-
+		
 	  /**
        * post dans radusergroup
        * @Annotations\Post("/users/{username}/groups/{groupname}")
@@ -658,6 +1127,20 @@ class RadiusController extends FOSRestController
        */
       public function userGroupAction($username,$groupname, Request $request)
       {
+		if($username != $request->request->all()["data"]["username"]){
+			$msg = "incorrect url username ";
+			$response = new Response();
+            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+            $response->headers->set('Content-Type', 'application/json');
+           return $response;
+		}
+		if($groupname != $request->request->all()["data"]["groupname"]){
+			$msg = "incorrect url groupname ";
+			$response = new Response();
+            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+            $response->headers->set('Content-Type', 'application/json');
+           return $response;
+		}
 		try{
 			$string = $request->getRequestUri(); 
 			$this->container->get('radius.compte')->jsonVeri($request->request->all(), "usergroup");
@@ -706,6 +1189,13 @@ class RadiusController extends FOSRestController
        */
       public function GroupcheckAction($groupname, $table, Request $request)
       {
+		if($groupname != $request->request->all()["data"]["groupname"]){
+			$msg = "incorrect url groupname ";
+			$response = new Response();
+            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+            $response->headers->set('Content-Type', 'application/json');
+           return $response;
+		}
 		try{
 			$string = $request->getRequestUri();
 			$this->container->get('radius.compte')->jsonVeri($request->request->all(), $table);
@@ -735,6 +1225,175 @@ class RadiusController extends FOSRestController
         $response->headers->set('Content-Type', 'application/json');
         return $response;
       }
+
+
+
+ 	  /**
+       * UPDATE UNE LIGNE EXISTE A PARTIR DES DONNEE
+       * @Annotations\Route(condition="request.attributes.get('version') == 'v1'")
+       * @Annotations\Patch("/users/{id}/check")
+       * @ApiDoc(
+       *   resource = true,
+       *   description = "UPDATE UNE NOUVELLE LIGNE A PARTIR DES DONNEE",
+       *   statusCodes = {
+       *     200 = "Returned when successful",
+       *     400 = "Returned when the form has errors"
+       *   }
+       * )
+       *
+	   * @param integer $id 	 id of object
+       * @param Request $request the request object
+       *
+       * @return Response
+       *
+       */
+      public function patchCheckAction( $id,Request $request)
+      {
+		try{
+			$string = $request->getRequestUri();
+			$this->container->get('radius.compte')->jsonVeri($request->request->all(), "check");
+		}catch(InvalidJsonException $exception){
+            $msg = $exception->getMessage();
+            $response = new Response();
+            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+            $response->headers->set('Content-Type', 'application/json');
+           return $response;
+          }
+  		
+		$id = $this->container->get('radius.compte')->checkReply( $id , "check",$request->request->all());	
+        $response = new Response();
+        $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PATCH-radcheck-OK", 'id' => $string .'/'.$id)));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+      }
+
+
+
+ 	  /**
+       * UPDATE UNE LIGNE EXISTE A PARTIR DES DONNEE
+       * @Annotations\Route(condition="request.attributes.get('version') == 'v1'")
+       * @Annotations\Patch("/users/{id}/reply")
+       * @ApiDoc(
+       *   resource = true,
+       *   description = "UPDATE UNE NOUVELLE LIGNE A PARTIR DES DONNEE",
+       *   statusCodes = {
+       *     200 = "Returned when successful",
+       *     400 = "Returned when the form has errors"
+       *   }
+       * )
+       *
+	   * @param integer $id 	 id of object
+       * @param Request $request the request object
+       *
+       * @return Response
+       *
+       */
+      public function patchReplyAction( $id,Request $request)
+      {
+		try{
+			$string = $request->getRequestUri();
+			$this->container->get('radius.compte')->jsonVeri($request->request->all(), "reply");
+		}catch(InvalidJsonException $exception){
+            $msg = $exception->getMessage();
+            $response = new Response();
+            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+            $response->headers->set('Content-Type', 'application/json');
+           return $response;
+          }
+  		
+		$id = $this->container->get('radius.compte')->checkReply( $id , "reply",$request->request->all());	
+        $response = new Response();
+        $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PATCH-radreply-OK", 'id' => $string .'/'.$id)));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+      }
+
+
+
+
+ 	  /**
+       * UPDATE UNE LIGNE EXISTE A PARTIR DES DONNEE
+       * @Annotations\Route(condition="request.attributes.get('version') == 'v1'")
+       * @Annotations\Patch("/groups/{id}/check")
+       * @ApiDoc(
+       *   resource = true,
+       *   description = "UPDATE UNE NOUVELLE LIGNE A PARTIR DES DONNEE",
+       *   statusCodes = {
+       *     200 = "Returned when successful",
+       *     400 = "Returned when the form has errors"
+       *   }
+       * )
+       *
+	   * @param integer $id 	 id of object
+       * @param Request $request the request object
+       *
+       * @return Response
+       *
+       */
+      public function patchgroupCheckAction( $id,Request $request)
+      {
+		try{
+			$string = $request->getRequestUri();
+			$this->container->get('radius.compte')->jsonVeri($request->request->all(), "groupcheck");
+		}catch(InvalidJsonException $exception){
+            $msg = $exception->getMessage();
+            $response = new Response();
+            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+            $response->headers->set('Content-Type', 'application/json');
+           return $response;
+          }
+  		
+		$id = $this->container->get('radius.compte')->checkReply( $id , "groupcheck",$request->request->all());	
+        $response = new Response();
+        $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PATCH-radgroupcheck-OK", 'id' => $string .'/'.$id)));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+      }
+
+
+
+ 	  /**
+       * UPDATE UNE LIGNE EXISTE A PARTIR DES DONNEE
+       * @Annotations\Route(condition="request.attributes.get('version') == 'v1'")
+       * @Annotations\Patch("/groups/{id}/reply")
+       * @ApiDoc(
+       *   resource = true,
+       *   description = "UPDATE UNE NOUVELLE LIGNE A PARTIR DES DONNEE",
+       *   statusCodes = {
+       *     200 = "Returned when successful",
+       *     400 = "Returned when the form has errors"
+       *   }
+       * )
+       *
+	   * @param integer $id 	 id of object
+       * @param Request $request the request object
+       *
+       * @return Response
+       *
+       */
+      public function patchgroupReplyAction( $id,Request $request)
+      {
+		try{
+			$string = $request->getRequestUri();
+			$this->container->get('radius.compte')->jsonVeri($request->request->all(), "groupreply");
+		}catch(InvalidJsonException $exception){
+            $msg = $exception->getMessage();
+            $response = new Response();
+            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+            $response->headers->set('Content-Type', 'application/json');
+           return $response;
+          }
+  		
+		$id = $this->container->get('radius.compte')->checkReply( $id , "groupreply",$request->request->all());	
+        $response = new Response();
+        $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PATCH-radgroupreply-OK", 'id' => $string .'/'.$id)));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+      }
+
+
+
+
 
 
       /**
@@ -838,15 +1497,21 @@ class RadiusController extends FOSRestController
 		try{
 			$string = $request->getRequestUri();
 			$this->container->get('radius.compte')->jsonVeri($request->request->all(), "usergroup");
+			$id=array($username,$groupname);
+			$id = $this->container->get('radius.compte')->checkReply( $id ,null,$request->request->all());	
 		}catch(InvalidJsonException $exception){
             $msg = $exception->getMessage();
             $response = new Response();
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
            return $response;
-          }
-  		$id=array($username,$groupname);
-		$id = $this->container->get('radius.compte')->checkReply( $id ,null,$request->request->all());	
+          }catch(NotFoundHttpException $exception){
+              $msg = $exception->getMessage();
+              $response = new Response();
+              $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
+              $response->headers->set('Content-Type', 'application/json');
+              return $response;
+            }	
         $response = new Response();
         $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PATCH-Usergroup-OK", 'username' => $string .'/'.$id)));
         $response->headers->set('Content-Type', 'application/json');
@@ -902,11 +1567,12 @@ class RadiusController extends FOSRestController
        * @return Response
        * @throws NotFoundHttpException when radreply not exist
        */
-        public function deleteUserAction( $username)
+        public function deleteUserAction( $username, Request $request)
         {
             try{
 			  $string = $request->getRequestUri();
               $id = $this->container->get('radius.compte')->delete($username,"userinfo");
+			  $ret = implode(",", $id);
             }catch(NotFoundHttpException $exception){
               $msg = $exception->getMessage();
               $response = new Response();
@@ -915,7 +1581,7 @@ class RadiusController extends FOSRestController
               return $response;
             }
             $response = new Response();
-            $response->setContent(json_encode(array('success' => TRUE,'msg' =>"DELETE-User-OK",'id' =>$string .'/'. $id)));
+            $response->setContent(json_encode(array('success' => TRUE,'msg' =>"DELETE-User-OK",'id' =>$string .'/'. $ret)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
         }
@@ -957,6 +1623,150 @@ class RadiusController extends FOSRestController
         }
 
 
+
+ 	/**
+     * SUPPRIME DANS UNE TABLE
+     * @Annotations\Delete("/users/{username}/check")
+     * @ApiDoc(
+     *   resource = true,
+     *   statusCodes = {
+     *     200 = "Returned when successful"
+     *   }
+     * )
+     *
+     * @param string     $username
+     *
+     * @return Response
+     * @throws NotFoundHttpException when radcheck not exist
+     */
+      public function deleteCheckAction($username)
+      {
+          try{
+			$string = $request->getRequestUri();
+            $id = $this->container->get('radius.compte')->delete($username,"check");
+          }catch(NotFoundHttpException $exception){
+            $msg = $exception->getMessage();
+            $response = new Response();
+            $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
+            $response->headers->set('Content-Type', 'application/json');
+            return $response;
+          }
+          $response = new Response();
+          $response->setContent(json_encode(array('success' => TRUE,'msg' =>"DELETE-radcheck-OK",'id' => $string .'/'.$id)));
+          $response->headers->set('Content-Type', 'application/json');
+          return $response;
+      }
+
+
+
+
+ 	/**
+     * SUPPRIME DANS UNE TABLE
+     * @Annotations\Delete("/groups/{groupname}/check")
+     * @ApiDoc(
+     *   resource = true,
+     *   statusCodes = {
+     *     200 = "Returned when successful"
+     *   }
+     * )
+     *
+     * @param string     $groupname
+     *
+     * @return Response
+     * @throws NotFoundHttpException when radgroupcheck not exist
+     */
+      public function deletegroupCheckAction($groupname)
+      {
+          try{
+			$string = $request->getRequestUri();
+            $id = $this->container->get('radius.compte')->delete($groupname,"groupcheck");
+          }catch(NotFoundHttpException $exception){
+            $msg = $exception->getMessage();
+            $response = new Response();
+            $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
+            $response->headers->set('Content-Type', 'application/json');
+            return $response;
+          }
+          $response = new Response();
+          $response->setContent(json_encode(array('success' => TRUE,'msg' =>"DELETE-radgroupcheck-OK",'id' => $string .'/'.$id)));
+          $response->headers->set('Content-Type', 'application/json');
+          return $response;
+      }
+
+
+
+
+ 	/**
+     * SUPPRIME DANS UNE TABLE
+     * @Annotations\Delete("/users/{username}/reply")
+     * @ApiDoc(
+     *   resource = true,
+     *   statusCodes = {
+     *     200 = "Returned when successful"
+     *   }
+     * )
+     *
+     * @param string     $username
+     *
+     * @return Response
+     * @throws NotFoundHttpException when radcheck not exist
+     */
+      public function deleteReplyAction($username)
+      {
+          try{
+			$string = $request->getRequestUri();
+            $id = $this->container->get('radius.compte')->delete($username,"reply");
+          }catch(NotFoundHttpException $exception){
+            $msg = $exception->getMessage();
+            $response = new Response();
+            $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
+            $response->headers->set('Content-Type', 'application/json');
+            return $response;
+          }
+          $response = new Response();
+          $response->setContent(json_encode(array('success' => TRUE,'msg' =>"DELETE-radreply-OK",'id' => $string .'/'.$id)));
+          $response->headers->set('Content-Type', 'application/json');
+          return $response;
+      }
+
+
+
+
+ 	/**
+     * SUPPRIME DANS UNE TABLE
+     * @Annotations\Delete("/groups/{groupname}/reply")
+     * @ApiDoc(
+     *   resource = true,
+     *   statusCodes = {
+     *     200 = "Returned when successful"
+     *   }
+     * )
+     *
+     * @param string     $groupname
+     *
+     * @return Response
+     * @throws NotFoundHttpException when radgroupreply not exist
+     */
+      public function deletegroupReplyAction($groupname)
+      {
+          try{
+			$string = $request->getRequestUri();
+            $id = $this->container->get('radius.compte')->delete($groupname,"groupreply");
+          }catch(NotFoundHttpException $exception){
+            $msg = $exception->getMessage();
+            $response = new Response();
+            $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
+            $response->headers->set('Content-Type', 'application/json');
+            return $response;
+          }
+          $response = new Response();
+          $response->setContent(json_encode(array('success' => TRUE,'msg' =>"DELETE-radgroupreply-OK",'id' => $string .'/'.$id)));
+          $response->headers->set('Content-Type', 'application/json');
+          return $response;
+      }
+
+
+
     /**
      * SUPPRIME DANS UNE TABLE
      * @Annotations\Delete("/users/{username}/{table}",requirements = {"table"="check|reply"})
@@ -972,7 +1782,7 @@ class RadiusController extends FOSRestController
      * @return Response
      * @throws NotFoundHttpException when radreply not exist
      */
-      public function deletecheckAction($version, $username, $table)
+      public function deletecheckgreAction($username, $table)
       {
           try{
 			$string = $request->getRequestUri();
@@ -1007,7 +1817,7 @@ class RadiusController extends FOSRestController
      * @return Response
      * @throws NotFoundHttpException when radreply not exist
      */
-      public function deletegroupCheckAction($groupname, $table)
+      public function deletegroupCheckgergAction($groupname, $table)
       {
 
           try{
@@ -1030,7 +1840,7 @@ class RadiusController extends FOSRestController
 
      /**
        * SUPPRIME DANS TOUTES LES TABLES
-       * @Annotations\Delete("/users/{username}/group/{groupname}")
+       * @Annotations\Delete("/users/{username}/groups/{groupname}")
        * @ApiDoc(
        *   resource = true,
        *   statusCodes = {
@@ -1082,7 +1892,7 @@ class RadiusController extends FOSRestController
        *
        * @return Response
        */
-        public function getUserAction($version, $username, $table)
+        public function getUsersezrAction($version, $username, $table)
         {
 
             try{
