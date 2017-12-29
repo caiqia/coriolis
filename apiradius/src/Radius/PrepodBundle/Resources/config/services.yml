@@ -4,6 +4,12 @@ services:
         arguments: [ "@doctrine.orm.entity_manager", "@form.factory", "@service_container" ]
         tags:
             - { name: form.type }
+
+
+    radius.listener:
+        class: Radius\PrepodBundle\EventListener\ExceptionListener
+        tags: 
+            - { name: kernel.event_listener, event: kernel.exception }
 #    radius_prepod.example:
 #        class: Radius\PrepodBundle\Example
 #        arguments: ["@service_id", "plain_value", "%parameter%"]

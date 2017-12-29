@@ -184,25 +184,22 @@ class LUCompte
 			if($id != null){                        //method patch
 				if($table == null){                 //entity radusergroup
 					$patch = $this->getUsergroup($id[0],$id[1]);
-					if(empty($patch)){
-						throw new NotFoundHttpException(sprintf('\'%s\' \'%s\' N\'EXISTE PAS DANS radusergroup.',$id[0],$id[1]));
-                		return;
-					}else{
-						$patch->setPriority($parameters["data"]["priority"]);
-						$ret = $patch->getUsername();
-					}	
+				    $patch->setPriority($parameters["data"]["priority"]);
+					$this->om->persist($patch);
+              		$this->om->flush();
+					$ret = $patch->getUsername();	
 				}else{                              //radcheck,radreply,radgroupcheck,radgroupreply                              
 					$patch = $this->getbyId($table, $id);
 					$patch->setAttribute($parameters["data"]["attribute"]);
 		   			$patch->setOp($parameters["data"]["op"]);
 		   			$patch->setValue($parameters["data"]["value"]);
+					$this->om->persist($patch);
+              		$this->om->flush();
 					$ret = $patch->getId();	
 				}
-				$this->om->persist($patch);
-              	$this->om->flush();
 				return $ret;
 			}else{                                     //method post
-				if($table != null){
+				if($table != null){                    //radcheck,radreply,radgroupcheck,radgroupreply
 				 	if($table=="check"){
 						$post = new Radcheck;
 						$post->setUsername($parameters["data"]["username"]);	
@@ -222,6 +219,8 @@ class LUCompte
 					$post->setAttribute($parameters["data"]["attribute"]);
 			   		$post->setOp($parameters["data"]["op"]);
 			   		$post->setValue($parameters["data"]["value"]);
+					$this->om->persist($post);
+           			$this->om->flush();
 					$ret = $post->getId();
 				}else{                                //entity radusergroup
 					$post = new Radusergroup;
@@ -230,8 +229,6 @@ class LUCompte
 					$post->setPriority($parameters["data"]["priority"]);
 					$ret = $post->getUsername();
 				}
-				$this->om->persist($post);
-           		$this->om->flush();
 		   		return $ret;
 			}
        }
@@ -243,7 +240,6 @@ class LUCompte
        * ajoute un nouveau entity
        *
        * @param string $table filter search array
-       * @throws InvalidJsonException when usename doesn't existe
        *
        *
        */
@@ -284,12 +280,16 @@ class LUCompte
 	   * @return Radusergroup
 	   */
 	   public function getUsergroup($username,$groupname){
+			
 			$list = $this->radusergroup->findByUsername($username);
 			$get = null;
 			foreach($list as $value){
 				if($value->getGroupname() == $groupname){
 					$get = $value;
 				}
+			}
+			if(empty($get)){
+				throw new NotFoundHttpException(sprintf('\'%s\' \'%s\' N\'EXISTE PAS DANS radusergroup.',$username,$groupname));
 			}
 	   		return $get;
        }
@@ -585,66 +585,6 @@ class LUCompte
 
 
 
-      /**
-       * Create a new LIGNE
-       *
-       * @param array $username
-       * @param array $parameters
-       * @param array $table
-       *
-       *
-       * @return integer
-       */
-        public function patch($id, $parameters, $table) {
-          
-          if($id){
-            $patch = $this->getbyId($table, $id);
-          }else{
-            $post = $this->newObject($table);
-          }
-          if(!$parameters)return;
-          $data = $parameters["data"];
-          if($patch){
-            foreach ($data as $key => $value){
-              switch($key){
-                case "attribute":
-                    foreach ($patch as $element){
-                      $element->setAttribute($value);
-                    }
-                break;
-                case "op":
-                    foreach ($patch as $element){
-                      $element->setOp($value);
-                    }
-                break;
-                case "value":
-                    foreach ($patch as $element){
-                      $element->setValue($value);
-                    }
-                break;
-                case "priority":
-                    foreach ($patch as $element){
-                      $element->setPriority($value);
-                    }
-                break;
-              }
-            }
-            $list = array();
-            foreach ($patch as $element){
-              $this->om->persist($element);
-              $this->om->flush();
-              if($table == "usergroup"){
-                $list[] = $element->getUsername();
-              }
-              $list[] = $element->getId();
-            }
-            return $list;
-          }
-      
-
-        }
-
-
         /**
          * DELETE DANS UNE TABLE
          *
@@ -675,10 +615,6 @@ class LUCompte
          */
           public function deleteUsergroup($username,$groupname) {
 				$delete = $this->getUsergroup($username,$groupname);
-				if(empty($delete)){
-					throw new NotFoundHttpException(sprintf('\'%s\'N\'EXISTE PAS DANS radusergroup.',$username));
-                	return;
-				}
                 $id = $delete->getUsername();
                 $this->om->remove($delete);
                 $this->om->flush();
@@ -759,6 +695,12 @@ class LUCompte
            */
             public function getbyId($table, $id) {
               switch($table){
+				 case "userinfo":
+                  $get = $this->userinfo->findOneById($id);
+                  break;
+				 case "radiusgroup":
+                  $get = $this->radiusgroup->findOneById($id);
+                  break;
                 case "reply":
                   $get = $this->radreply->findOneById($id);
                   break;
@@ -773,7 +715,7 @@ class LUCompte
                     break;
               }
               if(empty($get)){
-                throw new NotFoundHttpException(sprintf('\'%s\' DANS \'%s\' N\'EXISTE PAS.',$id,$table));
+                throw new NotFoundHttpException(sprintf('\'%s\' DANS \'rad%s\' N\'EXISTE PAS.',$id,$table));
               }
               return $get;
 
