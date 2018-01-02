@@ -774,16 +774,29 @@ class LUCompte
          * @param String        $method
          *
 		 * @throws InvalidJsonException
-         * @return Radcheck
+         * @return Userinfo
          *
          *
          */
-         public function processForm( array $parameters, $method = "PUT") {
-
-           $form = $this->formFactory->create("LUCIE\RadiusBundle\Form\RadcheckType", $patch, array('method' => $method));
-
-           $form->submit($parameters, false);
-           return $form;
+         public function processForm( $parameters ) {
+			var_dump($parameters);
+			$post = new Userinfo;
+           $post->setUsername($parameters["data"]["username"]);
+           $post->setChangeuserinfo("0");
+           $day = date("Y-m-d H:i:s");
+           $post->setCreationdate(new \DateTime($day));
+           $post->setCreationby("newuser.pl");
+           $post->setUpdatedate(new \DateTime($day)); 
+			$form = $this->formFactory->create("Radius\PrepodBundle\Form\UserinfoType", $post, array('method' => 'PATCH'));
+		    unset($parameters['_method']);
+		    $form->submit($parameters, 'PATCH' !== $method);
+		    if ($form->isValid()) {
+		        $post = $form->getData();
+		        $this->om->persist($post);
+		        $this->om->flush($post);
+		        return $post;
+		    }
+		    throw new InvalidJsonException('Invalid submitted data', $form);
            //throw new InvalidJsonException('Invalid submitted data', $form);
          }
 

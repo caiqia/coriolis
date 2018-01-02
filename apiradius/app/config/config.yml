@@ -83,7 +83,9 @@ fos_rest:
         enabled: true
     view:
         view_response_listener: true
-        formats: { json: true, xml: false, rss: false }
+        formats: { json: true, xml: true, rss: false }
+        templating_formats:
+            html: true
     serializer:
         serialize_null: true
     format_listener:

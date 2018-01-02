@@ -1,0 +1,20 @@
+{% extends "RadiusPrepodBundle::layout.html.twig" %}
+{% trans_default_domain 'RadiusPrepodBundle' %}
+
+{% block title %}{{'voicemail.get.title'|trans({ '%id%' : voicemail.uniqueid}) }}}{% endblock %}
+
+{% block content %}
+
+<h1>{{ 'voicemail.get.header'|trans({ '%numero%' : voicemail.mailbox , '%id%': voicemail.uniqueid}) }}</h1>
+<p>
+{{ 'voicemail.get.body'|trans({ '%numero%' : voicemail.mailbox , '%id%': voicemail.uniqueid})|raw }}
+</p>
+
+    <form action="{{ url('api_1_delete_voicemail',{'id' : voicemail.uniqueid }) }}"  method="POST">
+	<input type="hidden" name="_method" value="DELETE"/>
+	<div>
+        <button type="submit" class="btn btn-danger">{{'voicemail.get.delete'|trans}}</button>
+        </div>
+
+    </form>
+{% endblock %}

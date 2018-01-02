@@ -1,0 +1,60 @@
+{% extends "RadiusPrepodBundle::layout.html.twig" %}
+{% trans_default_domain 'RadiusPrepodBundle' %}
+
+{% block title %}{{'voicemail.all.title'|trans}}{% endblock %}
+
+{% block content %}
+    <h1 class="nom">{{'voicemail.all.title'|trans}}</h1>
+
+    <table class="table table-stripped table-condensed table-hover">
+      <thead>
+        <tr>
+           <th>#</th>
+           <th>{{'voicemail.all.numero'|trans}}</th>
+           <th>{{'voicemail.all.newMessage'|trans}}</th>
+           <th>{{'voicemail.all.oldMessage'|trans}}</th>
+           <th>{{'voicemail.all.action'|trans}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for voicemail in voicemails %}
+            <tr>
+           <td>{{voicemail.uniqueid}}</td>
+           <td>{{voicemail.mailbox}}</td>
+           <td>{% if voicemail.message %}
+               {{voicemail.message.new}}
+               {% else %} 0 {% endif %}</td>
+           <td>{% if voicemail.message %}
+               {{voicemail.message.old}}
+                {% else %} 0 {% endif %}</td>
+           <td><a class="btn btn-primary" href="{{ path('api_1_get_voicemail', {'id' : voicemail.id }) }}" role="button">{{'voicemail.all.edit'|trans}}</a></td>
+
+           </tr>
+        {% endfor %}
+      </tbody>
+ <tfoot>
+        <tr>
+          <td colspan="2">
+                de  {%if offset + 1 < total %} {{offset + 1}}  {%    else%} {{total}} {%endif %}  au {%if offset + limit < total %} {{offset + limit }} {%else%} {{total}} {%endif %} sur {{total}}
+          </td>
+          <td colspan="2" class="text-center">
+                <ul  class="pagination pagination-centered">
+                        <li class="footable-page-arrow {%if (offset == 0 or total == 0 ) %} disabled {%else%}{% set param = param|merge({ 'offset' : 0 })%}{%endif %}"><a href="{{path('api_1_get_voicemails', param)}}">&laquo;</a></li>
+                        <li class="footable-page-arrow {%if (offset - limit < 0 or total == 0) %} disabled {%else%}{% set param =param|merge({ 'offset' : offset - limit })%} {%endif %}"><a href="{{path('api_1_get_voicemails', param)}}">&lsaquo;</a></li>
+                        {% for i in -4..4 %}
+                                 {%if ((offset + i*limit >= 0) and (offset + i*limit < total))%}
+                                        {% set param =param|merge({ 'offset' : offset + i* limit })%}
+                                        <li {% if i == 0 %} class="active" {%endif%}><a href="{{path('api_1_get_voicemails', param)}}">{{i + offset/limit + 1}}</a></li>
+                                 {%endif%}
+                        {% endfor %}
+                        <li class="footable-page-arrow {%if (offset + limit >= total or total == 0) %} disabled {%else%}{% set param =param|merge({ 'offset' : offset + limit })%}     {%endif %}"><a href="{{path('api_1_get_voicemails', param)}}">&rsaquo;</a></li>
+                        <li class="footable-page-arrow {%if (offset + limit >= total or total == 0) %} disabled {%else%}{% set param =param|merge({ 'offset' : (((total-1)/limit)|round(0,'floor'))*limit })%}     {%endif %}"><a href="{{path('api_1_get_voicemails', param)}}">&raquo;</a></li>
+                </ul>
+          </td>
+        <td >
+        <a href="{{ path('api_1_new_voicemail') }}" class="btn btn-danger" role="button">{{'voicemail.all.new'|trans}}</a>
+        </td>
+        </tr>
+      </tfoot>
+    </table>
+{% endblock %}

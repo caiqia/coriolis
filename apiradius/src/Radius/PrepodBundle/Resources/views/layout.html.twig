@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>{% block title %}{% endblock %}</title>
+        <meta charset="UTF-8" />
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link href='http://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.13.1/jquery.validate.min.js"></script>
+    <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet" media="screen">
+
+    <!-- HTML5 Shim and Respond.js add IE8 support of HTML5 elements and media queries -->
+
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+</head>
+
+<body>
+    <!-- jQuery (necessary for Bootstraps JavaScript plugins) -->
+    <script src="{{ asset('js/jquery.js') }}"></script>
+    <!-- Include all JavaScripts, compiled by Assetic -->
+    <script src="{{ asset('js/bootstrap.js') }}"></script>
+        {% block javascripts %}{% endblock %}
+    <div class="header">
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">VMS</a>
+    </div>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" >
+      {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+      <ul class="nav navbar-nav">
+	<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{'menu.voicemail.title'|trans({},'RadiusPrepodBundle')}}<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="{{ path('api_1_get_voicemails') }}">{{'menu.voicemail.list'|trans({},'RadiusPrepodBundle')}}</a></li>
+            <li><a href="{{ path('api_1_new_voicemail') }}">{{'menu.voicemail.new'|trans({},'RadiusPrepodBundle')}}</a></li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+	<li class="dropdown">
+		<div class="navbar-btn">
+		 <a href="#" class="dropdown-toggle btn btn-default" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{  app.user.username }} <span class="caret"></span></a>
+		<ul class="dropdown-menu">
+		<li><a href="{{ path('fos_user_profile_edit') }}"><i class="icon-wrench"></i>
+                    Profile
+                </a>
+                </li>
+
+                <li><a href="{{ path('fos_user_security_logout') }}"><i class="icon-share"></i>
+                    {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
+                </a>
+		</li>
+		</ul>
+		</div>	
+	</li>
+	</ul>
+            {% endif %}
+</div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+</div>
+<div class="container">
+		<!--Body content-->
+		{% block content %}{% endblock %}
+    </div>
+</body>
+</html>
