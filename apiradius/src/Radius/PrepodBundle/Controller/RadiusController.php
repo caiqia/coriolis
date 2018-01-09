@@ -49,12 +49,14 @@ class RadiusController extends FOSRestController
             }catch(NotFoundHttpException $exception){
               $msg = $exception->getMessage();
               $response = new Response();
+			  $response->setStatusCode(400);
               $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
               $response->headers->set('Content-Type', 'application/json');
               return $response;
             }
             $data = $this->get('jms_serializer')->serialize($get, 'json');
             $response = new Response();
+			$response->setStatusCode(200);
             $response->setContent(json_encode(array('success' => TRUE,'msg' =>$data)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
@@ -87,12 +89,14 @@ class RadiusController extends FOSRestController
             }catch(NotFoundHttpException $exception){
               $msg = $exception->getMessage();
               $response = new Response();
+			  $response->setStatusCode(400);
               $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
               $response->headers->set('Content-Type', 'application/json');
               return $response;
             }
             $data = $this->get('jms_serializer')->serialize($get, 'json');
             $response = new Response();
+			$response->setStatusCode(200);
             $response->setContent(json_encode(array('success' => TRUE,'msg' =>$data)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
@@ -125,12 +129,14 @@ class RadiusController extends FOSRestController
             }catch(NotFoundHttpException $exception){
               $msg = $exception->getMessage();
               $response = new Response();
+			  $response->setStatusCode(400);
               $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
               $response->headers->set('Content-Type', 'application/json');
               return $response;
             }
             $data = $this->get('jms_serializer')->serialize($get, 'json');
             $response = new Response();
+			$response->setStatusCode(200);
             $response->setContent(json_encode(array('success' => TRUE,'msg' =>$data)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
@@ -164,12 +170,14 @@ class RadiusController extends FOSRestController
             }catch(NotFoundHttpException $exception){
               $msg = $exception->getMessage();
               $response = new Response();
+			  $response->setStatusCode(400);
               $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
               $response->headers->set('Content-Type', 'application/json');
               return $response;
             }
             $data = $this->get('jms_serializer')->serialize($get, 'json');
             $response = new Response();
+			$response->setStatusCode(200);
             $response->setContent(json_encode(array('success' => TRUE,'msg' =>$data)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
@@ -202,12 +210,14 @@ class RadiusController extends FOSRestController
             }catch(NotFoundHttpException $exception){
               $msg = $exception->getMessage();
               $response = new Response();
+			  $response->setStatusCode(400);
               $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
               $response->headers->set('Content-Type', 'application/json');
               return $response;
             }
             $data = $this->get('jms_serializer')->serialize($get, 'json');
             $response = new Response();
+			$response->setStatusCode(200);
             $response->setContent(json_encode(array('success' => TRUE,'msg' =>$data)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
@@ -240,12 +250,14 @@ class RadiusController extends FOSRestController
             }catch(NotFoundHttpException $exception){
               $msg = $exception->getMessage();
               $response = new Response();
+			  $response->setStatusCode(400);
               $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
               $response->headers->set('Content-Type', 'application/json');
               return $response;
             }
             $data = $this->get('jms_serializer')->serialize($get, 'json');
             $response = new Response();
+			$response->setStatusCode(200);
             $response->setContent(json_encode(array('success' => TRUE,'msg' =>$data)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
@@ -294,6 +306,7 @@ class RadiusController extends FOSRestController
         }catch(InvalidJsonException $exception){
                 $msg = $exception->getMessage();
                 $response = new Response();
+				$response->setStatusCode(400);
                 $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
                 $response->headers->set('Content-Type', 'application/json');
                 return $response;
@@ -303,6 +316,7 @@ class RadiusController extends FOSRestController
       	$total = $this->container->get('radius.compte')->count("userinfo",$search);
         $msg = "IL Y A ".$total." LIGNES DANS userinfo";
         $response = new Response();
+		$response->setStatusCode(200);
         $response->setContent(json_encode(array('success' => TRUE,'msg' => $msg)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -354,6 +368,7 @@ class RadiusController extends FOSRestController
         }catch(InvalidJsonException $exception){
             $msg = $exception->getMessage();
             $response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
@@ -363,6 +378,7 @@ class RadiusController extends FOSRestController
         $total = $this->container->get('radius.compte')->all("userinfo",$limit,$offset,$search);
         $data = $this->get('jms_serializer')->serialize($total, 'json');
         $response = new Response();
+		$response->setStatusCode(200);
         $response->setContent(json_encode(array('success' => TRUE,'msg' =>$data)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -408,6 +424,7 @@ class RadiusController extends FOSRestController
         }catch(InvalidJsonException $exception){
                 $msg = $exception->getMessage();
                 $response = new Response();
+				$response->setStatusCode(400);
                 $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
                 $response->headers->set('Content-Type', 'application/json');
                 return $response;
@@ -417,6 +434,7 @@ class RadiusController extends FOSRestController
       	$total = $this->container->get('radius.compte')->count("radiusgroup",$search);
         $msg = "IL Y A ".$total." LIGNES DANS radiusgroup";
         $response = new Response();
+		$response->setStatusCode(200);
         $response->setContent(json_encode(array('success' => TRUE,'msg' => $msg)));
         $response->headers->set('Content-Type', 'application/json');
         return $response; 
@@ -467,6 +485,7 @@ class RadiusController extends FOSRestController
         }catch(InvalidJsonException $exception){
             $msg = $exception->getMessage();
             $response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
@@ -476,6 +495,7 @@ class RadiusController extends FOSRestController
         $total = $this->container->get('radius.compte')->all("radiusgroup",$limit,$offset,$search);
         $data = $this->get('jms_serializer')->serialize($total, 'json');
         $response = new Response();
+		$response->setStatusCode(200);
         $response->setContent(json_encode(array('success' => TRUE,'msg' =>$data)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -524,6 +544,7 @@ class RadiusController extends FOSRestController
         }catch(InvalidJsonException $exception){
                 $msg = $exception->getMessage();
                 $response = new Response();
+				$response->setStatusCode(400);
                 $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
                 $response->headers->set('Content-Type', 'application/json');
                 return $response;
@@ -533,6 +554,7 @@ class RadiusController extends FOSRestController
       	$total = $this->container->get('radius.compte')->count("check",$search);
         $msg = "IL Y A ".$total." LIGNES DANS radcheck";
         $response = new Response();
+		$response->setStatusCode(200);
         $response->setContent(json_encode(array('success' => TRUE,'msg' => $msg)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -583,6 +605,7 @@ class RadiusController extends FOSRestController
         }catch(InvalidJsonException $exception){
                 $msg = $exception->getMessage();
                 $response = new Response();
+				$response->setStatusCode(400);
                 $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
                 $response->headers->set('Content-Type', 'application/json');
                 return $response;
@@ -592,6 +615,7 @@ class RadiusController extends FOSRestController
       	$total = $this->container->get('radius.compte')->count("reply",$search);
         $msg = "IL Y A ".$total." LIGNES DANS radreply";
         $response = new Response();
+		$response->setStatusCode(200);
         $response->setContent(json_encode(array('success' => TRUE,'msg' => $msg)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -641,6 +665,7 @@ class RadiusController extends FOSRestController
         }catch(InvalidJsonException $exception){
                 $msg = $exception->getMessage();
                 $response = new Response();
+				$response->setStatusCode(400);
                 $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
                 $response->headers->set('Content-Type', 'application/json');
                 return $response;
@@ -650,6 +675,7 @@ class RadiusController extends FOSRestController
       	$total = $this->container->get('radius.compte')->count("usergroup",$search);
         $msg = "IL Y A ".$total." LIGNES DANS radusergroup";
         $response = new Response();
+		$response->setStatusCode(200);
         $response->setContent(json_encode(array('success' => TRUE,'msg' => $msg)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -700,6 +726,7 @@ class RadiusController extends FOSRestController
         }catch(InvalidJsonException $exception){
                 $msg = $exception->getMessage();
                 $response = new Response();
+				$response->setStatusCode(400);
                 $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
                 $response->headers->set('Content-Type', 'application/json');
                 return $response;
@@ -709,6 +736,7 @@ class RadiusController extends FOSRestController
       	$total = $this->container->get('radius.compte')->count("groupcheck",$search);
         $msg = "IL Y A ".$total." LIGNES DANS radgroupcheck";
         $response = new Response();
+		$response->setStatusCode(200);
         $response->setContent(json_encode(array('success' => TRUE,'msg' => $msg)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -759,6 +787,7 @@ class RadiusController extends FOSRestController
         }catch(InvalidJsonException $exception){
                 $msg = $exception->getMessage();
                 $response = new Response();
+				$response->setStatusCode(400);
                 $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
                 $response->headers->set('Content-Type', 'application/json');
                 return $response;
@@ -768,6 +797,7 @@ class RadiusController extends FOSRestController
       	$total = $this->container->get('radius.compte')->count("groupreply",$search);
         $msg = "IL Y A ".$total." LIGNES DANS radgroupreply";
         $response = new Response();
+		$response->setStatusCode(200);
         $response->setContent(json_encode(array('success' => TRUE,'msg' => $msg)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -821,6 +851,7 @@ class RadiusController extends FOSRestController
         }catch(InvalidJsonException $exception){
             $msg = $exception->getMessage();
             $response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
@@ -830,6 +861,7 @@ class RadiusController extends FOSRestController
         $total = $this->container->get('radius.compte')->all("check",$limit,$offset,$search);
         $data = $this->get('jms_serializer')->serialize($total, 'json');
         $response = new Response();
+		$response->setStatusCode(200);
         $response->setContent(json_encode(array('success' => TRUE,'msg' =>$data)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -882,6 +914,7 @@ class RadiusController extends FOSRestController
         }catch(InvalidJsonException $exception){
             $msg = $exception->getMessage();
             $response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
@@ -891,6 +924,7 @@ class RadiusController extends FOSRestController
         $total = $this->container->get('radius.compte')->all("reply",$limit,$offset,$search);
         $data = $this->get('jms_serializer')->serialize($total, 'json');
         $response = new Response();
+		$response->setStatusCode(200);
         $response->setContent(json_encode(array('success' => TRUE,'msg' =>$data)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -943,6 +977,7 @@ class RadiusController extends FOSRestController
         }catch(InvalidJsonException $exception){
             $msg = $exception->getMessage();
             $response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
@@ -952,6 +987,7 @@ class RadiusController extends FOSRestController
         $total = $this->container->get('radius.compte')->all("usergroup",$limit,$offset,$search);
         $data = $this->get('jms_serializer')->serialize($total, 'json');
         $response = new Response();
+		$response->setStatusCode(200);
         $response->setContent(json_encode(array('success' => TRUE,'msg' =>$data)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -1005,6 +1041,7 @@ class RadiusController extends FOSRestController
         }catch(InvalidJsonException $exception){
             $msg = $exception->getMessage();
             $response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
@@ -1014,6 +1051,7 @@ class RadiusController extends FOSRestController
         $total = $this->container->get('radius.compte')->all("groupcheck",$limit,$offset,$search);
         $data = $this->get('jms_serializer')->serialize($total, 'json');
         $response = new Response();
+		$response->setStatusCode(200);
         $response->setContent(json_encode(array('success' => TRUE,'msg' =>$data)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -1067,6 +1105,7 @@ class RadiusController extends FOSRestController
         }catch(InvalidJsonException $exception){
             $msg = $exception->getMessage();
             $response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
@@ -1076,6 +1115,7 @@ class RadiusController extends FOSRestController
         $total = $this->container->get('radius.compte')->all("groupreply",$limit,$offset,$search);
         $data = $this->get('jms_serializer')->serialize($total, 'json');
         $response = new Response();
+		$response->setStatusCode(200);
         $response->setContent(json_encode(array('success' => TRUE,'msg' =>$data)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -1110,6 +1150,7 @@ class RadiusController extends FOSRestController
 		}catch(NotFoundHttpException $exception){
               $msg = $exception->getMessage();
               $response = new Response();
+			  $response->setStatusCode(400);
               $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
               $response->headers->set('Content-Type', 'application/json');
               return $response;
@@ -1117,6 +1158,7 @@ class RadiusController extends FOSRestController
         
 		$data = $this->get('jms_serializer')->serialize($get, 'json');
         $response = new Response();
+		$response->setStatusCode(200);
         $response->setContent(json_encode(array('success' => TRUE,'msg' => $data)));
         $response->headers->set('Content-Type', 'application/json');
         return $response; 
@@ -1144,6 +1186,7 @@ class RadiusController extends FOSRestController
 		if($username != $request->request->all()["data"]["username"]){
 			$msg = "incorrect url username ";
 			$response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
            return $response;
@@ -1151,21 +1194,27 @@ class RadiusController extends FOSRestController
 		try{
 			$string = $request->getRequestUri(); 
 			$this->container->get('radius.compte')->jsonVeri($request->request->all(), "userinfo");
-			$ret = $this->container->get('radius.compte')->users($request->request->all());
+			$id = $this->container->get('radius.compte')->users($request->request->all());		
+			$ret = implode(",", $id);
+			
+			var_dump($ret);
  		}catch(UniqueConstraintViolationException $exception){
 			$msg = "UniqueConstraintViolation : ".$exception->getErrorCode();
             $response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
 		}catch(InvalidJsonException $exception){
             $msg = $exception->getMessage();
             $response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
            return $response;
           }
 		$response = new Response();
+		$response->setStatusCode(200);
         $response->setContent(json_encode(array('success' => TRUE,'msg' =>"Creation-User-OK", 'id' => $string .'/'.$ret)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -1193,6 +1242,7 @@ class RadiusController extends FOSRestController
 		if( $groupname != $request->request->all()["data"]["groupname"]){
 			$msg = "incorrect url groupname ";
 			$response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
            return $response;
@@ -1204,17 +1254,20 @@ class RadiusController extends FOSRestController
  		}catch(UniqueConstraintViolationException $exception){
 			$msg = "UniqueConstraintViolation : ".$exception->getErrorCode();
             $response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
 		}catch(InvalidJsonException $exception){
             $msg = $exception->getMessage();
             $response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
            return $response;
           }
 		$response = new Response();
+		$response->setStatusCode(200);
         $response->setContent(json_encode(array('success' => TRUE,'msg' =>"Creation-Group-OK", 'id' => $string .'/'.$ret )));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -1242,6 +1295,7 @@ class RadiusController extends FOSRestController
 		if($username != $request->request->all()["data"]["username"]){
 			$msg = "incorrect url username ";
 			$response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
            return $response;
@@ -1253,6 +1307,7 @@ class RadiusController extends FOSRestController
  		}catch(UniqueConstraintViolationException $exception){
 			$msg = "UniqueConstraintViolation : ".$exception->getErrorCode();
             $response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
@@ -1260,17 +1315,20 @@ class RadiusController extends FOSRestController
 		catch(ForeignKeyConstraintViolationException $exception){
 			$msg = "ForeignKeyConstraintViolation : ".$exception->getErrorCode();
             $response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
 		}catch(InvalidJsonException $exception){
             $msg = $exception->getMessage();
             $response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
            return $response;
           }
 		$response = new Response();
+		$response->setStatusCode(200);
         $response->setContent(json_encode(array('success' => TRUE,'msg' =>"POST-radcheck-OK", 'id' => $string .'/'.$ret )));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -1299,6 +1357,7 @@ class RadiusController extends FOSRestController
 		if($username != $request->request->all()["data"]["username"]){
 			$msg = "incorrect url username ";
 			$response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
            return $response;
@@ -1310,6 +1369,7 @@ class RadiusController extends FOSRestController
  		}catch(UniqueConstraintViolationException $exception){
 			$msg = "UniqueConstraintViolation : ".$exception->getErrorCode();
             $response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
@@ -1317,17 +1377,20 @@ class RadiusController extends FOSRestController
 		catch(ForeignKeyConstraintViolationException $exception){
 			$msg = "ForeignKeyConstraintViolation : ".$exception->getErrorCode();
             $response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
 		}catch(InvalidJsonException $exception){
             $msg = $exception->getMessage();
             $response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
            return $response;
           }
 		$response = new Response();
+		$response->setStatusCode(200);
         $response->setContent(json_encode(array('success' => TRUE,'msg' =>"POST-radreply-OK", 'id' => $string .'/'.$ret)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -1355,6 +1418,7 @@ class RadiusController extends FOSRestController
 		if( $groupname != $request->request->all()["data"]["groupname"]){
 			$msg = "incorrect url groupname ";
 			$response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
            return $response;
@@ -1366,6 +1430,7 @@ class RadiusController extends FOSRestController
  		}catch(UniqueConstraintViolationException $exception){
 			$msg = "UniqueConstraintViolation : ".$exception->getErrorCode();
             $response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
@@ -1373,17 +1438,20 @@ class RadiusController extends FOSRestController
 		catch(ForeignKeyConstraintViolationException $exception){
 			$msg = "ForeignKeyConstraintViolation : ".$exception->getErrorCode();
             $response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
 		}catch(InvalidJsonException $exception){
             $msg = $exception->getMessage();
             $response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
            return $response;
           }
 		$response = new Response();
+		$response->setStatusCode(200);
         $response->setContent(json_encode(array('success' => TRUE,'msg' =>"POST-radgroupcheck-OK", 'id' => $string .'/'.$ret )));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -1412,6 +1480,7 @@ class RadiusController extends FOSRestController
 		if( $groupname != $request->request->all()["data"]["groupname"]){
 			$msg = "incorrect url groupname ";
 			$response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
            return $response;
@@ -1423,6 +1492,7 @@ class RadiusController extends FOSRestController
  		}catch(UniqueConstraintViolationException $exception){
 			$msg = "UniqueConstraintViolation : ".$exception->getErrorCode();
             $response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
@@ -1430,17 +1500,21 @@ class RadiusController extends FOSRestController
 		catch(ForeignKeyConstraintViolationException $exception){
 			$msg = "ForeignKeyConstraintViolation : ".$exception->getErrorCode();
             $response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
 		}catch(InvalidJsonException $exception){
+			
             $msg = $exception->getMessage();
             $response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
            return $response;
           }
 		$response = new Response();
+		$response->setStatusCode(200);
         $response->setContent(json_encode(array('success' => TRUE,'msg' =>"POST-radgroupreply-OK", 'id' => $string .'/'.$ret)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -1467,6 +1541,7 @@ class RadiusController extends FOSRestController
 		if($username != $request->request->all()["data"]["username"]){
 			$msg = "incorrect url username ";
 			$response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
            return $response;
@@ -1474,6 +1549,7 @@ class RadiusController extends FOSRestController
 		if($groupname != $request->request->all()["data"]["groupname"]){
 			$msg = "incorrect url groupname ";
 			$response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
            return $response;
@@ -1485,6 +1561,7 @@ class RadiusController extends FOSRestController
  		}catch(UniqueConstraintViolationException $exception){
 			$msg = "UniqueConstraintViolation : ".$exception->getErrorCode();
             $response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
@@ -1492,17 +1569,20 @@ class RadiusController extends FOSRestController
 		catch(ForeignKeyConstraintViolationException $exception){
 			$msg = "ForeignKeyConstraintViolation : ".$exception->getErrorCode();
             $response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
 		}catch(InvalidJsonException $exception){
             $msg = $exception->getMessage();
             $response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
            return $response;
           }
 		$response = new Response();
+		$response->setStatusCode(200);
         $response->setContent(json_encode(array('success' => TRUE,'msg' =>"POST-Usergroup-OK", 'id' => $string .'/'.$ret)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -1540,18 +1620,21 @@ class RadiusController extends FOSRestController
 		}catch(InvalidJsonException $exception){
             $msg = $exception->getMessage();
             $response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
            return $response;
           }catch(NotFoundHttpException $exception){
               $msg = $exception->getMessage();
               $response = new Response();
+			  $response->setStatusCode(400);	
               $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
               $response->headers->set('Content-Type', 'application/json');
               return $response;
           }	
   		
         $response = new Response();
+		$response->setStatusCode(200);
         $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PATCH-radcheck-OK", 'id' => $string .'/'.$ret)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -1587,18 +1670,21 @@ class RadiusController extends FOSRestController
 		}catch(InvalidJsonException $exception){
             $msg = $exception->getMessage();
             $response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
            return $response;
           }catch(NotFoundHttpException $exception){
               $msg = $exception->getMessage();
               $response = new Response();
+			  $response->setStatusCode(400);
               $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
               $response->headers->set('Content-Type', 'application/json');
               return $response;
           }	
 		
         $response = new Response();
+		$response->setStatusCode(200);
         $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PATCH-radreply-OK", 'id' => $string .'/'.$ret )));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -1635,17 +1721,20 @@ class RadiusController extends FOSRestController
 		}catch(InvalidJsonException $exception){
             $msg = $exception->getMessage();
             $response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
            return $response;
           }catch(NotFoundHttpException $exception){
               $msg = $exception->getMessage();
               $response = new Response();
+			  $response->setStatusCode(400);
               $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
               $response->headers->set('Content-Type', 'application/json');
               return $response;
           }
         $response = new Response();
+		$response->setStatusCode(200);
         $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PATCH-radgroupcheck-OK", 'id' => $string .'/'.$ret)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -1681,17 +1770,20 @@ class RadiusController extends FOSRestController
 		}catch(InvalidJsonException $exception){
             $msg = $exception->getMessage();
             $response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
            return $response;
           }catch(NotFoundHttpException $exception){
               $msg = $exception->getMessage();
               $response = new Response();
+			  $response->setStatusCode(400);
               $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
               $response->headers->set('Content-Type', 'application/json');
               return $response;
           }
         $response = new Response();
+		$response->setStatusCode(200);
         $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PATCH-radgroupreply-OK", 'id' => $string .'/'.$ret)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -1728,17 +1820,20 @@ class RadiusController extends FOSRestController
 		}catch(InvalidJsonException $exception){
             $msg = $exception->getMessage();
             $response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
            return $response;
           }catch(NotFoundHttpException $exception){
               $msg = $exception->getMessage();
               $response = new Response();
+			  $response->setStatusCode(400);
               $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
               $response->headers->set('Content-Type', 'application/json');
               return $response;
             }	
         $response = new Response();
+		$response->setStatusCode(200);
         $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PATCH-Usergroup-OK", 'username' => $string .'/'.$ret)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -1771,6 +1866,7 @@ class RadiusController extends FOSRestController
           $id = $this->container->get('radius.compte')->newObject("userinfo");
         }
         $response = new Response();
+		$response->setStatusCode(200);
         $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PUT-userinfo-OK" )));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -1805,6 +1901,7 @@ class RadiusController extends FOSRestController
           $id = $this->container->get('radius.compte')->newObject("radiusgroup");
         }
         $response = new Response();
+		$response->setStatusCode(200);
         $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PUT-radiusgroup-OK" )));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -1838,6 +1935,7 @@ class RadiusController extends FOSRestController
           $id = $this->container->get('radius.compte')->newObject("usergroup");
         }
         $response = new Response();
+		$response->setStatusCode(200);
         $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PUT-usergroup-OK" )));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -1872,6 +1970,7 @@ class RadiusController extends FOSRestController
           $id = $this->container->get('radius.compte')->newObject("check");
         }
         $response = new Response();
+		$response->setStatusCode(200);
         $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PUT-radcheck-OK" )));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -1905,6 +2004,7 @@ class RadiusController extends FOSRestController
           $id = $this->container->get('radius.compte')->newObject("reply");
         }
         $response = new Response();
+		$response->setStatusCode(200);
         $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PUT-radreply-OK" )));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -1939,6 +2039,7 @@ class RadiusController extends FOSRestController
           $id = $this->container->get('radius.compte')->newObject("groupcheck");
         }
         $response = new Response();
+		$response->setStatusCode(200);
         $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PUT-groupcheck-OK" )));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -1972,6 +2073,7 @@ class RadiusController extends FOSRestController
           $id = $this->container->get('radius.compte')->newObject("groupreply");
         }
         $response = new Response();
+		$response->setStatusCode(200);
         $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PUT-groupreply-OK" )));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -2007,11 +2109,13 @@ class RadiusController extends FOSRestController
             }catch(NotFoundHttpException $exception){
               $msg = $exception->getMessage();
               $response = new Response();
+			  $response->setStatusCode(400);
               $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
               $response->headers->set('Content-Type', 'application/json');
               return $response;
             }
             $response = new Response();
+			$response->setStatusCode(200);
             $response->setContent(json_encode(array('success' => TRUE,'msg' =>"DELETE-User-OK",'id' =>$string .'/'. $ret)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
@@ -2045,11 +2149,13 @@ class RadiusController extends FOSRestController
             }catch(NotFoundHttpException $exception){
               $msg = $exception->getMessage();
               $response = new Response();
+			  $response->setStatusCode(400);
               $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
               $response->headers->set('Content-Type', 'application/json');
               return $response;
             }
             $response = new Response();
+			$response->setStatusCode(200);
             $response->setContent(json_encode(array('success' => TRUE,'msg' =>"DELETE-Group-OK",'id' => $string .'/'.$ret)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
@@ -2082,11 +2188,13 @@ class RadiusController extends FOSRestController
           }catch(NotFoundHttpException $exception){
             $msg = $exception->getMessage();
             $response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
           }
           $response = new Response();
+		  $response->setStatusCode(200);
           $response->setContent(json_encode(array('success' => TRUE,'msg' =>"DELETE-radcheck-OK",'id' => $string .'/'.$ret)));
           $response->headers->set('Content-Type', 'application/json');
           return $response;
@@ -2120,11 +2228,13 @@ class RadiusController extends FOSRestController
           }catch(NotFoundHttpException $exception){
             $msg = $exception->getMessage();
             $response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
           }
           $response = new Response();
+		  $response->setStatusCode(200);
           $response->setContent(json_encode(array('success' => TRUE,'msg' =>"DELETE-radgroupcheck-OK",'id' => $string .'/'.$ret )));
           $response->headers->set('Content-Type', 'application/json');
           return $response;
@@ -2158,11 +2268,13 @@ class RadiusController extends FOSRestController
           }catch(NotFoundHttpException $exception){
             $msg = $exception->getMessage();
             $response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
           }
           $response = new Response();
+		  $response->setStatusCode(200);
           $response->setContent(json_encode(array('success' => TRUE,'msg' =>"DELETE-radreply-OK",'id' => $string .'/'.$ret)));
           $response->headers->set('Content-Type', 'application/json');
           return $response;
@@ -2196,11 +2308,13 @@ class RadiusController extends FOSRestController
           }catch(NotFoundHttpException $exception){
             $msg = $exception->getMessage();
             $response = new Response();
+			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
           }
           $response = new Response();
+		  $response->setStatusCode(200);
           $response->setContent(json_encode(array('success' => TRUE,'msg' =>"DELETE-radgroupreply-OK",'id' => $string .'/'.$ret)));
           $response->headers->set('Content-Type', 'application/json');
           return $response;
@@ -2232,16 +2346,17 @@ class RadiusController extends FOSRestController
 
             try{
 				$string = $request->getRequestUri();
-              $id = $this->container->get('radius.compte')->deleteUsergroup($username,$groupname);
-				$ret = implode(",", $id);
+              	$ret = $this->container->get('radius.compte')->deleteUsergroup($username,$groupname);
             }catch(NotFoundHttpException $exception){
               $msg = $exception->getMessage();
               $response = new Response();
+			  $response->setStatusCode(400);
               $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
               $response->headers->set('Content-Type', 'application/json');
               return $response;
             }
             $response = new Response();
+			$response->setStatusCode(200);
             $response->setContent(json_encode(array('success' => TRUE,'msg' =>"DELETE-radusergroup-OK",'username' => $string .'/'.$ret)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
@@ -2275,12 +2390,14 @@ class RadiusController extends FOSRestController
             }catch(NotFoundHttpException $exception){
               $msg = $exception->getMessage();
               $response = new Response();
+			  $response->setStatusCode(400);
               $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
               $response->headers->set('Content-Type', 'application/json');
               return $response;
             }
             $data = $this->get('jms_serializer')->serialize($get, 'json');
             $response = new Response();
+			$response->setStatusCode(200);
             $response->setContent(json_encode(array('success' => TRUE,'msg' =>$data)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;

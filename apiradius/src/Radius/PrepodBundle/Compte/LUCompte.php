@@ -59,15 +59,28 @@ class LUCompte
        */
        public function users($parameters){	 
            $post = new Userinfo;
-           $post->setUsername($parameters["data"]["username"]);
+           $post->setUsername($parameters["data"]["username"]);	  
            $post->setChangeuserinfo("0");
            $day = date("Y-m-d H:i:s");
            $post->setCreationdate(new \DateTime($day));
            $post->setCreationby("newuser.pl");
-           $post->setUpdatedate(new \DateTime($day));        
+           $post->setUpdatedate(new \DateTime($day));       
 		    $this->om->persist($post);
-			$this->om->flush();
-		   return $post->getId();
+			$this->om->flush($post);
+			$post2 = new Userbillinfo;
+			$post2->setUsername($parameters["data"]["username"]);
+			$post2->setChangeuserbillinfo("0");
+			$post2->setCreationdate(new \DateTime($day));
+			$post2->setCreationby("newuser.pl");
+			$post2->setUpdatedate(new \DateTime($day)); 
+			$post2->setLastbill(new \DateTime($day));
+			$post2->setNextbill(new \DateTime($day)); 
+			$this->om->persist($post2);	
+			$this->om->flush($post2);
+			$id = array();
+			$id[] = $post->getId();
+			$id[] = $post2->getId();
+		   return $id;
        }
 	
 
@@ -88,21 +101,21 @@ class LUCompte
           if($table == "check" ||$table == "reply" ){
              foreach ($search as $key => $value){
                 if(($key != 'id')&&($key != 'username')&&($key != 'op')&&($key != 'value')&&($key != 'attribute') ){                        
-                    throw new InvalidJsonException($msg);     
+                    throw new InvalidJsonException($msg,400);     
                  }
              }
           }
           if($table == "groupcheck" ||$table == "groupreply" ){
                foreach ($search as $key => $value){
                     if(($key != 'id')&&($key != 'groupname')&&($key != 'op')&&($key != 'value')&&($key != 'attribute') ){     
-                        throw new InvalidJsonException($msg);     
+                        throw new InvalidJsonException($msg,400);     
                     }    
                } 
             }
           if($table == "usergroup"  ){
               foreach ($search as $key => $value){
                   if(($key != 'groupname')&&($key != 'username')&&($key != 'priority') ){
-                        throw new InvalidJsonException($msg);
+                        throw new InvalidJsonException($msg,400);
                   }   
               }
           }
@@ -145,7 +158,7 @@ class LUCompte
                     }
                 }
                 if($param){
-                    throw new InvalidJsonException($msg);       
+                    throw new InvalidJsonException($msg,400);       
                 }else{
                      unset($search['offset']);
                      unset($search['limit']);
@@ -176,8 +189,8 @@ class LUCompte
       /**
        * post et patch dans radcheck, radreply, radgroupcheck et radgroupreply
 	   * @param integer $id
-	   * @param array $parametre
-       * @param array $parametre
+	   * @param string $table
+       * @param array $parameters
        * @return 
        */
        public function checkReply($id,$table,$parameters){
@@ -186,8 +199,8 @@ class LUCompte
 					$patch = $this->getUsergroup($id[0],$id[1]);
 				    $patch->setPriority($parameters["data"]["priority"]);
 					$this->om->persist($patch);
-              		$this->om->flush();
-					$ret = $patch->getUsername();	
+              		$this->om->flush();	
+					$ret = $patch->getUsername();				
 				}else{                              //radcheck,radreply,radgroupcheck,radgroupreply                              
 					$patch = $this->getbyId($table, $id);
 					$patch->setAttribute($parameters["data"]["attribute"]);
@@ -195,9 +208,8 @@ class LUCompte
 		   			$patch->setValue($parameters["data"]["value"]);
 					$this->om->persist($patch);
               		$this->om->flush();
-					$ret = $patch->getId();	
-				}
-				return $ret;
+					$ret = $patch->getId();				
+				}		
 			}else{                                     //method post
 				if($table != null){                    //radcheck,radreply,radgroupcheck,radgroupreply
 				 	if($table=="check"){
@@ -218,7 +230,7 @@ class LUCompte
 					}
 					$post->setAttribute($parameters["data"]["attribute"]);
 			   		$post->setOp($parameters["data"]["op"]);
-			   		$post->setValue($parameters["data"]["value"]);
+			   		$post->setValue($parameters["data"]["value"]);	
 					$this->om->persist($post);
            			$this->om->flush();
 					$ret = $post->getId();
@@ -227,10 +239,12 @@ class LUCompte
 					$post->setUsername($parameters["data"]["username"]);
 					$post->setGroupname($parameters["data"]["groupname"]);	
 					$post->setPriority($parameters["data"]["priority"]);
+					$this->om->persist($post);
+           			$this->om->flush();
 					$ret = $post->getUsername();
-				}
-		   		return $ret;
-			}
+				}	
+			}		
+			return $ret;
        }
 
 
@@ -482,7 +496,7 @@ class LUCompte
               break;
             }
             if(array_sum($cpt) != 0){
-                throw new InvalidJsonException($msg);
+                throw new InvalidJsonException($msg,400);
             }
             return;
       }
@@ -737,8 +751,12 @@ class LUCompte
             public function getbyUsername($table, $username) {
 
               switch($table){
+		
 				case "userinfo":
                   $get = $this->userinfo->findByUsername($username);
+				  if(!empty($this->userbillinfo->findByUsername($username))){
+						$get[] = $this->userbillinfo->findByUsername($username)[0];
+					}	  
                   break;
 				case "radiusgroup":
                   $get = $this->radiusgroup->findByGroupname($username);
@@ -778,8 +796,8 @@ class LUCompte
          *
          *
          */
-         public function processForm( $parameters ) {
-			var_dump($parameters);
+         public function processForm( $parameters ,$username) {
+	
 			$post = new Userinfo;
            $post->setUsername($parameters["data"]["username"]);
            $post->setChangeuserinfo("0");
@@ -787,15 +805,18 @@ class LUCompte
            $post->setCreationdate(new \DateTime($day));
            $post->setCreationby("newuser.pl");
            $post->setUpdatedate(new \DateTime($day)); 
+
+		//	$get = $this->getbyUsername("userinfo",$username)[0];
 			$form = $this->formFactory->create("Radius\PrepodBundle\Form\UserinfoType", $post, array('method' => 'PATCH'));
 		    unset($parameters['_method']);
-		    $form->submit($parameters, 'PATCH' !== $method);
-		    if ($form->isValid()) {
-		        $post = $form->getData();
+		    $form->submit($parameters, false);
+		//    if ($form->isValid()) {
+		       $post = $form->getData();
 		        $this->om->persist($post);
-		        $this->om->flush($post);
-		        return $post;
-		    }
+		        $this->om->flush();
+		//		var_dump($get);
+		        return $form;
+		//    }
 		    throw new InvalidJsonException('Invalid submitted data', $form);
            //throw new InvalidJsonException('Invalid submitted data', $form);
          }
