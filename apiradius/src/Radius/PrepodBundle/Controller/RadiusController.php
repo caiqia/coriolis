@@ -1840,74 +1840,6 @@ class RadiusController extends FOSRestController
       }
 
 
-      /**
-       * PUT UN NOUVEAU OBJECT userinfo
-       * @Annotations\Route(condition="request.attributes.get('version') == 'v1'")
-       * @Annotations\Put("/users/{username}")
-       * @ApiDoc(
-       *   resource = true,
-       *   description = "UPDATE UNE NOUVELLE LIGNE A PARTIR DES DONNEE",
-       *   statusCodes = {
-       *     200 = "Returned when successful",
-       *     400 = "Returned when the data has errors"
-       *   }
-       * )
-       *
-       * @param Request $request the request object
-       *
-       * @return Response
-       *
-       */
-      public function putUserAction( Request $request)
-      {
-
-        $method = $request->getMethod();
-        if($method == "PUT"){
-          $id = $this->container->get('radius.compte')->newObject("userinfo");
-        }
-        $response = new Response();
-		$response->setStatusCode(200);
-        $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PUT-userinfo-OK" )));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
-      }
-
-
-
-
-      /**
-       * PUT UN NOUVEAU OBJECT radiusgroup
-       * @Annotations\Route(condition="request.attributes.get('version') == 'v1'")
-       * @Annotations\Put("/groups/{groupname}")
-       * @ApiDoc(
-       *   resource = true,
-       *   description = "UPDATE UNE NOUVELLE LIGNE A PARTIR DES DONNEE",
-       *   statusCodes = {
-       *     200 = "Returned when successful",
-       *     400 = "Returned when the data has errors"
-       *   }
-       * )
-       *
-       * @param Request $request the request object
-       *
-       * @return Response
-       *
-       */
-      public function putGroupAction( Request $request)
-      {
-
-        $method = $request->getMethod();
-        if($method == "PUT"){
-          $id = $this->container->get('radius.compte')->newObject("radiusgroup");
-        }
-        $response = new Response();
-		$response->setStatusCode(200);
-        $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PUT-radiusgroup-OK" )));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
-      }
-
-
 
 
       /**
@@ -1928,15 +1860,31 @@ class RadiusController extends FOSRestController
        * @return Response
        *
        */
-      public function putUsergroupAction( Request $request)
+      public function putUsergroupAction( $username,$groupname,Request $request)
       {
-        $method = $request->getMethod();
-        if($method == "PUT"){
-          $id = $this->container->get('radius.compte')->newObject("usergroup");
-        }
+        try{
+			$string = $request->getRequestUri();
+			$this->container->get('radius.compte')->jsonVeri($request->request->all(), "usergroup");
+			$id=array($username,$groupname);
+			$ret = $this->container->get('radius.compte')->checkReply( $id ,null,$request->request->all());			
+		}catch(InvalidJsonException $exception){
+            $msg = $exception->getMessage();
+            $response = new Response();
+			$response->setStatusCode(400);
+            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+            $response->headers->set('Content-Type', 'application/json');
+           return $response;
+          }catch(NotFoundHttpException $exception){
+              $msg = $exception->getMessage();
+              $response = new Response();
+			  $response->setStatusCode(400);
+              $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
+              $response->headers->set('Content-Type', 'application/json');
+              return $response;
+            }	
         $response = new Response();
 		$response->setStatusCode(200);
-        $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PUT-usergroup-OK" )));
+        $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PATCH-Usergroup-OK", 'username' => $string .'/'.$ret)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
       }
@@ -1947,7 +1895,7 @@ class RadiusController extends FOSRestController
       /**
        * PUT UN NOUVEAU OBJECT radcheck
        * @Annotations\Route(condition="request.attributes.get('version') == 'v1'")
-       * @Annotations\Put("/users/{username}/check")
+       * @Annotations\Put("/users/{id}/check")
        * @ApiDoc(
        *   resource = true,
        *   description = "UPDATE UNE NOUVELLE LIGNE A PARTIR DES DONNEE",
@@ -1962,16 +1910,32 @@ class RadiusController extends FOSRestController
        * @return Response
        *
        */
-      public function putCheckAction( Request $request)
+      public function putCheckAction($id, Request $request)
       {
 
-        $method = $request->getMethod();
-        if($method == "PUT"){
-          $id = $this->container->get('radius.compte')->newObject("check");
-        }
+        try{
+			$string = $request->getRequestUri();
+			$this->container->get('radius.compte')->jsonVeri($request->request->all(), "check");
+			$ret  = $this->container->get('radius.compte')->checkReply( $id , "check",$request->request->all());
+		}catch(InvalidJsonException $exception){
+            $msg = $exception->getMessage();
+            $response = new Response();
+			$response->setStatusCode(400);
+            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+            $response->headers->set('Content-Type', 'application/json');
+           return $response;
+          }catch(NotFoundHttpException $exception){
+              $msg = $exception->getMessage();
+              $response = new Response();
+			  $response->setStatusCode(400);	
+              $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
+              $response->headers->set('Content-Type', 'application/json');
+              return $response;
+          }	
+  		
         $response = new Response();
 		$response->setStatusCode(200);
-        $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PUT-radcheck-OK" )));
+        $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PATCH-radcheck-OK", 'id' => $string .'/'.$ret)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
       }
@@ -1981,7 +1945,7 @@ class RadiusController extends FOSRestController
       /**
        * PUT UN NOUVEAU OBJECT radreply
        * @Annotations\Route(condition="request.attributes.get('version') == 'v1'")
-       * @Annotations\Put("/users/{username}/reply")
+       * @Annotations\Put("/users/{id}/reply")
        * @ApiDoc(
        *   resource = true,
        *   description = "UPDATE UNE NOUVELLE LIGNE A PARTIR DES DONNEE",
@@ -1996,16 +1960,32 @@ class RadiusController extends FOSRestController
        * @return Response
        *
        */
-      public function putReplyAction( Request $request)
+      public function putReplyAction($id, Request $request)
       {
 
-        $method = $request->getMethod();
-        if($method == "PUT"){
-          $id = $this->container->get('radius.compte')->newObject("reply");
-        }
+        try{
+			$string = $request->getRequestUri();
+			$this->container->get('radius.compte')->jsonVeri($request->request->all(), "reply");
+			$ret  = $this->container->get('radius.compte')->checkReply( $id , "reply",$request->request->all());
+		}catch(InvalidJsonException $exception){
+            $msg = $exception->getMessage();
+            $response = new Response();
+			$response->setStatusCode(400);
+            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+            $response->headers->set('Content-Type', 'application/json');
+           return $response;
+          }catch(NotFoundHttpException $exception){
+              $msg = $exception->getMessage();
+              $response = new Response();
+			  $response->setStatusCode(400);
+              $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
+              $response->headers->set('Content-Type', 'application/json');
+              return $response;
+          }	
+		
         $response = new Response();
 		$response->setStatusCode(200);
-        $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PUT-radreply-OK" )));
+        $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PATCH-radreply-OK", 'id' => $string .'/'.$ret )));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
       }
@@ -2016,7 +1996,7 @@ class RadiusController extends FOSRestController
       /**
        * PUT UN NOUVEAU OBJECT radgroupcheck
        * @Annotations\Route(condition="request.attributes.get('version') == 'v1'")
-       * @Annotations\Put("/groups/{groupname}/check")
+       * @Annotations\Put("/groups/{id}/check")
        * @ApiDoc(
        *   resource = true,
        *   description = "UPDATE UNE NOUVELLE LIGNE A PARTIR DES DONNEE",
@@ -2031,16 +2011,31 @@ class RadiusController extends FOSRestController
        * @return Response
        *
        */
-      public function putgroupCheckAction( Request $request)
+      public function putgroupCheckAction( $id,Request $request)
       {
 
-        $method = $request->getMethod();
-        if($method == "PUT"){
-          $id = $this->container->get('radius.compte')->newObject("groupcheck");
-        }
+        try{
+			$string = $request->getRequestUri();
+			$this->container->get('radius.compte')->jsonVeri($request->request->all(), "groupcheck");
+			$ret = $this->container->get('radius.compte')->checkReply( $id , "groupcheck",$request->request->all());	
+		}catch(InvalidJsonException $exception){
+            $msg = $exception->getMessage();
+            $response = new Response();
+			$response->setStatusCode(400);
+            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+            $response->headers->set('Content-Type', 'application/json');
+           return $response;
+          }catch(NotFoundHttpException $exception){
+              $msg = $exception->getMessage();
+              $response = new Response();
+			  $response->setStatusCode(400);
+              $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
+              $response->headers->set('Content-Type', 'application/json');
+              return $response;
+          }
         $response = new Response();
 		$response->setStatusCode(200);
-        $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PUT-groupcheck-OK" )));
+        $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PATCH-radgroupcheck-OK", 'id' => $string .'/'.$ret)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
       }
@@ -2050,7 +2045,7 @@ class RadiusController extends FOSRestController
  	  /**
        * PUT UN NOUVEAU OBJECT radgroupreply
        * @Annotations\Route(condition="request.attributes.get('version') == 'v1'")
-       * @Annotations\Put("/groups/{groupname}/reply")
+       * @Annotations\Put("/groups/{id}/reply")
        * @ApiDoc(
        *   resource = true,
        *   description = "PUT UN NOUVEAU OBJECT radgroupreply",
@@ -2065,16 +2060,30 @@ class RadiusController extends FOSRestController
        * @return Response
        *
        */
-      public function putgroupReplyAction( Request $request)
+      public function putgroupReplyAction( $id,Request $request)
       {
-
-        $method = $request->getMethod();
-        if($method == "PUT"){
-          $id = $this->container->get('radius.compte')->newObject("groupreply");
-        }
+        try{
+			$string = $request->getRequestUri();
+			$this->container->get('radius.compte')->jsonVeri($request->request->all(), "groupreply");
+			$ret = $this->container->get('radius.compte')->checkReply( $id , "groupreply",$request->request->all());	
+		}catch(InvalidJsonException $exception){
+            $msg = $exception->getMessage();
+            $response = new Response();
+			$response->setStatusCode(400);
+            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+            $response->headers->set('Content-Type', 'application/json');
+           return $response;
+          }catch(NotFoundHttpException $exception){
+              $msg = $exception->getMessage();
+              $response = new Response();
+			  $response->setStatusCode(400);
+              $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
+              $response->headers->set('Content-Type', 'application/json');
+              return $response;
+          }
         $response = new Response();
 		$response->setStatusCode(200);
-        $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PUT-groupreply-OK" )));
+        $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PATCH-radgroupreply-OK", 'id' => $string .'/'.$ret)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
       }
