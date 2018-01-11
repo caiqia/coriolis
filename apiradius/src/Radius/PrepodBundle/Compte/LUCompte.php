@@ -186,12 +186,43 @@ class LUCompte
 
 
 
+	/**
+	 * distinguer PUT et PATCH
+	 * @param
+     * @throws InvalidJsonException when several columns are modified 
+	 * @return
+	 */
+	public function patchVeri($id,$table,$parameters){
+		
+			$patch = $this->getbyId($table, $id);
+			$cpt = 0;
+			$msg = "une seule colonne peut etre modifie";
+			if($patch->getAttribute() != $parameters["data"]["attribute"]){
+				$cpt++;
+			}
+			if($patch->getOp() != $parameters["data"]["op"]){
+				$cpt++;
+			}
+			if($patch->getValue() != $parameters["data"]["value"]){
+				$cpt++;
+			}
+			if($cpt == 1){
+				return;			
+			}else{
+				 throw new InvalidJsonException($msg,400);
+			}
+
+	}
+     
+
+
+
       /**
        * post et patch dans radcheck, radreply, radgroupcheck et radgroupreply
 	   * @param integer $id
 	   * @param string $table
        * @param array $parameters
-       * @return 
+       * @return mixed $ret
        */
        public function checkReply($id,$table,$parameters){
 			if($id != null){                        //method patch
@@ -291,7 +322,7 @@ class LUCompte
 	   *
 	   * @param string $username
 	   * @param string $groupname
-	   * @return Radusergroup
+	   * @return Radusergroup $get
 	   */
 	   public function getUsergroup($username,$groupname){
 			
@@ -636,66 +667,7 @@ class LUCompte
           }
 
 
-		  /**
-           * DELETE utilisateur
-           *
-           * @param string $username
-           *
-           */
-            public function deleteUser($username) {
-				
-			  $delete = $this->userinfo->findByUsername($username);
-              $id = array();
-              $all = $this->radreply->findByUsername($username);
-              $all = array_merge($all,$this->radcheck->findByUsername($username));
-              $all = array_merge($all,$this->radusergroup->findByUsername($username));
-              $all = array_merge($all,$this->userinfo->findByUsername($username));
-              $all = array_merge($all,$this->userbillinfo->findByUsername($username));
-              $all = array_merge($all,$this->radgroupcheck->findByGroupname($username));
-              $all = array_merge($all,$this->radgroupreply->findByGroupname($username));
-              if(empty($all)){
-                throw new NotFoundHttpException(sprintf('\'%s\'N\'EXISTE PAS DANS RADIUS.',$username));
-                return;
-              }
-              foreach ($all as $value) {
-                $id[] = $value->getId();
-                $this->om->remove($value);
-                $this->om->flush();
-              }
-                return $id;
-            }
-
-
-
-          /**
-           * DELETE DANS TOUTES LES TABLES
-           *
-           * @param string $username
-           *
-           */
-            public function deleteAll($username) {
-              $id = array();
-              $all = $this->radreply->findByUsername($username);
-              $all = array_merge($all,$this->radcheck->findByUsername($username));
-              $all = array_merge($all,$this->radusergroup->findByUsername($username));
-              $all = array_merge($all,$this->userinfo->findByUsername($username));
-              $all = array_merge($all,$this->userbillinfo->findByUsername($username));
-              $all = array_merge($all,$this->radgroupcheck->findByGroupname($username));
-              $all = array_merge($all,$this->radgroupreply->findByGroupname($username));
-              if(empty($all)){
-                throw new NotFoundHttpException(sprintf('\'%s\'N\'EXISTE PAS DANS RADIUS.',$username));
-                return;
-              }
-              foreach ($all as $value) {
-                $id[] = $value->getId();
-                $this->om->remove($value);
-                $this->om->flush();
-              }
-                return $id;
-            }
-
-
-
+		 
 
 
 	      /**

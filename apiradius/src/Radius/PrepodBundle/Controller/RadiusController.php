@@ -1616,6 +1616,7 @@ class RadiusController extends FOSRestController
 		try{
 			$string = $request->getRequestUri();
 			$this->container->get('radius.compte')->jsonVeri($request->request->all(), "check");
+			$this->container->get('radius.compte')->patchVeri($id,"check",$request->request->all());
 			$ret  = $this->container->get('radius.compte')->checkReply( $id , "check",$request->request->all());
 		}catch(InvalidJsonException $exception){
             $msg = $exception->getMessage();
@@ -1666,6 +1667,7 @@ class RadiusController extends FOSRestController
 		try{
 			$string = $request->getRequestUri();
 			$this->container->get('radius.compte')->jsonVeri($request->request->all(), "reply");
+			$this->container->get('radius.compte')->patchVeri($id,"reply",$request->request->all());
 			$ret  = $this->container->get('radius.compte')->checkReply( $id , "reply",$request->request->all());
 		}catch(InvalidJsonException $exception){
             $msg = $exception->getMessage();
@@ -1717,6 +1719,7 @@ class RadiusController extends FOSRestController
 		try{
 			$string = $request->getRequestUri();
 			$this->container->get('radius.compte')->jsonVeri($request->request->all(), "groupcheck");
+			$this->container->get('radius.compte')->patchVeri($id,"groupcheck",$request->request->all());
 			$ret = $this->container->get('radius.compte')->checkReply( $id , "groupcheck",$request->request->all());	
 		}catch(InvalidJsonException $exception){
             $msg = $exception->getMessage();
@@ -1766,6 +1769,7 @@ class RadiusController extends FOSRestController
 		try{
 			$string = $request->getRequestUri();
 			$this->container->get('radius.compte')->jsonVeri($request->request->all(), "groupreply");
+			$this->container->get('radius.compte')->patchVeri($id,"groupreply",$request->request->all());
 			$ret = $this->container->get('radius.compte')->checkReply( $id , "groupreply",$request->request->all());	
 		}catch(InvalidJsonException $exception){
             $msg = $exception->getMessage();
