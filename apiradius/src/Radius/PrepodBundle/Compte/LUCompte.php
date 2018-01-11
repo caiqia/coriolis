@@ -141,7 +141,7 @@ class LUCompte
          *  
          *                                           
          */
-		 public function requestUri($uri, $search,$table ){
+	public function requestUri($uri, $search,$table ){
              $msg = 'incorrecte url parametter';
              $arg0 = strstr($uri,'?');          // des paramettres été ajoutés
              if($arg0 == '?'){ 
@@ -179,41 +179,11 @@ class LUCompte
        public function groups($parameters){	 
            $post = new Radiusgroup;
            $post->setGroupname($parameters["data"]["groupname"]);
-		    $this->om->persist($post);
-			$this->om->flush();
-		   return $post->getId();
+	   $this->om->persist($post);
+	   $this->om->flush();
+	   return $post->getId();
        }
 
-
-
-	/**
-	 * distinguer PUT et PATCH
-	 * @param
-     * @throws InvalidJsonException when several columns are modified 
-	 * @return
-	 */
-	public function patchVeri($id,$table,$parameters){
-		
-			$patch = $this->getbyId($table, $id);
-			$cpt = 0;
-			$msg = "une seule colonne peut etre modifie";
-			if($patch->getAttribute() != $parameters["data"]["attribute"]){
-				$cpt++;
-			}
-			if($patch->getOp() != $parameters["data"]["op"]){
-				$cpt++;
-			}
-			if($patch->getValue() != $parameters["data"]["value"]){
-				$cpt++;
-			}
-			if($cpt == 1){
-				return;			
-			}else{
-				 throw new InvalidJsonException($msg,400);
-			}
-
-	}
-     
 
 
 
@@ -225,12 +195,12 @@ class LUCompte
        * @return mixed $ret
        */
        public function checkReply($id,$table,$parameters){
-			if($id != null){                        //method patch
+			if($id != null){                        //method PUT
 				if($table == null){                 //entity radusergroup
 					$patch = $this->getUsergroup($id[0],$id[1]);
-				    $patch->setPriority($parameters["data"]["priority"]);
+				        $patch->setPriority($parameters["data"]["priority"]);
 					$this->om->persist($patch);
-              		$this->om->flush();	
+              		                $this->om->flush();	
 					$ret = $patch->getUsername();				
 				}else{                              //radcheck,radreply,radgroupcheck,radgroupreply                              
 					$patch = $this->getbyId($table, $id);
@@ -238,10 +208,10 @@ class LUCompte
 		   			$patch->setOp($parameters["data"]["op"]);
 		   			$patch->setValue($parameters["data"]["value"]);
 					$this->om->persist($patch);
-              		$this->om->flush();
+              		                $this->om->flush();
 					$ret = $patch->getId();				
 				}		
-			}else{                                     //method post
+			}else{                                     //method POST
 				if($table != null){                    //radcheck,radreply,radgroupcheck,radgroupreply
 				 	if($table=="check"){
 						$post = new Radcheck;
@@ -263,7 +233,7 @@ class LUCompte
 			   		$post->setOp($parameters["data"]["op"]);
 			   		$post->setValue($parameters["data"]["value"]);	
 					$this->om->persist($post);
-           			$this->om->flush();
+           			        $this->om->flush();
 					$ret = $post->getId();
 				}else{                                //entity radusergroup
 					$post = new Radusergroup;
@@ -271,7 +241,7 @@ class LUCompte
 					$post->setGroupname($parameters["data"]["groupname"]);	
 					$post->setPriority($parameters["data"]["priority"]);
 					$this->om->persist($post);
-           			$this->om->flush();
+           			        $this->om->flush();
 					$ret = $post->getUsername();
 				}	
 			}		
