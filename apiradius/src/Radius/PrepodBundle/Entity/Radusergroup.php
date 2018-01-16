@@ -1,9 +1,6 @@
 <?php
-
 namespace Radius\PrepodBundle\Entity;
-
 use Doctrine\ORM\Mapping as ORM;
-
 /**
  * Radusergroup
  *
@@ -18,7 +15,6 @@ class Radusergroup
      * @ORM\Column(name="priority", type="integer", nullable=false)
      */
     private $priority = '1';
-
     /**
      * @var string
      *
@@ -27,7 +23,6 @@ class Radusergroup
      * @ORM\GeneratedValue(strategy="NONE")
      */
     private $username;
-
     /**
      * @var string
      *
@@ -36,9 +31,6 @@ class Radusergroup
      * @ORM\GeneratedValue(strategy="NONE")
      */
     private $groupname;
-
-
-
     /**
      * Set priority
      *
@@ -49,10 +41,8 @@ class Radusergroup
     public function setPriority($priority)
     {
         $this->priority = $priority;
-
         return $this;
     }
-
     /**
      * Get priority
      *
@@ -62,7 +52,6 @@ class Radusergroup
     {
         return $this->priority;
     }
-
     /**
      * Set username
      *
@@ -73,10 +62,8 @@ class Radusergroup
     public function setUsername($username)
     {
         $this->username = $username;
-
         return $this;
     }
-
     /**
      * Get username
      *
@@ -86,7 +73,6 @@ class Radusergroup
     {
         return $this->username;
     }
-
     /**
      * Set groupname
      *
@@ -97,10 +83,8 @@ class Radusergroup
     public function setGroupname($groupname)
     {
         $this->groupname = $groupname;
-
         return $this;
     }
-
     /**
      * Get groupname
      *

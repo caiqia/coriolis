@@ -42,13 +42,12 @@ class Radcheck
      */
     private $id;
 
-
     /**
      * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Radius\PrepodBundle\Entity\Radiusgroup")
+     * @ORM\ManyToOne(targetEntity="Radius\PrepodBundle\Entity\Userinfo")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="groupname", referencedColumnName="groupname")
+     *   @ORM\JoinColumn(name="username", referencedColumnName="username")
      * })
      */
     private $username;
@@ -137,27 +136,19 @@ class Radcheck
         return $this->id;
     }
 
-
-
-
-
-	/**
+    /**
      * Set username
      *
      * @param string $username
      *
      * @return Radcheck
      */
-    public function setUsername($username)
+    public function setUsername($username )
     {
-		
         $this->username = $username;
 
         return $this;
     }
-
-
-
 
     /**
      * Get username

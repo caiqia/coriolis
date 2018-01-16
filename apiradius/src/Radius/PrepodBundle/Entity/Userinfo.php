@@ -175,6 +175,28 @@ class Userinfo
      */
     private $id;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Radius\PrepodBundle\Entity\Groupinfo", inversedBy="username")
+     * @ORM\JoinTable(name="radusergroup",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="username", referencedColumnName="username")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="groupname", referencedColumnName="groupname")
+     *   }
+     * )
+     */
+    private $groupname;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->groupname = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
 
     /**
@@ -713,5 +735,39 @@ class Userinfo
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Add groupname
+     *
+     * @param \Radius\PrepodBundle\Entity\Groupinfo $groupname
+     *
+     * @return Userinfo
+     */
+    public function addGroupname(\Radius\PrepodBundle\Entity\Groupinfo $groupname)
+    {
+        $this->groupname[] = $groupname;
+
+        return $this;
+    }
+
+    /**
+     * Remove groupname
+     *
+     * @param \Radius\PrepodBundle\Entity\Groupinfo $groupname
+     */
+    public function removeGroupname(\Radius\PrepodBundle\Entity\Groupinfo $groupname)
+    {
+        $this->groupname->removeElement($groupname);
+    }
+
+    /**
+     * Get groupname
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getGroupname()
+    {
+        return $this->groupname;
     }
 }

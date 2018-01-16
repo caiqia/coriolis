@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Radgroupreply
  *
- * @ORM\Table(name="radgroupreply", indexes={@ORM\Index(name="fk_group_reply", columns={"groupname"})})
+ * @ORM\Table(name="radgroupreply", uniqueConstraints={@ORM\UniqueConstraint(name="groupname", columns={"groupname"})})
  * @ORM\Entity
  */
 class Radgroupreply
@@ -45,7 +45,7 @@ class Radgroupreply
     /**
      * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Radius\PrepodBundle\Entity\Radiusgroup")
+     * @ORM\ManyToOne(targetEntity="Radius\PrepodBundle\Entity\Groupinfo")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="groupname", referencedColumnName="groupname")
      * })
@@ -143,7 +143,7 @@ class Radgroupreply
      *
      * @return Radgroupreply
      */
-    public function setGroupname( $groupname = null)
+    public function setGroupname( $groupname )
     {
         $this->groupname = $groupname;
 
@@ -153,7 +153,7 @@ class Radgroupreply
     /**
      * Get groupname
      *
-     * @return \Radius\PrepodBundle\Entity\Radiusgroup
+     * @return string
      */
     public function getGroupname()
     {

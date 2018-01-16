@@ -15,7 +15,7 @@ use Radius\PrepodBundle\Entity\Radgroupreply;
 use Radius\PrepodBundle\Entity\Radcheck;
 use Radius\PrepodBundle\Entity\Radusergroup;
 use Radius\PrepodBundle\Entity\Userinfo;
-use Radius\PrepodBundle\Entity\Radiusgroup;
+use Radius\PrepodBundle\Entity\Groupinfo;
 use Radius\PrepodBundle\Entity\Userbillinfo;
 use Radius\PrepodBundle\Form\RadcheckType;
 
@@ -30,7 +30,7 @@ class LUCompte
   protected $radcheck;
   protected $radusergroup;
   protected $userinfo;
-  protected $radiusgroup;
+  protected $groupinfo;
   protected $userbillinfo;
 
 
@@ -44,7 +44,7 @@ class LUCompte
           $this->radcheck = $this->om->getRepository("RadiusPrepodBundle:Radcheck");
           $this->radusergroup = $this->om->getRepository("RadiusPrepodBundle:Radusergroup");
           $this->userinfo = $this->om->getRepository("RadiusPrepodBundle:Userinfo");
-		  $this->radiusgroup = $this->om->getRepository("RadiusPrepodBundle:Radiusgroup");
+		  $this->groupinfo = $this->om->getRepository("RadiusPrepodBundle:Groupinfo");
           $this->userbillinfo = $this->om->getRepository("RadiusPrepodBundle:Userbillinfo");
       }
 
@@ -86,89 +86,6 @@ class LUCompte
 
 
 
-     /**
-      * verifier si url est correcte 
-      * @param array $search filter search array
-      * @param string $table entity radius
-      * 
-      *
-      * @throws InvalidJsonException
-      *
-      * @return 
-      */
-      public function searchVeri($search,$table){ 
-          $msg = 'incorrecte url paramettre';
-          if($table == "check" ||$table == "reply" ){
-             foreach ($search as $key => $value){
-                if(($key != 'id')&&($key != 'username')&&($key != 'op')&&($key != 'value')&&($key != 'attribute') ){                        
-                    throw new InvalidJsonException($msg,400);     
-                 }
-             }
-          }
-          if($table == "groupcheck" ||$table == "groupreply" ){
-               foreach ($search as $key => $value){
-                    if(($key != 'id')&&($key != 'groupname')&&($key != 'op')&&($key != 'value')&&($key != 'attribute') ){     
-                        throw new InvalidJsonException($msg,400);     
-                    }    
-               } 
-            }
-          if($table == "usergroup"  ){
-              foreach ($search as $key => $value){
-                  if(($key != 'groupname')&&($key != 'username')&&($key != 'priority') ){
-                        throw new InvalidJsonException($msg,400);
-                  }   
-              }
-          }
-		  if($table == "userinfo" || $table == "radiusgroup"){
-				/*
-				ne vérifie pas parce qu'il y a trop de colonne dans userinfo				
-				*/
-			}
-           return;     
-      }
-
-
-
-
-
-        /**
-         * traite l'uri donnée par l'utilisateur
-         *  
-         * @param string $uri uri given by user
-         * @param array $search filter search array
-         * @param string $table entity radius
-         * @throws InvalidJsonException when usename doesn't existe
-         *  
-         *                                           
-         */
-	public function requestUri($uri, $search,$table ){
-             $msg = 'incorrecte url parametter';
-             $arg0 = strstr($uri,'?');          // des paramettres été ajoutés
-             if($arg0 == '?'){ 
-                return;
-            }
-            if(!empty($arg0)){              
-                $buff = strstr($arg0,'limit');
-                $param = true;                      
-                foreach($search as $key => $value){
-                    if(!empty($value)){
-                        if(($key!='limit')||(($key == 'limit')&&(!empty($buff)))){
-                              $param = false;                 
-                        }
-                    }
-                }
-                if($param){
-                    throw new InvalidJsonException($msg,400);       
-                }else{
-                     unset($search['offset']);
-                     unset($search['limit']);
-                    $this->searchVeri($search, $table);
-                }
-            }else{ 
-                return;
-            }
-         }
-
  
 			  
   	  /**
@@ -177,18 +94,18 @@ class LUCompte
        * @return 
        */
        public function groups($parameters){	 
-           $post = new Radiusgroup;
+           $post = new Groupinfo;
            $post->setGroupname($parameters["data"]["groupname"]);
-	   $this->om->persist($post);
-	   $this->om->flush();
-	   return $post->getId();
+	   	   $this->om->persist($post);
+	   	   $this->om->flush();
+	   	   return $post->getId();
        }
 
 
 
 
       /**
-       * post et patch dans radcheck, radreply, radgroupcheck et radgroupreply
+       * post et put dans radcheck, radreply, radgroupcheck et radgroupreply
 	   * @param integer $id
 	   * @param string $table
        * @param array $parameters
@@ -197,19 +114,19 @@ class LUCompte
        public function checkReply($id,$table,$parameters){
 			if($id != null){                        //method PUT
 				if($table == null){                 //entity radusergroup
-					$patch = $this->getUsergroup($id[0],$id[1]);
-				        $patch->setPriority($parameters["data"]["priority"]);
-					$this->om->persist($patch);
-              		                $this->om->flush();	
-					$ret = $patch->getUsername();				
+					$put = $this->getUsergroup($id[0],$id[1]);
+				    $put->setPriority($parameters["data"]["priority"]);
+					$this->om->persist($put);
+              		$this->om->flush();	
+					$ret = $put->getUsername();				
 				}else{                              //radcheck,radreply,radgroupcheck,radgroupreply                              
-					$patch = $this->getbyId($table, $id);
-					$patch->setAttribute($parameters["data"]["attribute"]);
-		   			$patch->setOp($parameters["data"]["op"]);
-		   			$patch->setValue($parameters["data"]["value"]);
-					$this->om->persist($patch);
-              		                $this->om->flush();
-					$ret = $patch->getId();				
+					$put = $this->getbyId($table, $id);
+					$put->setAttribute($parameters["data"]["attribute"]);
+		   			$put->setOp($parameters["data"]["op"]);
+		   			$put->setValue($parameters["data"]["value"]);
+					$this->om->persist($put);
+              		$this->om->flush();
+					$ret = $put->getId();				
 				}		
 			}else{                                     //method POST
 				if($table != null){                    //radcheck,radreply,radgroupcheck,radgroupreply
@@ -241,7 +158,7 @@ class LUCompte
 					$post->setGroupname($parameters["data"]["groupname"]);	
 					$post->setPriority($parameters["data"]["priority"]);
 					$this->om->persist($post);
-           			        $this->om->flush();
+           			$this->om->flush();
 					$ret = $post->getUsername();
 				}	
 			}		
@@ -263,8 +180,8 @@ class LUCompte
 			case "userinfo":
                return new Userinfo;
               break;
-			case "radiusgroup":
-               return new Radiusgroup;
+			case "groupinfo":
+               return new Groupinfo;
               break;
             case "reply":
                return new Radreply;
@@ -290,12 +207,13 @@ class LUCompte
 	  /**
 	   * get objet radusergroup
 	   *
-	   * @param string $username
+	   * @param integer $id
 	   * @param string $groupname
 	   * @return Radusergroup $get
 	   */
-	   public function getUsergroup($username,$groupname){
-			
+	   public function getUsergroup($id,$groupname){
+			$user = $this->getbyId("userinfo",$id);
+			$username = $user->getUsername();
 			$list = $this->radusergroup->findByUsername($username);
 			$get = null;
 			foreach($list as $value){
@@ -308,6 +226,25 @@ class LUCompte
 			}
 	   		return $get;
        }
+
+
+	  /**
+	   * compare username dans userinfo et dans json
+	   *
+	   * @param integer $id id of userinfo
+	   * @throws InvalidJsonException when username is not the same
+	   * @return  
+	   */
+	  public function compareName($id,$parameters){
+			$msg = "username incorrecte";
+	  		$name = $this->idtoName($id);
+			if($name == $parameters["data"]["username"]){
+				return;
+			}else{
+				throw new InvalidJsonException($msg,400);
+				return;			
+			}
+	  }
 
 
 
@@ -483,7 +420,7 @@ class LUCompte
                       }
                 }
               break;
-			 case "radiusgroup":
+			 case "groupinfo":
                 $cpt = array(1);
                 foreach ($data as $key => $value){
                       if($key == "groupname"){
@@ -518,8 +455,8 @@ class LUCompte
 			case "userinfo":
             $all = $this->userinfo->findBy($search, null, $limit, $offset);
             break;
-			case "radiusgroup":
-            $all = $this->radiusgroup->findBy($search, null, $limit, $offset);
+			case "groupinfo":
+            $all = $this->groupinfo->findBy($search, null, $limit, $offset);
             break;
           case "reply":
             $all = $this->radreply->findBy($search, null, $limit, $offset);
@@ -557,8 +494,8 @@ class LUCompte
 			case "userinfo":
               $entity_class = "RadiusPrepodBundle:Userinfo";
               break;
-			case "radiusgroup":
-              $entity_class = "RadiusPrepodBundle:Radiusgroup";
+			case "groupinfo":
+              $entity_class = "RadiusPrepodBundle:Groupinfo";
               break;
             case "reply":
               $entity_class = "RadiusPrepodBundle:Radreply";
@@ -604,18 +541,19 @@ class LUCompte
          * DELETE DANS UNE TABLE
          *
          * @param string $table
-         * @param string $username
+         * @param integer $id
          *
          */
-          public function delete($username,$table) {
-              $id = array();
+          public function delete($id,$table) {
+              $ar = array();
+			  $username = $this->idtoName($id);
               $delete = $this->getbyUsername($table, $username);
               foreach ($delete as $value) {
-                $id[] = $value->getId();
+                $ar[] = $value->getId();
                 $this->om->remove($value);
                 $this->om->flush();
               }
-              return $id;
+              return $ar;
           }
 
 
@@ -624,18 +562,36 @@ class LUCompte
          * DELETE DANS LA TABLE radusergroup
          *
          * @param string $table
-         * @param string $username
+         * @param integer $id
 		 * @return integer 
          *
          */
-          public function deleteUsergroup($username,$groupname) {
-				$delete = $this->getUsergroup($username,$groupname);
-                $id = $delete->getUsername();
+          public function deleteUsergroup($id,$groupname) {
+				$delete = $this->getUsergroup($id,$groupname);
+                $ar = $delete->getUsername();
                 $this->om->remove($delete);
                 $this->om->flush();
-              return $id;
+              return $ar;
           }
 
+
+		/**
+		 * GET username AVEC id
+		 *
+		 *
+		 * @param integer $id
+		 * @return string $username
+		 *
+		 */
+		public function idtoName( $id ){
+   			$get = $this->userinfo->findOneById($id);
+			if(empty($get)){
+				throw new NotFoundHttpException(sprintf('\'%s\' DANS \'userinfo\' N\'EXISTE PAS.',$id));
+				return;
+			}
+			$name = $get->getUsername();
+			return $name;
+		}
 
 		 
 
@@ -654,8 +610,8 @@ class LUCompte
 				 case "userinfo":
                   $get = $this->userinfo->findOneById($id);
                   break;
-				 case "radiusgroup":
-                  $get = $this->radiusgroup->findOneById($id);
+				 case "groupinfo":
+                  $get = $this->groupinfo->findOneById($id);
                   break;
                 case "reply":
                   $get = $this->radreply->findOneById($id);
@@ -684,6 +640,7 @@ class LUCompte
           /**
            * Get an OBJET
            *
+		   * @param string $table
            * @param mixed $username
            *
 		   * @throws NotFoundHttpException when row not exist
@@ -700,8 +657,8 @@ class LUCompte
 						$get[] = $this->userbillinfo->findByUsername($username)[0];
 					}	  
                   break;
-				case "radiusgroup":
-                  $get = $this->radiusgroup->findByGroupname($username);
+				case "groupinfo":
+                  $get = $this->groupinfo->findByGroupname($username);
                   break;
                 case "reply":
                   $get = $this->radreply->findByUsername($username);

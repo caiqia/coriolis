@@ -117,5 +117,15 @@
         <option name="fixed"/>
       </options>
     </field>
+    <many-to-many field="groupname" target-entity="Groupinfo" inversed-by="username" fetch="LAZY">
+      <join-table name="radusergroup">
+        <join-columns>
+          <join-column name="username" referenced-column-name="username"/>
+        </join-columns>
+        <inverse-join-columns>
+          <join-column name="groupname" referenced-column-name="groupname"/>
+        </inverse-join-columns>
+      </join-table>
+    </many-to-many>
   </entity>
 </doctrine-mapping>

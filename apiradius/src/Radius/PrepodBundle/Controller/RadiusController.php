@@ -24,9 +24,9 @@ class RadiusController extends FOSRestController
 {
 
 
-	   /**
+	  /**
        * get pour l'entity userinfo.
-       * @Annotations\Get("/users/{username}")
+       * @Annotations\Get("/users/{id}")
        *
        * @ApiDoc(
        *   resource = true,
@@ -37,26 +37,26 @@ class RadiusController extends FOSRestController
        * )
        *
        *
-       * @param string               $username     username of a user
+       * @param integer              $id           id of a user
        * @param Request              $request      the request object
        *
        * @return Response
        */
-	  public function getUserAction( $username, Request $request)
+	  public function getUserAction( $id, Request $request)
       {
             try{
-              $get = $this->container->get('radius.compte')->getbyUsername("userinfo", $username);
+              $get = $this->container->get('radius.compte')->getbyId("userinfo", $id);
             }catch(NotFoundHttpException $exception){
-              $msg = $exception->getMessage();
+              $msg = $exception->getMessage()." avec code: ".$exception->getStatusCode();
               $response = new Response();
-	      $response->setStatusCode(400);
+	      	  $response->setStatusCode(400);
               $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
               $response->headers->set('Content-Type', 'application/json');
               return $response;
             }
             $data = $this->get('jms_serializer')->serialize($get, 'json');
             $response = new Response();
-	    $response->setStatusCode(200);
+	    	$response->setStatusCode(200);
             $response->setContent(json_encode(array('success' => TRUE,'msg' =>$data)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
@@ -65,7 +65,7 @@ class RadiusController extends FOSRestController
 
 
       /**
-       * get pour l'entity radiusgroup
+       * get pour l'entity groupinfo
        * @Annotations\Get("/groups/{groupname}")
        *
        * @ApiDoc(
@@ -85,18 +85,18 @@ class RadiusController extends FOSRestController
       public function getGroupAction( $groupname, Request $request)
       {
             try{
-              $get = $this->container->get('radius.compte')->getbyUsername("radiusgroup", $groupname);
+              $get = $this->container->get('radius.compte')->getbyUsername("groupinfo", $groupname);
             }catch(NotFoundHttpException $exception){
-              $msg = $exception->getMessage();
+              $msg = $exception->getMessage()." avec code: ".$exception->getStatusCode();
               $response = new Response();
-	      $response->setStatusCode(400);
+	      	  $response->setStatusCode(400);
               $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
               $response->headers->set('Content-Type', 'application/json');
               return $response;
             }
             $data = $this->get('jms_serializer')->serialize($get, 'json');
             $response = new Response();
-	    $response->setStatusCode(200);
+	    	$response->setStatusCode(200);
             $response->setContent(json_encode(array('success' => TRUE,'msg' =>$data)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
@@ -106,7 +106,7 @@ class RadiusController extends FOSRestController
 
       /**
        * get pour l'entity radcheck.
-       * @Annotations\Get("/users/{username}/check")
+       * @Annotations\Get("/users/{id}/check")
        *
        * @ApiDoc(
        *   resource = true,
@@ -122,21 +122,22 @@ class RadiusController extends FOSRestController
        *
        * @return Response
        */
-	  public function getCheckAction( $username, Request $request)
+	  public function getCheckAction( $id, Request $request)
       {
             try{
+			  $username = $this->container->get('radius.compte')->idtoName( $id );
               $get = $this->container->get('radius.compte')->getbyUsername("check", $username);
             }catch(NotFoundHttpException $exception){
-              $msg = $exception->getMessage();
+              $msg = $exception->getMessage()." avec code: ".$exception->getStatusCode();
               $response = new Response();
-	      $response->setStatusCode(400);
+	      	  $response->setStatusCode(400);
               $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
               $response->headers->set('Content-Type', 'application/json');
               return $response;
             }
             $data = $this->get('jms_serializer')->serialize($get, 'json');
             $response = new Response();
-	    $response->setStatusCode(200);
+	    	$response->setStatusCode(200);
             $response->setContent(json_encode(array('success' => TRUE,'msg' =>$data)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
@@ -168,16 +169,16 @@ class RadiusController extends FOSRestController
             try{
               $get = $this->container->get('radius.compte')->getbyUsername("groupcheck", $groupname);
             }catch(NotFoundHttpException $exception){
-              $msg = $exception->getMessage();
+              $msg = $exception->getMessage()." avec code: ".$exception->getStatusCode();
               $response = new Response();
-	      $response->setStatusCode(400);
+	      	  $response->setStatusCode(400);
               $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
               $response->headers->set('Content-Type', 'application/json');
               return $response;
             }
             $data = $this->get('jms_serializer')->serialize($get, 'json');
             $response = new Response();
-	    $response->setStatusCode(200);
+	   	 	$response->setStatusCode(200);
             $response->setContent(json_encode(array('success' => TRUE,'msg' =>$data)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
@@ -187,7 +188,7 @@ class RadiusController extends FOSRestController
 
       /**
        * get pour l'entity radreply.
-       * @Annotations\Get("/users/{username}/reply")
+       * @Annotations\Get("/users/{id}/reply")
        *
        * @ApiDoc(
        *   resource = true,
@@ -198,17 +199,18 @@ class RadiusController extends FOSRestController
        * )
        *
        *
-       * @param string               $username     username of radreply
+       * @param integer              $id           id of radreply
        * @param Request              $request      the request object
        *
        * @return Response
        */
-	  public function getReplyAction( $username, Request $request)
+	  public function getReplyAction( $id, Request $request)
       {
             try{
+			  $username = $this->container->get('radius.compte')->idtoName( $id );
               $get = $this->container->get('radius.compte')->getbyUsername("reply", $username);
             }catch(NotFoundHttpException $exception){
-              $msg = $exception->getMessage();
+              $msg = $exception->getMessage()." avec code: ".$exception->getStatusCode();
               $response = new Response();
 			  $response->setStatusCode(400);
               $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
@@ -248,7 +250,7 @@ class RadiusController extends FOSRestController
             try{
               $get = $this->container->get('radius.compte')->getbyUsername("groupreply", $groupname);
             }catch(NotFoundHttpException $exception){
-              $msg = $exception->getMessage();
+              $msg = $exception->getMessage()." avec code: ".$exception->getStatusCode();
               $response = new Response();
 			  $response->setStatusCode(400);
               $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
@@ -257,7 +259,7 @@ class RadiusController extends FOSRestController
             }
             $data = $this->get('jms_serializer')->serialize($get, 'json');
             $response = new Response();
-	    $response->setStatusCode(200);
+	    	$response->setStatusCode(200);
             $response->setContent(json_encode(array('success' => TRUE,'msg' =>$data)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
@@ -265,910 +267,10 @@ class RadiusController extends FOSRestController
 
 
 
-      /**
-       * RETOURNE LE NOMBRE DE LIGNE DANS userinfo.
-       * @Annotations\Get("/users/count")
-       *
-       * @ApiDoc(
-       *   resource = true,
-       *   statusCodes = {
-       *     200 = "Returned when successful",
-       *     400 = "Returned when no ressource found"
-       *   }
-       * )
-       *
-       * @Annotations\QueryParam(name="id", requirements="\d+", nullable=true, description="object id ")
-       * @Annotations\QueryParam(name="username",  nullable=true, description="username ")
-       * @Annotations\QueryParam(name="creationdate",  nullable=true, description="object creationdate")
-       * @Annotations\QueryParam(name="updatedate",  nullable=true, description="object updatedate ")
-       * @Annotations\QueryParam(name="offset", requirements="\d+", nullable=true, description="Offset from which to start listing object.")
-       * @Annotations\QueryParam(name="limit", requirements="\d+", nullable=true, default="10", description="How many objects to return.")
-       *
-       *
-       * @param Request               $request      the request object
-       * @param ParamFetcherInterface $paramFetcher param fetcher service
-       *
-       * @return Response
-       */
-      public function userCountAction( Request $request, ParamFetcherInterface $paramFetcher)
-      {
-          $string = $request->getRequestUri(); 
-          $search =  $paramFetcher->all();
-          foreach($search as $key => $value )
-          {
-        	if(empty($value))
-        	{
-        	    unset($search[$key]);
-        	}
-          }       
-         try{
-            $this->container->get('radius.compte')->requestUri($string,$search,"userinfo");
-        }catch(InvalidJsonException $exception){
-                $msg = $exception->getMessage();
-                $response = new Response();
-		$response->setStatusCode(400);
-                $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
-                $response->headers->set('Content-Type', 'application/json');
-                return $response;
-        }
-        unset($search['offset']);
-        unset($search['limit']);
-      	$total = $this->container->get('radius.compte')->count("userinfo",$search);
-        $msg = "IL Y A ".$total." LIGNES DANS userinfo";
-        $response = new Response();
-	$response->setStatusCode(200);
-        $response->setContent(json_encode(array('success' => TRUE,'msg' => $msg)));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
-      }
-
-
-      /**
-       * RETOURNE TOUS OBJECTS DANS LA TABLE userinfo
-       * @Annotations\Get("/users/search")
-       *
-       * @ApiDoc(
-       *   resource = true,
-       *   statusCodes = {
-       *     200 = "Returned when successful",
-       *     400 = "Returned when no ressource found"
-       *   }
-       * )
-       *
-       * @Annotations\QueryParam(name="id", requirements="\d+", nullable=true, description="object id ")
-       * @Annotations\QueryParam(name="username",  nullable=true, description="groupname ")
-       * @Annotations\QueryParam(name="creationdate",  nullable=true, description="object creationdate")
-       * @Annotations\QueryParam(name="updatedate",  nullable=true, description="object updatedate ")
-       * @Annotations\QueryParam(name="offset", requirements="\d+", nullable=true, description="Offset from which to start listing object.")
-       * @Annotations\QueryParam(name="limit", requirements="\d+", nullable=true, default="10", description="How many objects to return.")
-       *
-       *
-       * @param Request               $request      the request object
-       * @param ParamFetcherInterface $paramFetcher param fetcher service
-       *
-       * @return Response
-       */
-      public function userSearchAction(Request $request, ParamFetcherInterface $paramFetcher)
-      {
-           $string = $request->getRequestUri();
-           $offset = $paramFetcher->get('offset');
-           $offset = null == $offset ? 0 : $offset;
-           $limit = $paramFetcher->get('limit');
-           $limit = null == $limit ? 0 : $limit;
-           $search =  $paramFetcher->all();
-          foreach($search as $key => $value )
-          {
-            if(empty($value))
-            {
-              unset($search[$key]);
-            }
-          } 
-        try{
-            $this->container->get('radius.compte')->requestUri($string,$search,"userinfo");
-        }catch(InvalidJsonException $exception){
-            $msg = $exception->getMessage();
-            $response = new Response();
-	    $response->setStatusCode(400);
-            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
-            $response->headers->set('Content-Type', 'application/json');
-            return $response;
-        }
-        unset($search['offset']);
-        unset($search['limit']);
-        $total = $this->container->get('radius.compte')->all("userinfo",$limit,$offset,$search);
-        $data = $this->get('jms_serializer')->serialize($total, 'json');
-        $response = new Response();
-	$response->setStatusCode(200);
-        $response->setContent(json_encode(array('success' => TRUE,'msg' =>$data)));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
-      }
-
-
- 	  /**
-       * RETOURNE LE NOMBRE DE LIGNE DANS radiusgroup.
-       * @Annotations\Get("/groups/count")
-       *
-       * @ApiDoc(
-       *   resource = true,
-       *   statusCodes = {
-       *     200 = "Returned when successful",
-       *     400 = "Returned when no ressource found"
-       *   }
-       * )
-       *
-       * @Annotations\QueryParam(name="id", requirements="\d+", nullable=true, description="object id ")
-       * @Annotations\QueryParam(name="groupname",  nullable=true, description="groupname ")
-       * @Annotations\QueryParam(name="offset", requirements="\d+", nullable=true, description="Offset from which to start listing object.")
-       * @Annotations\QueryParam(name="limit", requirements="\d+", nullable=true, default="10", description="How many objects to return.")
-       *
-       *
-       * @param Request               $request      the request object
-       * @param ParamFetcherInterface $paramFetcher param fetcher service
-       *
-       * @return Response
-       */
-      public function groupCountAction(Request $request, ParamFetcherInterface $paramFetcher)
-      {
-           $string = $request->getRequestUri(); 
-          $search =  $paramFetcher->all();
-          foreach($search as $key => $value )
-          {
-        	if(empty($value))
-        	{
-        	    unset($search[$key]);
-        	}
-          }       
-         try{
-            $this->container->get('radius.compte')->requestUri($string,$search,"radiusgroup");
-        }catch(InvalidJsonException $exception){
-                $msg = $exception->getMessage();
-                $response = new Response();
-		$response->setStatusCode(400);
-                $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
-                $response->headers->set('Content-Type', 'application/json');
-                return $response;
-        }
-        unset($search['offset']);
-        unset($search['limit']);
-      	$total = $this->container->get('radius.compte')->count("radiusgroup",$search);
-        $msg = "IL Y A ".$total." LIGNES DANS radiusgroup";
-        $response = new Response();
-	$response->setStatusCode(200);
-        $response->setContent(json_encode(array('success' => TRUE,'msg' => $msg)));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response; 
-      }
-
-
-
-      /**
-       * RETOURNE TOUS OBJECTS DANS LA TABLE radiusgroup
-       * @Annotations\Get("/groups/search")
-       *
-       * @ApiDoc(
-       *   resource = true,
-       *   statusCodes = {
-       *     200 = "Returned when successful",
-       *     400 = "Returned when no ressource found"
-       *   }
-       * )
-       *
-       * @Annotations\QueryParam(name="id", requirements="\d+", nullable=true, description="object id ")
-       * @Annotations\QueryParam(name="groupname",  nullable=true, description="groupname ")
-       * @Annotations\QueryParam(name="offset", requirements="\d+", nullable=true, description="Offset from which to start listing object.")
-       * @Annotations\QueryParam(name="limit", requirements="\d+", nullable=true, default="10", description="How many objects to return.")
-       *
-       *
-       * @param Request               $request      the request object
-       * @param ParamFetcherInterface $paramFetcher param fetcher service
-       *
-       * @return Response
-       */
-      public function groupSearchAction(Request $request, ParamFetcherInterface $paramFetcher)
-      {
-           $string = $request->getRequestUri();
-           $offset = $paramFetcher->get('offset');
-           $offset = null == $offset ? 0 : $offset;
-           $limit = $paramFetcher->get('limit');
-           $limit = null == $limit ? 0 : $limit;
-           $search =  $paramFetcher->all();
-          foreach($search as $key => $value )
-          {
-            if(empty($value))
-            {
-              unset($search[$key]);
-            }
-          } 
-        try{
-            $this->container->get('radius.compte')->requestUri($string,$search,"radiusgroup");
-        }catch(InvalidJsonException $exception){
-            $msg = $exception->getMessage();
-            $response = new Response();
-	    $response->setStatusCode(400);
-            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
-            $response->headers->set('Content-Type', 'application/json');
-            return $response;
-        }
-        unset($search['offset']);
-        unset($search['limit']);
-        $total = $this->container->get('radius.compte')->all("radiusgroup",$limit,$offset,$search);
-        $data = $this->get('jms_serializer')->serialize($total, 'json');
-        $response = new Response();
-	$response->setStatusCode(200);
-        $response->setContent(json_encode(array('success' => TRUE,'msg' =>$data)));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
-      }
-
-
-
-
-	  /**
-       * RETOURNE LE NOMBRE DE LIGNE DANS radcheck.
-       * @Annotations\Get("/users/count/check")
-       *
-       * @ApiDoc(
-       *   resource = true,
-       *   statusCodes = {
-       *     200 = "Returned when successful",
-       *     400 = "Returned when no ressource found"
-       *   }
-       * )
-       *
-       * @Annotations\QueryParam(name="id", requirements="\d+", nullable=true, description="object id ")
-       * @Annotations\QueryParam(name="username",  nullable=true, description="username ")
-       * @Annotations\QueryParam(name="attribute",  nullable=true, description="object attribute")
-       * @Annotations\QueryParam(name="value",  nullable=true, description="object value ")
-       * @Annotations\QueryParam(name="offset", requirements="\d+", nullable=true, description="Offset from which to start listing object.")
-       * @Annotations\QueryParam(name="limit", requirements="\d+", nullable=true, default="10", description="How many objects to return.")
-       *
-       *
-       * @param Request               $request      the request object
-       * @param ParamFetcherInterface $paramFetcher param fetcher service
-       *
-       * @return Response
-       */
-      public function countCheckAction( Request $request, ParamFetcherInterface $paramFetcher){
-	    $string = $request->getRequestUri(); 
-          $search =  $paramFetcher->all();
-          foreach($search as $key => $value )
-          {
-        	if(empty($value))
-        	{
-        	    unset($search[$key]);
-        	}
-          }       
-         try{
-            $this->container->get('radius.compte')->requestUri($string,$search,"check");
-        }catch(InvalidJsonException $exception){
-                $msg = $exception->getMessage();
-                $response = new Response();
-		$response->setStatusCode(400);
-                $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
-                $response->headers->set('Content-Type', 'application/json');
-                return $response;
-        }
-        unset($search['offset']);
-        unset($search['limit']);
-      	$total = $this->container->get('radius.compte')->count("check",$search);
-        $msg = "IL Y A ".$total." LIGNES DANS radcheck";
-        $response = new Response();
-	$response->setStatusCode(200);
-        $response->setContent(json_encode(array('success' => TRUE,'msg' => $msg)));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
-
-	  }
-
-
-
-
-
-	  /**
-       * RETOURNE LE NOMBRE DE LIGNE DANS radreply.
-       * @Annotations\Get("/users/count/reply")
-       *
-       * @ApiDoc(
-       *   resource = true,
-       *   statusCodes = {
-       *     200 = "Returned when successful",
-       *     400 = "Returned when no ressource found"
-       *   }
-       * )
-       *
-       * @Annotations\QueryParam(name="id", requirements="\d+", nullable=true, description="object id ")
-       * @Annotations\QueryParam(name="username",  nullable=true, description="username ")
-       * @Annotations\QueryParam(name="attribute",  nullable=true, description="object attribute")
-       * @Annotations\QueryParam(name="value",  nullable=true, description="object value ")
-       * @Annotations\QueryParam(name="offset", requirements="\d+", nullable=true, description="Offset from which to start listing object.")
-       * @Annotations\QueryParam(name="limit", requirements="\d+", nullable=true, default="10", description="How many objects to return.")
-       *
-       *
-       * @param Request               $request      the request object
-       * @param ParamFetcherInterface $paramFetcher param fetcher service
-       *
-       * @return Response
-       */
-      public function countReplyAction( Request $request, ParamFetcherInterface $paramFetcher){
-	    $string = $request->getRequestUri(); 
-          $search =  $paramFetcher->all();
-          foreach($search as $key => $value )
-          {
-        	if(empty($value))
-        	{
-        	    unset($search[$key]);
-        	}
-          }       
-         try{
-            $this->container->get('radius.compte')->requestUri($string,$search,"reply");
-        }catch(InvalidJsonException $exception){
-                $msg = $exception->getMessage();
-                $response = new Response();
-		$response->setStatusCode(400);
-                $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
-                $response->headers->set('Content-Type', 'application/json');
-                return $response;
-        }
-        unset($search['offset']);
-        unset($search['limit']);
-      	$total = $this->container->get('radius.compte')->count("reply",$search);
-        $msg = "IL Y A ".$total." LIGNES DANS radreply";
-        $response = new Response();
-	$response->setStatusCode(200);
-        $response->setContent(json_encode(array('success' => TRUE,'msg' => $msg)));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
-
-	  }
-
-
-
-
-	  /**
-       * RETOURNE LE NOMBRE DE LIGNE DANS radusergroup.
-       * @Annotations\Get("/users/count/groups")
-       *
-       * @ApiDoc(
-       *   resource = true,
-       *   statusCodes = {
-       *     200 = "Returned when successful",
-       *     400 = "Returned when no ressource found"
-       *   }
-       * )
-       *
-       * @Annotations\QueryParam(name="id", requirements="\d+", nullable=true, description="object id ")
-       * @Annotations\QueryParam(name="username",  nullable=true, description="username of object")
-       * @Annotations\QueryParam(name="groupname",  nullable=true, description="groupname of object")
-       * @Annotations\QueryParam(name="priority",  nullable=true, description="object priority ")
-       * @Annotations\QueryParam(name="offset", requirements="\d+", nullable=true, description="Offset from which to start listing object.")
-       * @Annotations\QueryParam(name="limit", requirements="\d+", nullable=true, default="10", description="How many objects to return.")
-       *
-       *
-       * @param Request               $request      the request object
-       * @param ParamFetcherInterface $paramFetcher param fetcher service
-       *
-       * @return Response
-       */
-      public function countuserGroupAction( Request $request, ParamFetcherInterface $paramFetcher){
-	  $string = $request->getRequestUri(); 
-          $search =  $paramFetcher->all();
-          foreach($search as $key => $value )
-          {
-        	if(empty($value))
-        	{
-        	    unset($search[$key]);
-        	}
-          }       
-         try{
-            $this->container->get('radius.compte')->requestUri($string,$search,"usergroup");
-        }catch(InvalidJsonException $exception){
-                $msg = $exception->getMessage();
-                $response = new Response();
-		$response->setStatusCode(400);
-                $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
-                $response->headers->set('Content-Type', 'application/json');
-                return $response;
-        }
-        unset($search['offset']);
-        unset($search['limit']);
-      	$total = $this->container->get('radius.compte')->count("usergroup",$search);
-        $msg = "IL Y A ".$total." LIGNES DANS radusergroup";
-        $response = new Response();
-	$response->setStatusCode(200);
-        $response->setContent(json_encode(array('success' => TRUE,'msg' => $msg)));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
-
-	  }
-
-
-
-
-
-	  /**
-       * RETOURNE LE NOMBRE DE LIGNE DANS radgroupcheck.
-       * @Annotations\Get("/groups/count/check")
-       *
-       * @ApiDoc(
-       *   resource = true,
-       *   statusCodes = {
-       *     200 = "Returned when successful",
-       *     400 = "Returned when no ressource found"
-       *   }
-       * )
-       *
-       * @Annotations\QueryParam(name="id", requirements="\d+", nullable=true, description="object id ")
-       * @Annotations\QueryParam(name="groupname",  nullable=true, description="groupname of objet")
-       * @Annotations\QueryParam(name="attribute",  nullable=true, description="object attribute")
-       * @Annotations\QueryParam(name="value",  nullable=true, description="object value ")
-       * @Annotations\QueryParam(name="offset", requirements="\d+", nullable=true, description="Offset from which to start listing object.")
-       * @Annotations\QueryParam(name="limit", requirements="\d+", nullable=true, default="10", description="How many objects to return.")
-       *
-       *
-       * @param Request               $request      the request object
-       * @param ParamFetcherInterface $paramFetcher param fetcher service
-       *
-       * @return Response
-       */
-      public function countGroupcheckAction( Request $request, ParamFetcherInterface $paramFetcher){
-	  $string = $request->getRequestUri(); 
-          $search =  $paramFetcher->all();
-          foreach($search as $key => $value )
-          {
-        	if(empty($value))
-        	{
-        	    unset($search[$key]);
-        	}
-          }       
-         try{
-            $this->container->get('radius.compte')->requestUri($string,$search,"groupcheck");
-        }catch(InvalidJsonException $exception){
-                $msg = $exception->getMessage();
-                $response = new Response();
-		$response->setStatusCode(400);
-                $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
-                $response->headers->set('Content-Type', 'application/json');
-                return $response;
-        }
-        unset($search['offset']);
-        unset($search['limit']);
-      	$total = $this->container->get('radius.compte')->count("groupcheck",$search);
-        $msg = "IL Y A ".$total." LIGNES DANS radgroupcheck";
-        $response = new Response();
-	$response->setStatusCode(200);
-        $response->setContent(json_encode(array('success' => TRUE,'msg' => $msg)));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
-
-	  }
-
-
-
-
-
-	  /**
-       * RETOURNE LE NOMBRE DE LIGNE DANS radgroupreply.
-       * @Annotations\Get("/groups/count/reply")
-       *
-       * @ApiDoc(
-       *   resource = true,
-       *   statusCodes = {
-       *     200 = "Returned when successful",
-       *     400 = "Returned when no ressource found"
-       *   }
-       * )
-       *
-       * @Annotations\QueryParam(name="id", requirements="\d+", nullable=true, description="object id ")
-       * @Annotations\QueryParam(name="groupname",  nullable=true, description="groupname of objet")
-       * @Annotations\QueryParam(name="attribute",  nullable=true, description="object attribute")
-       * @Annotations\QueryParam(name="value",  nullable=true, description="object value ")
-       * @Annotations\QueryParam(name="offset", requirements="\d+", nullable=true, description="Offset from which to start listing object.")
-       * @Annotations\QueryParam(name="limit", requirements="\d+", nullable=true, default="10", description="How many objects to return.")
-       *
-       *
-       * @param Request               $request      the request object
-       * @param ParamFetcherInterface $paramFetcher param fetcher service
-       *
-       * @return Response
-       */
-      public function countgroupReplyAction( Request $request, ParamFetcherInterface $paramFetcher){
-	  $string = $request->getRequestUri(); 
-          $search =  $paramFetcher->all();
-          foreach($search as $key => $value )
-          {
-        	if(empty($value))
-        	{
-        	    unset($search[$key]);
-        	}
-          }       
-         try{
-            $this->container->get('radius.compte')->requestUri($string,$search,"groupreply");
-        }catch(InvalidJsonException $exception){
-                $msg = $exception->getMessage();
-                $response = new Response();
-		$response->setStatusCode(400);
-                $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
-                $response->headers->set('Content-Type', 'application/json');
-                return $response;
-        }
-        unset($search['offset']);
-        unset($search['limit']);
-      	$total = $this->container->get('radius.compte')->count("groupreply",$search);
-        $msg = "IL Y A ".$total." LIGNES DANS radgroupreply";
-        $response = new Response();
-	$response->setStatusCode(200);
-        $response->setContent(json_encode(array('success' => TRUE,'msg' => $msg)));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
-
-	  }
-
-
-
-      /**
-       * RETOURNE TOUS OBJECTS DANS LA TABLE radcheck
-       * @Annotations\Get("/users/search/check")
-       *
-       * @ApiDoc(
-       *   resource = true,
-       *   statusCodes = {
-       *     200 = "Returned when successful",
-       *     400 = "Returned when no ressource found"
-       *   }
-       * )
-       *
-       * @Annotations\QueryParam(name="id", requirements="\d+", nullable=true, description="object id ")
-       * @Annotations\QueryParam(name="username",  nullable=true, description="username of object")
-       * @Annotations\QueryParam(name="attribute",  nullable=true, description="object attribute")
-       * @Annotations\QueryParam(name="value",  nullable=true, description="object value ")
-       * @Annotations\QueryParam(name="offset", requirements="\d+", nullable=true, description="Offset from which to start listing object.")
-       * @Annotations\QueryParam(name="limit", requirements="\d+", nullable=true, default="10", description="How many objects to return.")
-       *
-       *
-       * @param Request               $request      the request object
-       * @param ParamFetcherInterface $paramFetcher param fetcher service
-       *
-       * @return Response
-       */
-      public function searchCheckAction( Request $request, ParamFetcherInterface $paramFetcher)
-      {
-           $string = $request->getRequestUri();
-           $offset = $paramFetcher->get('offset');
-           $offset = null == $offset ? 0 : $offset;
-           $limit = $paramFetcher->get('limit');
-           $limit = null == $limit ? 0 : $limit;
-           $search =  $paramFetcher->all();
-          foreach($search as $key => $value )
-          {
-            if(empty($value))
-            {
-              unset($search[$key]);
-            }
-          } 
-        try{
-            $this->container->get('radius.compte')->requestUri($string,$search,"check");
-        }catch(InvalidJsonException $exception){
-            $msg = $exception->getMessage();
-            $response = new Response();
-	    $response->setStatusCode(400);
-            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
-            $response->headers->set('Content-Type', 'application/json');
-            return $response;
-        }
-        unset($search['offset']);
-        unset($search['limit']);
-        $total = $this->container->get('radius.compte')->all("check",$limit,$offset,$search);
-        $data = $this->get('jms_serializer')->serialize($total, 'json');
-        $response = new Response();
-	$response->setStatusCode(200);
-        $response->setContent(json_encode(array('success' => TRUE,'msg' =>$data)));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
-      }
-
-
-
-	  /**
-       * RETOURNE TOUS OBJECTS DANS LA TABLE radreply
-       * @Annotations\Get("/users/search/reply")
-       *
-       * @ApiDoc(
-       *   resource = true,
-       *   statusCodes = {
-       *     200 = "Returned when successful",
-       *     400 = "Returned when no ressource found"
-       *   }
-       * )
-       *
-       * @Annotations\QueryParam(name="id", requirements="\d+", nullable=true, description="object id ")
-       * @Annotations\QueryParam(name="username",  nullable=true, description="username of object")
-       * @Annotations\QueryParam(name="attribute",  nullable=true, description="object attribute")
-       * @Annotations\QueryParam(name="value",  nullable=true, description="object value ")
-       * @Annotations\QueryParam(name="offset", requirements="\d+", nullable=true, description="Offset from which to start listing object.")
-       * @Annotations\QueryParam(name="limit", requirements="\d+", nullable=true, default="10", description="How many objects to return.")
-       *
-       *
-       * @param Request               $request      the request object
-       * @param ParamFetcherInterface $paramFetcher param fetcher service
-       *
-       * @return Response
-       */
-      public function searchReplyAction( Request $request, ParamFetcherInterface $paramFetcher)
-      {
-           $string = $request->getRequestUri();
-           $offset = $paramFetcher->get('offset');
-           $offset = null == $offset ? 0 : $offset;
-           $limit = $paramFetcher->get('limit');
-           $limit = null == $limit ? 0 : $limit;
-           $search =  $paramFetcher->all();
-          foreach($search as $key => $value )
-          {
-            if(empty($value))
-            {
-              unset($search[$key]);
-            }
-          } 
-        try{
-            $this->container->get('radius.compte')->requestUri($string,$search,"reply");
-        }catch(InvalidJsonException $exception){
-            $msg = $exception->getMessage();
-            $response = new Response();
-	    $response->setStatusCode(400);
-            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
-            $response->headers->set('Content-Type', 'application/json');
-            return $response;
-        }
-        unset($search['offset']);
-        unset($search['limit']);
-        $total = $this->container->get('radius.compte')->all("reply",$limit,$offset,$search);
-        $data = $this->get('jms_serializer')->serialize($total, 'json');
-        $response = new Response();
-	$response->setStatusCode(200);
-        $response->setContent(json_encode(array('success' => TRUE,'msg' =>$data)));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
-      }
-
-
-
-
-	  /**
-       * RETOURNE TOUS OBJECTS DANS LA TABLE radusergroup
-       * @Annotations\Get("/users/search/groups")
-       *
-       * @ApiDoc(
-       *   resource = true,
-       *   statusCodes = {
-       *     200 = "Returned when successful",
-       *     400 = "Returned when no ressource found"
-       *   }
-       * )
-       *
-       * @Annotations\QueryParam(name="id", requirements="\d+", nullable=true, description="object id ")
-       * @Annotations\QueryParam(name="username",  nullable=true, description="username of object")
-       * @Annotations\QueryParam(name="groupname",  nullable=true, description="groupname of object")
-       * @Annotations\QueryParam(name="offset", requirements="\d+", nullable=true, description="Offset from which to start listing object.")
-       * @Annotations\QueryParam(name="limit", requirements="\d+", nullable=true, default="10", description="How many objects to return.")
-       *
-       *
-       * @param Request               $request      the request object
-       * @param ParamFetcherInterface $paramFetcher param fetcher service
-       *
-       * @return Response
-       */
-      public function searchuserGroupAction( Request $request, ParamFetcherInterface $paramFetcher)
-      {
-           $string = $request->getRequestUri();
-           $offset = $paramFetcher->get('offset');
-           $offset = null == $offset ? 0 : $offset;
-           $limit = $paramFetcher->get('limit');
-           $limit = null == $limit ? 0 : $limit;
-           $search =  $paramFetcher->all();
-          foreach($search as $key => $value )
-          {
-            if(empty($value))
-            {
-              unset($search[$key]);
-            }
-          } 
-        try{
-            $this->container->get('radius.compte')->requestUri($string,$search,"usergroup");
-        }catch(InvalidJsonException $exception){
-            $msg = $exception->getMessage();
-            $response = new Response();
-	    $response->setStatusCode(400);
-            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
-            $response->headers->set('Content-Type', 'application/json');
-            return $response;
-        }
-        unset($search['offset']);
-        unset($search['limit']);
-        $total = $this->container->get('radius.compte')->all("usergroup",$limit,$offset,$search);
-        $data = $this->get('jms_serializer')->serialize($total, 'json');
-        $response = new Response();
-	$response->setStatusCode(200);
-        $response->setContent(json_encode(array('success' => TRUE,'msg' =>$data)));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
-      }
-
-
-
-
-      /**
-       * RETOURNE TOUS OBJECTS DANS LA TABLE radgroupcheck
-       * @Annotations\Get("/groups/search/check")
-       *
-       * @ApiDoc(
-       *   resource = true,
-       *   statusCodes = {
-       *     200 = "Returned when successful",
-       *     400 = "Returned when no ressource found"
-       *   }
-       * )
-       *
-       * @Annotations\QueryParam(name="id", requirements="\d+", nullable=true, description="object id ")
-       * @Annotations\QueryParam(name="groupname",  nullable=true, description="groupname of object")
-       * @Annotations\QueryParam(name="attribute",  nullable=true, description="object attribute")
-       * @Annotations\QueryParam(name="value",  nullable=true, description="object value ")
-       * @Annotations\QueryParam(name="offset", requirements="\d+", nullable=true, description="Offset from which to start listing object.")
-       * @Annotations\QueryParam(name="limit", requirements="\d+", nullable=true, default="10", description="How many objects to return.")
-       *
-       *
-       * @param Request               $request      the request object
-       * @param ParamFetcherInterface $paramFetcher param fetcher service
-       *
-       * @return Response
-       */
-      public function searchgroupCheckAction( Request $request, ParamFetcherInterface $paramFetcher)
-      {
-           $string = $request->getRequestUri();
-           $offset = $paramFetcher->get('offset');
-           $offset = null == $offset ? 0 : $offset;
-           $limit = $paramFetcher->get('limit');
-           $limit = null == $limit ? 0 : $limit;
-           $search =  $paramFetcher->all();
-          foreach($search as $key => $value )
-          {
-            if(empty($value))
-            {
-              unset($search[$key]);
-            }
-          } 
-        try{
-            $this->container->get('radius.compte')->requestUri($string,$search,"groupcheck");
-        }catch(InvalidJsonException $exception){
-            $msg = $exception->getMessage();
-            $response = new Response();
-	    $response->setStatusCode(400);
-            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
-            $response->headers->set('Content-Type', 'application/json');
-            return $response;
-        }
-        unset($search['offset']);
-        unset($search['limit']);
-        $total = $this->container->get('radius.compte')->all("groupcheck",$limit,$offset,$search);
-        $data = $this->get('jms_serializer')->serialize($total, 'json');
-        $response = new Response();
-	$response->setStatusCode(200);
-        $response->setContent(json_encode(array('success' => TRUE,'msg' =>$data)));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
-      }
-
-
-
-
-      /**
-       * RETOURNE TOUS OBJECTS DANS LA TABLE radgroupreply
-       * @Annotations\Get("/groups/search/reply")
-       *
-       * @ApiDoc(
-       *   resource = true,
-       *   statusCodes = {
-       *     200 = "Returned when successful",
-       *     400 = "Returned when no ressource found"
-       *   }
-       * )
-       *
-       * @Annotations\QueryParam(name="id", requirements="\d+", nullable=true, description="object id ")
-       * @Annotations\QueryParam(name="groupname",  nullable=true, description="groupname of object")
-       * @Annotations\QueryParam(name="attribute",  nullable=true, description="object attribute")
-       * @Annotations\QueryParam(name="value",  nullable=true, description="object value ")
-       * @Annotations\QueryParam(name="offset", requirements="\d+", nullable=true, description="Offset from which to start listing object.")
-       * @Annotations\QueryParam(name="limit", requirements="\d+", nullable=true, default="10", description="How many objects to return.")
-       *
-       *
-       * @param Request               $request      the request object
-       * @param ParamFetcherInterface $paramFetcher param fetcher service
-       *
-       * @return Response
-       */
-      public function searchgroupReplyAction( Request $request, ParamFetcherInterface $paramFetcher)
-      {
-           $string = $request->getRequestUri();
-           $offset = $paramFetcher->get('offset');
-           $offset = null == $offset ? 0 : $offset;
-           $limit = $paramFetcher->get('limit');
-           $limit = null == $limit ? 0 : $limit;
-           $search =  $paramFetcher->all();
-          foreach($search as $key => $value )
-          {
-            if(empty($value))
-            {
-              unset($search[$key]);
-            }
-          } 
-        try{
-            $this->container->get('radius.compte')->requestUri($string,$search,"groupreply");
-        }catch(InvalidJsonException $exception){
-            $msg = $exception->getMessage();
-            $response = new Response();
-	    $response->setStatusCode(400);
-            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
-            $response->headers->set('Content-Type', 'application/json');
-            return $response;
-        }
-        unset($search['offset']);
-        unset($search['limit']);
-        $total = $this->container->get('radius.compte')->all("groupreply",$limit,$offset,$search);
-        $data = $this->get('jms_serializer')->serialize($total, 'json');
-        $response = new Response();
-	$response->setStatusCode(200);
-        $response->setContent(json_encode(array('success' => TRUE,'msg' =>$data)));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
-      }
-
-
-
-
-
-	  /**
-       * GET POUR ENTITY radusergroup
-       * @Annotations\Get("users/{username}/groups/{groupname}")
-       *
-       * @ApiDoc(
-       *   resource = true,
-       *   statusCodes = {
-       *     200 = "Returned when successful",
-       *     400 = "Returned when no ressource found"
-       *   }
-       * )
-       *
-       * @param string  $username  username of object
-       * @param string  $groupname groupname of object
-       * @param Request  $request      the request object
-       *
-       * @return Response
-       */
-      public function getUsergroupAction($username,$groupname, Request $request)
-      {
-		try{
-			$get = $this->container->get('radius.compte')->getUsergroup($username,$groupname);
-		}catch(NotFoundHttpException $exception){
-              $msg = $exception->getMessage();
-              $response = new Response();
-	      $response->setStatusCode(400);
-              $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
-              $response->headers->set('Content-Type', 'application/json');
-              return $response;
-          }
-        
-		$data = $this->get('jms_serializer')->serialize($get, 'json');
-        $response = new Response();
-	$response->setStatusCode(200);
-        $response->setContent(json_encode(array('success' => TRUE,'msg' => $data)));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response; 
-      }
-
-
 
 	  /**
        * creation d'un utilisateur
-       * @Annotations\Post("/users/{username}")
+       * @Annotations\Post("/users")
        * @ApiDoc(
        *    resource = true,
        *    description = "creation d'un utilisateur",
@@ -1181,16 +283,8 @@ class RadiusController extends FOSRestController
        * @param Request $request  the request object
        * @return Response
        */
-      public function UserAction( $username, Request $request)
+      public function UserAction( Request $request)
       {
-		if($username != $request->request->all()["data"]["username"]){
-			$msg = "incorrect url username ";
-			$response = new Response();
-			$response->setStatusCode(400);
-                        $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
-                        $response->headers->set('Content-Type', 'application/json');
-                        return $response;
-		}
 		try{
 			$string = $request->getRequestUri(); 
 			$this->container->get('radius.compte')->jsonVeri($request->request->all(), "userinfo");
@@ -1198,24 +292,24 @@ class RadiusController extends FOSRestController
 			$ret = implode(",", $id);
  		}catch(UniqueConstraintViolationException $exception){
 			$msg = "UniqueConstraintViolation : ".$exception->getErrorCode();
-                        $response = new Response();
+            $response = new Response();
 			$response->setStatusCode(400);
-                        $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
                         $response->headers->set('Content-Type', 'application/json');
                         return $response;
 		}catch(InvalidJsonException $exception){
-                        $msg = $exception->getMessage();
-                        $response = new Response();
+            $msg = $exception->getMessage()." avec code: ".$exception->getCode();
+            $response = new Response();
 			$response->setStatusCode(400);
                         $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
                         $response->headers->set('Content-Type', 'application/json');
                         return $response;
                 }
-		$response = new Response();
-		$response->setStatusCode(200);
-                $response->setContent(json_encode(array('success' => TRUE,'msg' =>"Creation-User-OK", 'id' => $string .'/'.$ret)));
-                $response->headers->set('Content-Type', 'application/json');
-                return $response;
+			$response = new Response();
+			$response->setStatusCode(200);
+            $response->setContent(json_encode(array('success' => TRUE,'msg' =>"Creation-User-OK", 'id' => $string .'/'.$ret)));
+            $response->headers->set('Content-Type', 'application/json');
+            return $response;
       }
 
 
@@ -1251,31 +345,31 @@ class RadiusController extends FOSRestController
 			$ret = $this->container->get('radius.compte')->groups($request->request->all());
  		}catch(UniqueConstraintViolationException $exception){
 			$msg = "UniqueConstraintViolation : ".$exception->getErrorCode();
-                        $response = new Response();
+            $response = new Response();
 			$response->setStatusCode(400);
                         $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
                         $response->headers->set('Content-Type', 'application/json');
                         return $response;
 		}catch(InvalidJsonException $exception){
-                        $msg = $exception->getMessage();
-                        $response = new Response();
+            $msg = $exception->getMessage()." avec code: ".$exception->getCode();
+            $response = new Response();
 			$response->setStatusCode(400);
                         $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
                         $response->headers->set('Content-Type', 'application/json');
                         return $response;
                 }
-		$response = new Response();
-		$response->setStatusCode(200);
-        $response->setContent(json_encode(array('success' => TRUE,'msg' =>"Creation-Group-OK", 'id' => $string .'/'.$ret )));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
+			$response = new Response();
+			$response->setStatusCode(200);
+        	$response->setContent(json_encode(array('success' => TRUE,'msg' =>"Creation-Group-OK", 'id' => $string .'/'.$ret )));
+        	$response->headers->set('Content-Type', 'application/json');
+        	return $response;
       }
 
 		
 
 	  /**
        * post dans radcheck
-       * @Annotations\Post("/users/{username}/check")
+       * @Annotations\Post("/users/{id}/check")
        * @ApiDoc(
        *    resource = true,
        *    description = "post dans radcheck",
@@ -1288,23 +382,17 @@ class RadiusController extends FOSRestController
        * @param Request $request the request object
        * @return Response
        */
-      public function postCheckAction($username,Request $request)
+      public function postCheckAction($id,Request $request)
       {
-		if($username != $request->request->all()["data"]["username"]){
-			$msg = "incorrect url username ";
-			$response = new Response();
-			$response->setStatusCode(400);
-            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
-            $response->headers->set('Content-Type', 'application/json');
-           return $response;
-		}
+		
 		try{
 			$string = $request->getRequestUri(); 
 			$this->container->get('radius.compte')->jsonVeri($request->request->all(), "check");
+			$this->container->get('radius.compte')->compareName($id, $request->request->all());
 			$ret = $this->container->get('radius.compte')->checkReply(null,"check",$request->request->all());
  		}catch(UniqueConstraintViolationException $exception){
 			$msg = "UniqueConstraintViolation : ".$exception->getErrorCode();
-                        $response = new Response();
+            $response = new Response();
 			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
@@ -1318,13 +406,20 @@ class RadiusController extends FOSRestController
             $response->headers->set('Content-Type', 'application/json');
             return $response;
 		}catch(InvalidJsonException $exception){
-            $msg = $exception->getMessage();
+            $msg = $exception->getMessage()." avec code: ".$exception->getCode();
             $response = new Response();
-	    $response->setStatusCode(400);
+	    	$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
            return $response;
-          }
+          }catch(NotFoundHttpException $exception){
+              $msg = $exception->getMessage()." avec code: ".$exception->getStatusCode();
+              $response = new Response();
+			  $response->setStatusCode(400);
+              $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
+              $response->headers->set('Content-Type', 'application/json');
+              return $response;
+            }
 		$response = new Response();
 		$response->setStatusCode(200);
         $response->setContent(json_encode(array('success' => TRUE,'msg' =>"POST-radcheck-OK", 'id' => $string .'/'.$ret )));
@@ -1337,7 +432,7 @@ class RadiusController extends FOSRestController
 
       /**
        * post dans radreply
-       * @Annotations\Post("/users/{username}/reply")
+       * @Annotations\Post("/users/{id}/reply")
        * @ApiDoc(
        *    resource = true,
        *    description = "post dans radreply",
@@ -1350,23 +445,17 @@ class RadiusController extends FOSRestController
        * @param Request $request the request object
        * @return Response
        */
-      public function postReplyAction($username,Request $request)
+      public function postReplyAction($id,Request $request)
       {
-		if($username != $request->request->all()["data"]["username"]){
-			$msg = "incorrect url username ";
-			$response = new Response();
-			$response->setStatusCode(400);
-            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
-            $response->headers->set('Content-Type', 'application/json');
-           return $response;
-		}
+		
 		try{
 			$string = $request->getRequestUri(); 
 			$this->container->get('radius.compte')->jsonVeri($request->request->all(), "reply");
+			$this->container->get('radius.compte')->compareName($id, $request->request->all());
 			$ret = $this->container->get('radius.compte')->checkReply(null,"reply",$request->request->all());
  		}catch(UniqueConstraintViolationException $exception){
 			$msg = "UniqueConstraintViolation : ".$exception->getErrorCode();
-                        $response = new Response();
+            $response = new Response();
 			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
@@ -1374,19 +463,26 @@ class RadiusController extends FOSRestController
 		}
 		catch(ForeignKeyConstraintViolationException $exception){
 			$msg = "ForeignKeyConstraintViolation : ".$exception->getErrorCode();
-                        $response = new Response();
+            $response = new Response();
 			$response->setStatusCode(400);
-                        $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
 		}catch(InvalidJsonException $exception){
-            $msg = $exception->getMessage();
+            $msg = $exception->getMessage()." avec code: ".$exception->getCode();
             $response = new Response();
-	    $response->setStatusCode(400);
+	    	$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
            return $response;
-          }
+          }catch(NotFoundHttpException $exception){
+              $msg = $exception->getMessage()." avec code: ".$exception->getStatusCode();
+              $response = new Response();
+			  $response->setStatusCode(400);
+              $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
+              $response->headers->set('Content-Type', 'application/json');
+              return $response;
+            }
 		$response = new Response();
 		$response->setStatusCode(200);
         $response->setContent(json_encode(array('success' => TRUE,'msg' =>"POST-radreply-OK", 'id' => $string .'/'.$ret)));
@@ -1427,7 +523,7 @@ class RadiusController extends FOSRestController
 			$ret = $this->container->get('radius.compte')->checkReply(null,"groupcheck",$request->request->all());
  		}catch(UniqueConstraintViolationException $exception){
 			$msg = "UniqueConstraintViolation : ".$exception->getErrorCode();
-                        $response = new Response();
+            $response = new Response();
 			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
@@ -1435,13 +531,13 @@ class RadiusController extends FOSRestController
 		}
 		catch(ForeignKeyConstraintViolationException $exception){
 			$msg = "ForeignKeyConstraintViolation : ".$exception->getErrorCode();
-                        $response = new Response();
+            $response = new Response();
 			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
 		}catch(InvalidJsonException $exception){
-            $msg = $exception->getMessage();
+            $msg = $exception->getMessage()." avec code: ".$exception->getCode();
             $response = new Response();
 			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
@@ -1503,8 +599,7 @@ class RadiusController extends FOSRestController
             $response->headers->set('Content-Type', 'application/json');
             return $response;
 		}catch(InvalidJsonException $exception){
-			
-            $msg = $exception->getMessage();
+            $msg = $exception->getMessage()." avec code: ".$exception->getCode();
             $response = new Response();
 			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
@@ -1522,7 +617,7 @@ class RadiusController extends FOSRestController
 		
 	  /**
        * post dans radusergroup
-       * @Annotations\Post("/users/{username}/groups/{groupname}")
+       * @Annotations\Post("/users/{id}/groups/{groupname}")
        * @ApiDoc(
        *    resource = true,
        *    description = "post dans radusergroup",
@@ -1534,16 +629,9 @@ class RadiusController extends FOSRestController
        * @param Request $request the request object
        * @return Response
        */
-      public function userGroupAction($username,$groupname, Request $request)
+      public function userGroupAction($id,$groupname, Request $request)
       {
-		if($username != $request->request->all()["data"]["username"]){
-			$msg = "incorrect url username ";
-			$response = new Response();
-			$response->setStatusCode(400);
-            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
-            $response->headers->set('Content-Type', 'application/json');
-           return $response;
-		}
+		
 		if($groupname != $request->request->all()["data"]["groupname"]){
 			$msg = "incorrect url groupname ";
 			$response = new Response();
@@ -1555,6 +643,7 @@ class RadiusController extends FOSRestController
 		try{
 			$string = $request->getRequestUri(); 
 			$this->container->get('radius.compte')->jsonVeri($request->request->all(), "usergroup");
+			$this->container->get('radius.compte')->compareName($id, $request->request->all());
 			$ret = $this->container->get('radius.compte')->checkReply(null,null,$request->request->all());
  		}catch(UniqueConstraintViolationException $exception){
 			$msg = "UniqueConstraintViolation : ".$exception->getErrorCode();
@@ -1572,13 +661,20 @@ class RadiusController extends FOSRestController
             $response->headers->set('Content-Type', 'application/json');
             return $response;
 		}catch(InvalidJsonException $exception){
-            $msg = $exception->getMessage();
+            $msg = $exception->getMessage()." avec code: ".$exception->getCode();
             $response = new Response();
 			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
            return $response;
-          }
+          }catch(NotFoundHttpException $exception){
+              $msg = $exception->getMessage()." avec code: ".$exception->getStatusCode();
+              $response = new Response();
+			  $response->setStatusCode(400);
+              $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
+              $response->headers->set('Content-Type', 'application/json');
+              return $response;
+            }
 		$response = new Response();
 		$response->setStatusCode(200);
         $response->setContent(json_encode(array('success' => TRUE,'msg' =>"POST-Usergroup-OK", 'id' => $string .'/'.$ret)));
@@ -1593,7 +689,7 @@ class RadiusController extends FOSRestController
       /**
        * PUT UN NOUVEAU OBJECT radusergroup
        * @Annotations\Route(condition="request.attributes.get('version') == 'v1'")
-       * @Annotations\Put("/users/{username}/groups/{groupname}")
+       * @Annotations\Put("/users/{id}/groups/{groupname}")
        * @ApiDoc(
        *   resource = true,
        *   description = "UPDATE UNE NOUVELLE LIGNE A PARTIR DES DONNEE",
@@ -1608,22 +704,22 @@ class RadiusController extends FOSRestController
        * @return Response
        *
        */
-      public function putUsergroupAction( $username,$groupname,Request $request)
+      public function putUsergroupAction( $id,$groupname,Request $request)
       {
         try{
 			$string = $request->getRequestUri();
 			$this->container->get('radius.compte')->jsonVeri($request->request->all(), "usergroup");
-			$id=array($username,$groupname);
+			$id=array($id,$groupname);
 			$ret = $this->container->get('radius.compte')->checkReply( $id ,null,$request->request->all());			
 		}catch(InvalidJsonException $exception){
-            $msg = $exception->getMessage();
+            $msg = $exception->getMessage()." avec code: ".$exception->getCode();
             $response = new Response();
 			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
            return $response;
           }catch(NotFoundHttpException $exception){
-              $msg = $exception->getMessage();
+              $msg = $exception->getMessage()." avec code: ".$exception->getStatusCode();
               $response = new Response();
 			  $response->setStatusCode(400);
               $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
@@ -1632,7 +728,7 @@ class RadiusController extends FOSRestController
             }	
         $response = new Response();
 		$response->setStatusCode(200);
-        $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PATCH-Usergroup-OK", 'username' => $string .'/'.$ret)));
+        $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PUT-Usergroup-OK", 'username' => $string .'/'.$ret)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
       }
@@ -1661,28 +757,27 @@ class RadiusController extends FOSRestController
       public function putCheckAction($id, Request $request)
       {
 
-                 try{
+         try{
 			$string = $request->getRequestUri();
 			$this->container->get('radius.compte')->jsonVeri($request->request->all(), "check");
 			$ret  = $this->container->get('radius.compte')->checkReply( $id , "check",$request->request->all());
 		}catch(InvalidJsonException $exception){
-            $msg = $exception->getMessage();
+            $msg = $exception->getMessage()." avec code: ".$exception->getCode();
             $response = new Response();
-	    $response->setStatusCode(400);
+	    	$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
            return $response;
           }catch(NotFoundHttpException $exception){
-              $msg = $exception->getMessage();
+              $msg = $exception->getMessage()." avec code: ".$exception->getStatusCode();
               $response = new Response();
-	      $response->setStatusCode(400);	
+	      	  $response->setStatusCode(400);	
               $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
               $response->headers->set('Content-Type', 'application/json');
               return $response;
           }	
-  		
         $response = new Response();
-	$response->setStatusCode(200);
+		$response->setStatusCode(200);
         $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PUT-radcheck-OK", 'id' => $string .'/'.$ret)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -1716,23 +811,23 @@ class RadiusController extends FOSRestController
 			$this->container->get('radius.compte')->jsonVeri($request->request->all(), "reply");
 			$ret  = $this->container->get('radius.compte')->checkReply( $id , "reply",$request->request->all());
 		}catch(InvalidJsonException $exception){
-            $msg = $exception->getMessage();
+            $msg = $exception->getMessage()." avec code: ".$exception->getCode();
             $response = new Response();
-	    $response->setStatusCode(400);
+	    	$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
            return $response;
           }catch(NotFoundHttpException $exception){
-              $msg = $exception->getMessage();
+              $msg = $exception->getMessage()." avec code: ".$exception->getStatusCode();
               $response = new Response();
-	      $response->setStatusCode(400);
+	      	  $response->setStatusCode(400);
               $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
               $response->headers->set('Content-Type', 'application/json');
               return $response;
           }	
 		
         $response = new Response();
-	$response->setStatusCode(200);
+		$response->setStatusCode(200);
         $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PUT-radreply-OK", 'id' => $string .'/'.$ret )));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -1767,22 +862,22 @@ class RadiusController extends FOSRestController
 			$this->container->get('radius.compte')->jsonVeri($request->request->all(), "groupcheck");
 			$ret = $this->container->get('radius.compte')->checkReply( $id , "groupcheck",$request->request->all());	
 		}catch(InvalidJsonException $exception){
-            $msg = $exception->getMessage();
+            $msg = $exception->getMessage()." avec code: ".$exception->getCode();
             $response = new Response();
-	    $response->setStatusCode(400);
+	    	$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
            return $response;
           }catch(NotFoundHttpException $exception){
-              $msg = $exception->getMessage();
+              $msg = $exception->getMessage()." avec code: ".$exception->getStatusCode();
               $response = new Response();
-	      $response->setStatusCode(400);
+	      	  $response->setStatusCode(400);
               $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
               $response->headers->set('Content-Type', 'application/json');
               return $response;
           }
         $response = new Response();
-	$response->setStatusCode(200);
+		$response->setStatusCode(200);
         $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PUT-radgroupcheck-OK", 'id' => $string .'/'.$ret)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -1815,22 +910,22 @@ class RadiusController extends FOSRestController
 			$this->container->get('radius.compte')->jsonVeri($request->request->all(), "groupreply");
 			$ret = $this->container->get('radius.compte')->checkReply( $id , "groupreply",$request->request->all());	
 		}catch(InvalidJsonException $exception){
-            $msg = $exception->getMessage();
+            $msg = $exception->getMessage()." avec code: ".$exception->getCode();
             $response = new Response();
-	    $response->setStatusCode(400);
+	   	    $response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
             $response->headers->set('Content-Type', 'application/json');
            return $response;
           }catch(NotFoundHttpException $exception){
-              $msg = $exception->getMessage();
+              $msg = $exception->getMessage()." avec code: ".$exception->getStatusCode();
               $response = new Response();
-	      $response->setStatusCode(400);
+	      	  $response->setStatusCode(400);
               $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
               $response->headers->set('Content-Type', 'application/json');
               return $response;
           }
         $response = new Response();
-	$response->setStatusCode(200);
+		$response->setStatusCode(200);
         $response->setContent(json_encode(array('success' => TRUE,'msg' =>"PUT-radgroupreply-OK", 'id' => $string .'/'.$ret)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -1842,7 +937,7 @@ class RadiusController extends FOSRestController
 
 	  /**
        * SUPPRIME DANS LA TABLE userinfo 
-       * @Annotations\Delete("/users/{username}")
+       * @Annotations\Delete("/users/{id}")
        * @ApiDoc(
        *   resource = true,
        *   statusCodes = {
@@ -1856,23 +951,23 @@ class RadiusController extends FOSRestController
        * @return Response
        * @throws NotFoundHttpException when userinfo not exist
        */
-        public function deleteUserAction( $username, Request $request)
+        public function deleteUserAction( $id, Request $request)
         {
 			
             try{
 			  $string = $request->getRequestUri();
-              $id = $this->container->get('radius.compte')->delete($username,"userinfo");
-	      $ret = implode(",", $id);
+              $id = $this->container->get('radius.compte')->delete($id,"userinfo");
+	      	  $ret = implode(",", $id);
             }catch(NotFoundHttpException $exception){
-              $msg = $exception->getMessage();
+              $msg = $exception->getMessage()." avec code: ".$exception->getStatusCode();
               $response = new Response();
-	      $response->setStatusCode(400);
+	      	  $response->setStatusCode(400);
               $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
               $response->headers->set('Content-Type', 'application/json');
               return $response;
             }
             $response = new Response();
-	    $response->setStatusCode(200);
+	    	$response->setStatusCode(200);
             $response->setContent(json_encode(array('success' => TRUE,'msg' =>"DELETE-User-OK",'id' =>$string .'/'. $ret)));
             $response->headers->set('Content-Type', 'application/json');
             return $response;
@@ -1901,10 +996,10 @@ class RadiusController extends FOSRestController
 
             try{
 				$string = $request->getRequestUri();
-                $id = $this->container->get('radius.compte')->delete($groupname,"radiusgroup");
+                $id = $this->container->get('radius.compte')->delete($groupname,"groupinfo");
 				$ret = implode(",", $id);
             }catch(NotFoundHttpException $exception){
-              $msg = $exception->getMessage();
+              $msg = $exception->getMessage()." avec code: ".$exception->getStatusCode();
               $response = new Response();
 			  $response->setStatusCode(400);
               $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
@@ -1922,7 +1017,7 @@ class RadiusController extends FOSRestController
 
  	/**
      * SUPPRIME DANS LA TABLE radcheck
-     * @Annotations\Delete("/users/{username}/check")
+     * @Annotations\Delete("/users/{id}/check")
      * @ApiDoc(
      *   resource = true,
      *   statusCodes = {
@@ -1931,19 +1026,19 @@ class RadiusController extends FOSRestController
      *   }
      * )
      *
-     * @param string     $username
+     * @param integer     $id
      *
      * @return Response
      * @throws NotFoundHttpException when radcheck not exist
      */
-      public function deleteCheckAction($username, Request $request)
+      public function deleteCheckAction($id, Request $request)
       {
           try{
 			$string = $request->getRequestUri();
-            $id = $this->container->get('radius.compte')->delete($username,"check");
+            $id = $this->container->get('radius.compte')->delete($id,"check");
 			$ret = implode(",", $id);
           }catch(NotFoundHttpException $exception){
-            $msg = $exception->getMessage();
+            $msg = $exception->getMessage()." avec code: ".$exception->getStatusCode();
             $response = new Response();
 			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
@@ -1983,7 +1078,7 @@ class RadiusController extends FOSRestController
             $id = $this->container->get('radius.compte')->delete($groupname,"groupcheck");
 			$ret = implode(",", $id);
           }catch(NotFoundHttpException $exception){
-            $msg = $exception->getMessage();
+            $msg = $exception->getMessage()." avec code: ".$exception->getStatusCode();
             $response = new Response();
 			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
@@ -2002,7 +1097,7 @@ class RadiusController extends FOSRestController
 
  	/**
      * SUPPRIME DANS LA TABLE radreply
-     * @Annotations\Delete("/users/{username}/reply")
+     * @Annotations\Delete("/users/{id}/reply")
      * @ApiDoc(
      *   resource = true,
      *   statusCodes = {
@@ -2011,19 +1106,19 @@ class RadiusController extends FOSRestController
      *   }
      * )
      *
-     * @param string     $username
+     * @param  integer     $id
      *
      * @return Response
      * @throws NotFoundHttpException when radcheck not exist
      */
-      public function deleteReplyAction($username, Request $request)
+      public function deleteReplyAction($id, Request $request)
       {
           try{
 			$string = $request->getRequestUri();
-            $id = $this->container->get('radius.compte')->delete($username,"reply");
+            $id = $this->container->get('radius.compte')->delete($id,"reply");
 			$ret = implode(",", $id);
           }catch(NotFoundHttpException $exception){
-            $msg = $exception->getMessage();
+            $msg = $exception->getMessage()." avec code: ".$exception->getStatusCode();
             $response = new Response();
 			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
@@ -2063,7 +1158,7 @@ class RadiusController extends FOSRestController
             $id = $this->container->get('radius.compte')->delete($groupname,"groupreply");
 			$ret = implode(",", $id);
           }catch(NotFoundHttpException $exception){
-            $msg = $exception->getMessage();
+            $msg = $exception->getMessage()." avec code: ".$exception->getStatusCode();
             $response = new Response();
 			$response->setStatusCode(400);
             $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
@@ -2083,7 +1178,7 @@ class RadiusController extends FOSRestController
 
      /**
        * SUPPRIME DANS LA TABLE radusergroup
-       * @Annotations\Delete("/users/{username}/groups/{groupname}")
+       * @Annotations\Delete("/users/{id}/groups/{groupname}")
        * @ApiDoc(
        *   resource = true,
        *   statusCodes = {
@@ -2092,20 +1187,20 @@ class RadiusController extends FOSRestController
        *   }
        * )
        *
-       * @param string     $username
+       * @param integer     $id
 	   * @param string     $groupname
        *
        * @return Response
        * @throws NotFoundHttpException when radusergroup not exist
        */
-        public function deleteUsergroupAction($username,$groupname,Request $request)
+        public function deleteUsergroupAction($id,$groupname,Request $request)
         {
 
             try{
 				$string = $request->getRequestUri();
-              	$ret = $this->container->get('radius.compte')->deleteUsergroup($username,$groupname);
+              	$ret = $this->container->get('radius.compte')->deleteUsergroup($id,$groupname);
             }catch(NotFoundHttpException $exception){
-              $msg = $exception->getMessage();
+              $msg = $exception->getMessage()." avec code: ".$exception->getStatusCode();
               $response = new Response();
 			  $response->setStatusCode(400);
               $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
@@ -2124,7 +1219,7 @@ class RadiusController extends FOSRestController
 
       /**
        * @Annotations\Route(condition="request.attributes.get('version') == 'v1'")
-       * @Annotations\Get("/{id}/{table}",requirements = {"id"="\d+","table"="userinfo|radiusgroup|check|reply|groupcheck|groupreply"})
+       * @Annotations\Get("/{id}/{table}",requirements = {"id"="\d+","table"="userinfo|groupinfo|check|reply|groupcheck|groupreply"})
        * get les objects par id
        * @ApiDoc(
        *   resource = true,

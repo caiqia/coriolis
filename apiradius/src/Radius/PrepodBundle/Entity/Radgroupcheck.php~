@@ -45,7 +45,7 @@ class Radgroupcheck
     /**
      * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Radius\PrepodBundle\Entity\Radiusgroup")
+     * @ORM\ManyToOne(targetEntity="Radius\PrepodBundle\Entity\Groupinfo")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="groupname", referencedColumnName="groupname")
      * })
@@ -53,110 +53,5 @@ class Radgroupcheck
     private $groupname;
 
 
-
-    /**
-     * Set attribute
-     *
-     * @param string $attribute
-     *
-     * @return Radgroupcheck
-     */
-    public function setAttribute($attribute)
-    {
-        $this->attribute = $attribute;
-
-        return $this;
-    }
-
-    /**
-     * Get attribute
-     *
-     * @return string
-     */
-    public function getAttribute()
-    {
-        return $this->attribute;
-    }
-
-    /**
-     * Set op
-     *
-     * @param string $op
-     *
-     * @return Radgroupcheck
-     */
-    public function setOp($op)
-    {
-        $this->op = $op;
-
-        return $this;
-    }
-
-    /**
-     * Get op
-     *
-     * @return string
-     */
-    public function getOp()
-    {
-        return $this->op;
-    }
-
-    /**
-     * Set value
-     *
-     * @param string $value
-     *
-     * @return Radgroupcheck
-     */
-    public function setValue($value)
-    {
-        $this->value = $value;
-
-        return $this;
-    }
-
-    /**
-     * Get value
-     *
-     * @return string
-     */
-    public function getValue()
-    {
-        return $this->value;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set groupname
-     *
-     * @param string $groupname
-     *
-     * @return Radgroupcheck
-     */
-    public function setGroupname($groupname)
-    {
-        $this->groupname = $groupname;
-
-        return $this;
-    }
-
-    /**
-     * Get groupname
-     *
-     * @return string
-     */
-    public function getGroupname()
-    {
-        return $this->groupname;
-    }
 }
+
