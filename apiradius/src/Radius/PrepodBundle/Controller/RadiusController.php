@@ -64,6 +64,7 @@ class RadiusController extends FOSRestController
 
 
 
+
       /**
        * get pour l'entity groupinfo
        * @Annotations\Get("/groups/{groupname}")
@@ -265,6 +266,41 @@ class RadiusController extends FOSRestController
             return $response;
       }
 
+
+
+
+  	  /**
+       * creation d'un utilisateur
+       * @Annotations\Post("/users/name")
+       * @ApiDoc(
+       *    resource = true,
+       *    description = "creation d'un utilisateur",
+       *    statusCodes = {
+       *        200 = "returned when successful",
+       *        400 = "returned when the data has errors"
+       *    }
+       * )
+       * @param string  $username username of object
+       * @param Request $request  the request object
+       * @return Response
+	   */
+	  public function nametoIdAction( Request $request){
+ 			try{
+              $get = $this->container->get('radius.compte')->nametoId($request->request->all());
+            }catch(NotFoundHttpException $exception){
+              $msg = $exception->getMessage()." avec code: ".$exception->getStatusCode();
+              $response = new Response();
+	      	  $response->setStatusCode(400);
+              $response->setContent(json_encode(array('success' => FALSE,'msg' =>$msg)));
+              $response->headers->set('Content-Type', 'application/json');
+              return $response;
+            }
+            $response = new Response();
+	    	$response->setStatusCode(200);
+            $response->setContent(json_encode(array('success' => TRUE,'msg' =>$get)));
+            $response->headers->set('Content-Type', 'application/json');
+            return $response;
+		}
 
 
 

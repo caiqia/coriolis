@@ -593,6 +593,23 @@ class LUCompte
 			return $name;
 		}
 
+
+
+		/**
+		 * GET id AVEC username
+		 *
+		 *
+		 * @param string $username
+		 * @return integer $id
+		 *
+		 */
+		public function nametoId( array $parameters ){
+			
+   			$get = $this->getbyUsername("userinfo",$parameters["data"]["username"]);
+			$id = $get["userinfo"]->getId();
+			return $id;
+		}
+
 		 
 
 
@@ -652,9 +669,10 @@ class LUCompte
               switch($table){
 		
 				case "userinfo":
-                  $get = $this->userinfo->findByUsername($username);
+				  $get = array("userinfo" => null, "userbillinfo" => null);
+                  $get["userinfo"] = $this->userinfo->findByUsername($username)[0];
 				  if(!empty($this->userbillinfo->findByUsername($username))){
-						$get[] = $this->userbillinfo->findByUsername($username)[0];
+						$get["userbillinfo"] = $this->userbillinfo->findByUsername($username)[0];
 					}	  
                   break;
 				case "groupinfo":
