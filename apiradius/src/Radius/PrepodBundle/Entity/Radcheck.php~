@@ -43,7 +43,7 @@ class Radcheck
     private $id;
 
     /**
-     * @var string
+     * @var \Radius\PrepodBundle\Entity\Userinfo
      *
      * @ORM\ManyToOne(targetEntity="Radius\PrepodBundle\Entity\Userinfo")
      * @ORM\JoinColumns({

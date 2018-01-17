@@ -45,7 +45,7 @@ class Radgroupcheck
     /**
      * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Radius\PrepodBundle\Entity\Groupinfo")
+     * @ORM\ManyToOne(targetEntity="Radius\PrepodBundle\Entity\Radiusgroup")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="groupname", referencedColumnName="groupname")
      * })
@@ -143,7 +143,7 @@ class Radgroupcheck
      *
      * @return Radgroupcheck
      */
-    public function setGroupname( $groupname )
+    public function setGroupname($groupname)
     {
         $this->groupname = $groupname;
 

@@ -86,6 +86,89 @@ class LUCompte
 
 
 
+     /**
+      * verifier si url est correcte 
+      * @param array $search filter search array
+      * @param string $table entity radius
+      * 
+      *
+      * @throws InvalidJsonException
+      *
+      * @return 
+      */
+      public function searchVeri($search,$table){ 
+          $msg = 'incorrecte url paramettre';
+          if($table == "check" ||$table == "reply" ){
+             foreach ($search as $key => $value){
+                if(($key != 'id')&&($key != 'username')&&($key != 'op')&&($key != 'value')&&($key != 'attribute') ){                        
+                    throw new InvalidJsonException($msg,400);     
+                 }
+             }
+          }
+          if($table == "groupcheck" ||$table == "groupreply" ){
+               foreach ($search as $key => $value){
+                    if(($key != 'id')&&($key != 'groupname')&&($key != 'op')&&($key != 'value')&&($key != 'attribute') ){     
+                        throw new InvalidJsonException($msg,400);     
+                    }    
+               } 
+            }
+          if($table == "usergroup"  ){
+              foreach ($search as $key => $value){
+                  if(($key != 'groupname')&&($key != 'username')&&($key != 'priority') ){
+                        throw new InvalidJsonException($msg,400);
+                  }   
+              }
+          }
+		  if($table == "userinfo" || $table == "groupinfo"){
+				/*
+				ne vérifie pas parce qu'il y a trop de colonne dans userinfo				
+				*/
+			}
+           return;     
+      }
+
+
+
+
+
+        /**
+         * traite l'uri donnée par l'utilisateur
+         *  
+         * @param string $uri uri given by user
+         * @param array $search filter search array
+         * @param string $table entity radius
+         * @throws InvalidJsonException when usename doesn't existe
+         *  
+         *                                           
+         */
+	public function requestUri($uri, $search,$table ){
+             $msg = 'incorrecte url parametter';
+             $arg0 = strstr($uri,'?');          // des paramettres été ajoutés
+             if($arg0 == '?'){ 
+                return;
+            }
+            if(!empty($arg0)){              
+                $buff = strstr($arg0,'limit');
+                $param = true;                      
+                foreach($search as $key => $value){
+                    if(!empty($value)){
+                        if(($key!='limit')||(($key == 'limit')&&(!empty($buff)))){
+                              $param = false;                 
+                        }
+                    }
+                }
+                if($param){
+                    throw new InvalidJsonException($msg,400);       
+                }else{
+                     unset($search['offset']);
+                     unset($search['limit']);
+                    $this->searchVeri($search, $table);
+                }
+            }else{ 
+                return;
+            }
+         }
+
  
 			  
   	  /**
@@ -96,16 +179,17 @@ class LUCompte
        public function groups($parameters){	 
            $post = new Groupinfo;
            $post->setGroupname($parameters["data"]["groupname"]);
-	   	   $this->om->persist($post);
-	   	   $this->om->flush();
-	   	   return $post->getId();
+			$post->setDescription($parameters["data"]["description"]);
+	   $this->om->persist($post);
+	   $this->om->flush();
+	   return $post->getId();
        }
 
 
 
 
       /**
-       * post et put dans radcheck, radreply, radgroupcheck et radgroupreply
+       * post et patch dans radcheck, radreply, radgroupcheck et radgroupreply
 	   * @param integer $id
 	   * @param string $table
        * @param array $parameters
@@ -163,6 +247,7 @@ class LUCompte
 				}	
 			}		
 			return $ret;
+						
        }
 
 
@@ -180,8 +265,8 @@ class LUCompte
 			case "userinfo":
                return new Userinfo;
               break;
-			case "groupinfo":
-               return new Groupinfo;
+			case "radiusgroup":
+               return new Radiusgroup;
               break;
             case "reply":
                return new Radreply;
@@ -202,6 +287,25 @@ class LUCompte
           return;
       }
   
+
+	  /**
+	   * compare username dans userinfo et dans json
+	   *
+	   * @param integer $id id of userinfo
+	   * @throws InvalidJsonException when username is not the same
+	   * @return  
+	   */
+	  public function compareName($id,$parameters){
+			$msg = "username incorrecte";
+	  		$name = $this->idtoName($id);
+			if($name == $parameters["data"]["username"]){
+				return;
+			}else{
+				throw new InvalidJsonException($msg,400);
+				return;			
+			}
+	  }
+
 
 
 	  /**
@@ -226,25 +330,6 @@ class LUCompte
 			}
 	   		return $get;
        }
-
-
-	  /**
-	   * compare username dans userinfo et dans json
-	   *
-	   * @param integer $id id of userinfo
-	   * @throws InvalidJsonException when username is not the same
-	   * @return  
-	   */
-	  public function compareName($id,$parameters){
-			$msg = "username incorrecte";
-	  		$name = $this->idtoName($id);
-			if($name == $parameters["data"]["username"]){
-				return;
-			}else{
-				throw new InvalidJsonException($msg,400);
-				return;			
-			}
-	  }
 
 
 
@@ -420,7 +505,7 @@ class LUCompte
                       }
                 }
               break;
-			 case "groupinfo":
+			 case "radiusgroup":
                 $cpt = array(1);
                 foreach ($data as $key => $value){
                       if($key == "groupname"){
@@ -455,8 +540,8 @@ class LUCompte
 			case "userinfo":
             $all = $this->userinfo->findBy($search, null, $limit, $offset);
             break;
-			case "groupinfo":
-            $all = $this->groupinfo->findBy($search, null, $limit, $offset);
+			case "radiusgroup":
+            $all = $this->radiusgroup->findBy($search, null, $limit, $offset);
             break;
           case "reply":
             $all = $this->radreply->findBy($search, null, $limit, $offset);
@@ -494,8 +579,8 @@ class LUCompte
 			case "userinfo":
               $entity_class = "RadiusPrepodBundle:Userinfo";
               break;
-			case "groupinfo":
-              $entity_class = "RadiusPrepodBundle:Groupinfo";
+			case "radiusgroup":
+              $entity_class = "RadiusPrepodBundle:Radiusgroup";
               break;
             case "reply":
               $entity_class = "RadiusPrepodBundle:Radreply";
@@ -555,9 +640,8 @@ class LUCompte
               }
               return $ar;
           }
+  
 
-
-	
 		/**
          * DELETE DANS LA TABLE radusergroup
          *
@@ -573,45 +657,9 @@ class LUCompte
                 $this->om->flush();
               return $ar;
           }
-
-
-		/**
-		 * GET username AVEC id
-		 *
-		 *
-		 * @param integer $id
-		 * @return string $username
-		 *
-		 */
-		public function idtoName( $id ){
-   			$get = $this->userinfo->findOneById($id);
-			if(empty($get)){
-				throw new NotFoundHttpException(sprintf('\'%s\' DANS \'userinfo\' N\'EXISTE PAS.',$id));
-				return;
-			}
-			$name = $get->getUsername();
-			return $name;
-		}
-
-
-
-		/**
-		 * GET id AVEC username
-		 *
-		 *
-		 * @param string $username
-		 * @return integer $id
-		 *
-		 */
-		public function nametoId( array $parameters ){
-			
-   			$get = $this->getbyUsername("userinfo",$parameters["data"]["username"]);
-			$id = $get["userinfo"]->getId();
-			return $id;
-		}
-
-		 
-
+	
+	
+		
 
 	      /**
            * Get an OBJET
@@ -627,8 +675,8 @@ class LUCompte
 				 case "userinfo":
                   $get = $this->userinfo->findOneById($id);
                   break;
-				 case "groupinfo":
-                  $get = $this->groupinfo->findOneById($id);
+				 case "radiusgroup":
+                  $get = $this->radiusgroup->findOneById($id);
                   break;
                 case "reply":
                   $get = $this->radreply->findOneById($id);
@@ -653,8 +701,42 @@ class LUCompte
 
 
 
+		/**
+		 * GET username AVEC id
+		 *
+		 *
+		 * @param integer $id
+		 * @return string $username
+		 *
+		 */
+		public function idtoName( $id ){
+   			$get = $this->userinfo->findOneById($id);
+			if(empty($get)){
+				throw new NotFoundHttpException(sprintf('\'%s\' DANS \'userinfo\' N\'EXISTE PAS.',$id));
+				return;
+			}
+			$name = $get->getUsername();
+			return $name;
+		}
 
-          /**
+
+		/**
+		 * GET id AVEC username
+		 *
+		 *
+		 * @param string $username
+		 * @return integer $id
+		 *
+		 */
+		public function nametoId( array $parameters ){
+			
+   			$get = $this->getbyUsername("userinfo",$parameters["data"]["username"]);
+			$id = $get["userinfo"]->getId();
+			return $id;
+		}
+
+
+		  /**
            * Get an OBJET
            *
 		   * @param string $table
@@ -665,7 +747,6 @@ class LUCompte
            *
            */
             public function getbyUsername($table, $username) {
-
               switch($table){
 		
 				case "userinfo":
@@ -698,8 +779,9 @@ class LUCompte
                 throw new NotFoundHttpException(sprintf('\'%s\' DANS \'%s\' N\'EXISTE PAS.',$username,$table));
               }
               return $get;
-
             }
+
+
 
 
         /**

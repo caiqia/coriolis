@@ -1,9 +1,6 @@
 <?php
-
 namespace Radius\PrepodBundle\Entity;
-
 use Doctrine\ORM\Mapping as ORM;
-
 /**
  * Groupinfo
  *
@@ -18,14 +15,12 @@ class Groupinfo
      * @ORM\Column(name="groupname", type="string", length=64, nullable=false)
      */
     private $groupname;
-
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="string", length=255, nullable=true)
      */
     private $description;
-
     /**
      * @var integer
      *
@@ -34,14 +29,12 @@ class Groupinfo
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
-
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\ManyToMany(targetEntity="Radius\PrepodBundle\Entity\Userinfo", mappedBy="groupname")
      */
     private $username;
-
     /**
      * Constructor
      */
@@ -49,8 +42,6 @@ class Groupinfo
     {
         $this->username = new \Doctrine\Common\Collections\ArrayCollection();
     }
-
-
     /**
      * Set groupname
      *
@@ -61,10 +52,8 @@ class Groupinfo
     public function setGroupname($groupname)
     {
         $this->groupname = $groupname;
-
         return $this;
     }
-
     /**
      * Get groupname
      *
@@ -74,7 +63,6 @@ class Groupinfo
     {
         return $this->groupname;
     }
-
     /**
      * Set description
      *
@@ -85,10 +73,8 @@ class Groupinfo
     public function setDescription($description)
     {
         $this->description = $description;
-
         return $this;
     }
-
     /**
      * Get description
      *
@@ -98,7 +84,6 @@ class Groupinfo
     {
         return $this->description;
     }
-
     /**
      * Get id
      *
@@ -108,7 +93,6 @@ class Groupinfo
     {
         return $this->id;
     }
-
     /**
      * Add username
      *
@@ -119,10 +103,8 @@ class Groupinfo
     public function addUsername(\Radius\PrepodBundle\Entity\Userinfo $username)
     {
         $this->username[] = $username;
-
         return $this;
     }
-
     /**
      * Remove username
      *
@@ -132,7 +114,6 @@ class Groupinfo
     {
         $this->username->removeElement($username);
     }
-
     /**
      * Get username
      *

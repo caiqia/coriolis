@@ -175,28 +175,6 @@ class Userinfo
      */
     private $id;
 
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Radius\PrepodBundle\Entity\Groupinfo", inversedBy="username")
-     * @ORM\JoinTable(name="radusergroup",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="username", referencedColumnName="username")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="groupname", referencedColumnName="groupname")
-     *   }
-     * )
-     */
-    private $groupname;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->groupname = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
 }
 

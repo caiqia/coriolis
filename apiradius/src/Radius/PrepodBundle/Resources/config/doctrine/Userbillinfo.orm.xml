@@ -6,7 +6,6 @@
     </indexes>
     <unique-constraints>
       <unique-constraint name="ind_name" columns="username"/>
-      <unique-constraint name="ind_nom" columns="username"/>
     </unique-constraints>
     <id name="id" type="integer" column="id">
       <generator strategy="IDENTITY"/>

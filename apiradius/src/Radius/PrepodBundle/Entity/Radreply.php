@@ -55,6 +55,30 @@ class Radreply
 
 
     /**
+     * Set username
+     *
+     * @param string $username
+     *
+     * @return Radreply
+     */
+    public function setUsername($username)
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    /**
+     * Get username
+     *
+     * @return string
+     */
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    /**
      * Set attribute
      *
      * @param string $attribute
@@ -134,29 +158,5 @@ class Radreply
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set username
-     *
-     * @param string $username
-     *
-     * @return Radreply
-     */
-    public function setUsername( $username )
-    {
-        $this->username = $username;
-
-        return $this;
-    }
-
-    /**
-     * Get username
-     *
-     * @return string
-     */
-    public function getUsername()
-    {
-        return $this->username;
     }
 }
