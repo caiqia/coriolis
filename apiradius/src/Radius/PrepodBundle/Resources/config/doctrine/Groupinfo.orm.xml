@@ -17,6 +17,5 @@
         <option name="fixed"/>
       </options>
     </field>
-    <many-to-many field="username" target-entity="Userinfo" mapped-by="groupname" fetch="LAZY"/>
   </entity>
 </doctrine-mapping>

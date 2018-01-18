@@ -86,7 +86,7 @@ class RadiusController extends FOSRestController
       public function getGroupAction( $groupname, Request $request)
       {
             try{
-              $get = $this->container->get('radius.compte')->getbyUsername("radiusgroup", $groupname);
+              $get = $this->container->get('radius.compte')->getbyUsername("groupinfo", $groupname);
             }catch(NotFoundHttpException $exception){
               $msg = $exception->getMessage();
               $response = new Response();

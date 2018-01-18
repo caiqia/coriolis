@@ -29,19 +29,7 @@ class Groupinfo
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Radius\PrepodBundle\Entity\Userinfo", mappedBy="groupname")
-     */
-    private $username;
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->username = new \Doctrine\Common\Collections\ArrayCollection();
-    }
+  
     /**
      * Set groupname
      *
@@ -93,34 +81,7 @@ class Groupinfo
     {
         return $this->id;
     }
-    /**
-     * Add username
-     *
-     * @param \Radius\PrepodBundle\Entity\Userinfo $username
-     *
-     * @return Groupinfo
-     */
-    public function addUsername(\Radius\PrepodBundle\Entity\Userinfo $username)
-    {
-        $this->username[] = $username;
-        return $this;
-    }
-    /**
-     * Remove username
-     *
-     * @param \Radius\PrepodBundle\Entity\Userinfo $username
-     */
-    public function removeUsername(\Radius\PrepodBundle\Entity\Userinfo $username)
-    {
-        $this->username->removeElement($username);
-    }
-    /**
-     * Get username
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getUsername()
-    {
-        return $this->username;
-    }
+  
+  
+  
 }
