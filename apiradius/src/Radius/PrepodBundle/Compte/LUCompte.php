@@ -44,7 +44,7 @@ class LUCompte
           $this->radcheck = $this->om->getRepository("RadiusPrepodBundle:Radcheck");
           $this->radusergroup = $this->om->getRepository("RadiusPrepodBundle:Radusergroup");
           $this->userinfo = $this->om->getRepository("RadiusPrepodBundle:Userinfo");
-		  $this->groupinfo = $this->om->getRepository("RadiusPrepodBundle:Groupinfo");
+	  $this->groupinfo = $this->om->getRepository("RadiusPrepodBundle:Groupinfo");
           $this->userbillinfo = $this->om->getRepository("RadiusPrepodBundle:Userbillinfo");
       }
 
@@ -52,7 +52,7 @@ class LUCompte
 
 
 
-	  /**
+      /**
        * creation d'un utilisateur
        * @param array $parameters the parameters in POST request body
        * @return integer 
@@ -179,7 +179,7 @@ class LUCompte
        public function groups($parameters){	 
            $post = new Groupinfo;
            $post->setGroupname($parameters["data"]["groupname"]);
-			$post->setDescription($parameters["data"]["description"]);
+	   $post->setDescription($parameters["data"]["description"]);
 	   $this->om->persist($post);
 	   $this->om->flush();
 	   return $post->getId();
@@ -199,9 +199,9 @@ class LUCompte
 			if($id != null){                        //method PUT
 				if($table == null){                 //entity radusergroup
 					$put = $this->getUsergroup($id[0],$id[1]);
-				    $put->setPriority($parameters["data"]["priority"]);
+				        $put->setPriority($parameters["data"]["priority"]);
 					$this->om->persist($put);
-              		$this->om->flush();	
+              		                $this->om->flush();	
 					$ret = $put->getUsername();				
 				}else{                              //radcheck,radreply,radgroupcheck,radgroupreply                              
 					$put = $this->getbyId($table, $id);
@@ -209,7 +209,7 @@ class LUCompte
 		   			$put->setOp($parameters["data"]["op"]);
 		   			$put->setValue($parameters["data"]["value"]);
 					$this->om->persist($put);
-              		$this->om->flush();
+              		                $this->om->flush();
 					$ret = $put->getId();				
 				}		
 			}else{                                     //method POST
@@ -262,11 +262,11 @@ class LUCompte
        */
       public function newObject($table){
           switch($table){
-			case "userinfo":
+	    case "userinfo":
                return new Userinfo;
               break;
-			case "radiusgroup":
-               return new Radiusgroup;
+	    case "groupinfo":
+               return new Groupinfo;
               break;
             case "reply":
                return new Radreply;
@@ -505,7 +505,7 @@ class LUCompte
                       }
                 }
               break;
-			 case "radiusgroup":
+			 case "groupinfo":
                 $cpt = array(1);
                 foreach ($data as $key => $value){
                       if($key == "groupname"){
@@ -537,11 +537,11 @@ class LUCompte
        */
       public function all($table, $limit = 5, $offset = 0, $search = array()) {
         switch($table){
-			case "userinfo":
+	  case "userinfo":
             $all = $this->userinfo->findBy($search, null, $limit, $offset);
             break;
-			case "radiusgroup":
-            $all = $this->radiusgroup->findBy($search, null, $limit, $offset);
+	  case "groupinfo":
+            $all = $this->groupinfo->findBy($search, null, $limit, $offset);
             break;
           case "reply":
             $all = $this->radreply->findBy($search, null, $limit, $offset);
@@ -550,7 +550,6 @@ class LUCompte
             $all = $this->radcheck->findBy($search, null, $limit, $offset);
             break;
           case "groupcheck":
-            //array('groupname' => 'ctx-GP-324324')
             $all = $this->radgroupcheck->findBy($search, null, $limit, $offset);
             break;
           case "groupreply":
@@ -576,11 +575,11 @@ class LUCompte
       public function count($table, $search = array()) {
 
           switch($table){
-			case "userinfo":
+	    case "userinfo":
               $entity_class = "RadiusPrepodBundle:Userinfo";
               break;
-			case "radiusgroup":
-              $entity_class = "RadiusPrepodBundle:Radiusgroup";
+	    case "groupinfo":
+              $entity_class = "RadiusPrepodBundle:Groupinfo";
               break;
             case "reply":
               $entity_class = "RadiusPrepodBundle:Radreply";
@@ -630,28 +629,25 @@ class LUCompte
          *
          */
           public function delete($id,$table) {
-              $ar = array();
-			  $username = $this->idtoName($id);
-              $delete = $this->getbyUsername($table, $username);
-              foreach ($delete as $value) {
-                $ar[] = $value->getId();
-                $this->om->remove($value);
+              
+              $delete = $this->getbyId($table, $id);
+                $value = $delete->getId();
+                $this->om->remove($delete);
                 $this->om->flush();
-              }
-              return $ar;
+              return $value;
           }
   
 
-		/**
+	/**
          * DELETE DANS LA TABLE radusergroup
          *
          * @param string $table
          * @param integer $id
-		 * @return integer 
+	 * @return integer 
          *
          */
           public function deleteUsergroup($id,$groupname) {
-				$delete = $this->getUsergroup($id,$groupname);
+		$delete = $this->getUsergroup($id,$groupname);
                 $ar = $delete->getUsername();
                 $this->om->remove($delete);
                 $this->om->flush();
@@ -661,22 +657,22 @@ class LUCompte
 	
 		
 
-	      /**
+	  /**
            * Get an OBJET
            *
            * @param mixed $username
            *
-		   * @throws NotFoundHttpException when row not exist
+	   * @throws NotFoundHttpException when row not exist
            * @return array
            *
            */
             public function getbyId($table, $id) {
               switch($table){
-				 case "userinfo":
+		case "userinfo":
                   $get = $this->userinfo->findOneById($id);
                   break;
-				 case "radiusgroup":
-                  $get = $this->radiusgroup->findOneById($id);
+		case "groupinfo":
+                  $get = $this->groupinfo->findOneById($id);
                   break;
                 case "reply":
                   $get = $this->radreply->findOneById($id);

@@ -466,26 +466,26 @@ class RadiusController extends FOSRestController
 			$ret = $this->container->get('radius.compte')->checkReply(null,"check",$request->request->all());
  		}catch(UniqueConstraintViolationException $exception){
 			$msg = "UniqueConstraintViolation : ".$exception->getErrorCode();
-            $response = new Response();
+                        $response = new Response();
 			$response->setStatusCode(400);
-            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
-            $response->headers->set('Content-Type', 'application/json');
-            return $response;
+                        $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+                        $response->headers->set('Content-Type', 'application/json');
+                        return $response;
 		}
 		catch(ForeignKeyConstraintViolationException $exception){
 			$msg = "ForeignKeyConstraintViolation : ".$exception->getErrorCode();
                         $response = new Response();
 			$response->setStatusCode(400);
-            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
-            $response->headers->set('Content-Type', 'application/json');
-            return $response;
+                        $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+                        $response->headers->set('Content-Type', 'application/json');
+                        return $response;
 		}catch(InvalidJsonException $exception){
-            $msg = $exception->getMessage()." avec code: ".$exception->getCode();
-            $response = new Response();
-	    	$response->setStatusCode(400);
-            $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
-            $response->headers->set('Content-Type', 'application/json');
-           return $response;
+                    $msg = $exception->getMessage()." avec code: ".$exception->getCode();
+                    $response = new Response();
+	    	    $response->setStatusCode(400);
+                    $response->setContent(json_encode(array('success' => FALSE,'msg' => $msg)));
+                    $response->headers->set('Content-Type', 'application/json');
+                    return $response;
           }catch(NotFoundHttpException $exception){
               $msg = $exception->getMessage()." avec code: ".$exception->getStatusCode();
               $response = new Response();
@@ -1029,9 +1029,8 @@ class RadiusController extends FOSRestController
         {
 			
             try{
-			  $string = $request->getRequestUri();
-              $id = $this->container->get('radius.compte')->delete($id,"userinfo");
-	      	  $ret = implode(",", $id);
+		$string = $request->getRequestUri();
+                $ret = $this->container->get('radius.compte')->delete($id,"userinfo");
             }catch(NotFoundHttpException $exception){
               $msg = $exception->getMessage()." avec code: ".$exception->getStatusCode();
               $response = new Response();
@@ -1071,9 +1070,8 @@ class RadiusController extends FOSRestController
         {
 
             try{
-				$string = $request->getRequestUri();
-                $id = $this->container->get('radius.compte')->delete($groupname,"radiusgroup");
-				$ret = implode(",", $id);
+		$string = $request->getRequestUri();
+                $ret = $this->container->get('radius.compte')->delete($groupname,"groupinfo");
             }catch(NotFoundHttpException $exception){
               $msg = $exception->getMessage();
               $response = new Response();
@@ -1111,8 +1109,7 @@ class RadiusController extends FOSRestController
       {
           try{
 			$string = $request->getRequestUri();
-            $id = $this->container->get('radius.compte')->delete($id,"check");
-			$ret = implode(",", $id);
+            $ret = $this->container->get('radius.compte')->delete($id,"check");
           }catch(NotFoundHttpException $exception){
             $msg = $exception->getMessage()." avec code: ".$exception->getStatusCode();
             $response = new Response();
@@ -1151,8 +1148,7 @@ class RadiusController extends FOSRestController
       {
           try{
 			$string = $request->getRequestUri();
-            $id = $this->container->get('radius.compte')->delete($groupname,"groupcheck");
-			$ret = implode(",", $id);
+            $ret = $this->container->get('radius.compte')->delete($groupname,"groupcheck");
           }catch(NotFoundHttpException $exception){
             $msg = $exception->getMessage();
             $response = new Response();
@@ -1191,8 +1187,7 @@ class RadiusController extends FOSRestController
       {
           try{
 			$string = $request->getRequestUri();
-            $id = $this->container->get('radius.compte')->delete($id,"reply");
-			$ret = implode(",", $id);
+            $ret = $this->container->get('radius.compte')->delete($id,"reply");
           }catch(NotFoundHttpException $exception){
             $msg = $exception->getMessage()." avec code: ".$exception->getStatusCode();
             $response = new Response();
@@ -1231,8 +1226,7 @@ class RadiusController extends FOSRestController
       {
           try{
 			$string = $request->getRequestUri();
-            $id = $this->container->get('radius.compte')->delete($groupname,"groupreply");
-			$ret = implode(",", $id);
+            $ret = $this->container->get('radius.compte')->delete($groupname,"groupreply");
           }catch(NotFoundHttpException $exception){
             $msg = $exception->getMessage();
             $response = new Response();
@@ -1271,7 +1265,7 @@ class RadiusController extends FOSRestController
         public function deleteUsergroupAction($id,$groupname,Request $request)
         {
             try{
-				$string = $request->getRequestUri();
+		$string = $request->getRequestUri();
               	$ret = $this->container->get('radius.compte')->deleteUsergroup($id,$groupname);
             }catch(NotFoundHttpException $exception){
               $msg = $exception->getMessage()." avec code: ".$exception->getStatusCode();
