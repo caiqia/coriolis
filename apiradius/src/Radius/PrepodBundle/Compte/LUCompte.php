@@ -186,25 +186,56 @@ class LUCompte
        }
 
 
+     /**
+      * check si data est correcte pour PUT et DELETE
+      * @param string $username
+      * @param string $groupname
+      * @param string $parameters
+      * @throws InvalidJsonException when data is not correct
+      * @return
+      */
+  public function putOrdeleteData($username,$groupname,$parameters){
+        $msg = "username or groupname of data incorrect";
+        if(!empty($username)){
+            if($username != $parameters["data"]["username"]){
+                throw new InvalidJsonException($msg,400);
+                return;
+            }
+        }
+        if(!empty($groupname)){
+            if($groupname !=$parameters["data"]["groupname"]){
+                throw new InvalidJsonException($msg,400);
+                return;
+            }
+        }
+  
+  }
 
 
       /**
        * post et patch dans radcheck, radreply, radgroupcheck et radgroupreply
-	   * @param integer $id
-	   * @param string $table
+       * @param integer $id
+       * @param string $table
        * @param array $parameters
        * @return mixed $ret
        */
        public function checkReply($id,$table,$parameters){
 			if($id != null){                        //method PUT
 				if($table == null){                 //entity radusergroup
-					$put = $this->getUsergroup($id[0],$id[1]);
+                                    $put = $this->getUsergroup($id[0],$id[1]);
+                                    $this->putOrdeleteData($put->getUsername(),$put->getGroupname(),$parameters);
 				        $put->setPriority($parameters["data"]["priority"]);
 					$this->om->persist($put);
               		                $this->om->flush();	
 					$ret = $put->getUsername();				
 				}else{                              //radcheck,radreply,radgroupcheck,radgroupreply                              
-					$put = $this->getbyId($table, $id);
+                                    $put = $this->getbyId($table, $id);
+                                    if(($table=="check") || ($table == "reply")){
+                                        $this->putOrdeleteData($put->getUsername(),null,$parameters);
+                                    }
+                                    if(($table=="groupcheck") ||($table == "groupreply")){
+                                        $this->putOrdeleteData(null,$put->getGroupname(),$parameters);
+                                    }
 					$put->setAttribute($parameters["data"]["attribute"]);
 		   			$put->setOp($parameters["data"]["op"]);
 		   			$put->setValue($parameters["data"]["value"]);
@@ -626,11 +657,18 @@ class LUCompte
          *
          * @param string $table
          * @param integer $id
+         * @param array $parameters
          *
          */
-          public function delete($id,$table) {
-              
+          public function delete($id,$table,$parameters) {
+                   
               $delete = $this->getbyId($table, $id);
+              if(($table=="check")||($table=="reply")||($table=="userinfo")){
+                $this->putOrdeleteData($delete->getUsername(),null,$parameters);
+              }
+              if(($table=="groupcheck")||($table=="groupreply")||($table=="groupinfo")){
+                $this->putOrdeleteData(null,$delete->getGroupname(),$parameters);
+              }
                 $value = $delete->getId();
                 $this->om->remove($delete);
                 $this->om->flush();
@@ -643,11 +681,13 @@ class LUCompte
          *
          * @param string $table
          * @param integer $id
+         * @param string $parameters
 	 * @return integer 
          *
          */
-          public function deleteUsergroup($id,$groupname) {
-		$delete = $this->getUsergroup($id,$groupname);
+          public function deleteUsergroup($id,$groupname,$parameters) {
+              $delete = $this->getUsergroup($id,$groupname);
+              $this->putOrdeleteData($delete->getUsername(),$delete->getGroupname(),$parameters);
                 $ar = $delete->getUsername();
                 $this->om->remove($delete);
                 $this->om->flush();
