@@ -663,12 +663,12 @@ class LUCompte
           public function delete($id,$table,$parameters) {
                    
               $delete = $this->getbyId($table, $id);
-              if(($table=="check")||($table=="reply")||($table=="userinfo")){
-                $this->putOrdeleteData($delete->getUsername(),null,$parameters);
-              }
-              if(($table=="groupcheck")||($table=="groupreply")||($table=="groupinfo")){
-                $this->putOrdeleteData(null,$delete->getGroupname(),$parameters);
-              }
+//              if(($table=="check")||($table=="reply")||($table=="userinfo")){
+//                $this->putOrdeleteData($delete->getUsername(),null,$parameters);
+//              }
+//              if(($table=="groupcheck")||($table=="groupreply")||($table=="groupinfo")){
+//                $this->putOrdeleteData(null,$delete->getGroupname(),$parameters);
+//              }
                 $value = $delete->getId();
                 $this->om->remove($delete);
                 $this->om->flush();
@@ -687,7 +687,7 @@ class LUCompte
          */
           public function deleteUsergroup($id,$groupname,$parameters) {
               $delete = $this->getUsergroup($id,$groupname);
-              $this->putOrdeleteData($delete->getUsername(),$delete->getGroupname(),$parameters);
+//              $this->putOrdeleteData($delete->getUsername(),$delete->getGroupname(),$parameters);
                 $ar = $delete->getUsername();
                 $this->om->remove($delete);
                 $this->om->flush();
