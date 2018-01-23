@@ -273,7 +273,7 @@ class LUCompte
 					$post->setGroupname($parameters["data"]["groupname"]);	
 					$post->setPriority($parameters["data"]["priority"]);
 					$this->om->persist($post);
-           			$this->om->flush();
+                       			$this->om->flush();
 					$ret = $post->getUsername();
 				}	
 			}		
@@ -711,6 +711,9 @@ class LUCompte
 		case "userinfo":
                   $get = $this->userinfo->findOneById($id);
                   break;
+                case "userbillinfo":
+                    $get = $this->userbillinfo->findOneById($id);
+                    break;
 		case "groupinfo":
                   $get = $this->groupinfo->findOneById($id);
                   break;
@@ -727,7 +730,9 @@ class LUCompte
                     $get = $this->radgroupreply->findOneById($id);
                     break;
               }
+              
               if(empty($get)){
+                  
                 throw new NotFoundHttpException(sprintf('\'%s\' DANS \'rad%s\' N\'EXISTE PAS.',$id,$table));
               }
               return $get;
@@ -738,7 +743,7 @@ class LUCompte
 
 
 		/**
-		 * GET username AVEC id
+		 * GET username AVEC id dans userinfo
 		 *
 		 *
 		 * @param integer $id
@@ -764,10 +769,11 @@ class LUCompte
 		 * @return integer $id
 		 *
 		 */
-		public function nametoId( array $parameters ){
-			
-   			$get = $this->getbyUsername("userinfo",$parameters["data"]["username"]);
-			$id = $get["userinfo"]->getId();
+		public function nametoId( $username ){
+			$id = array("userinfo" => null,"userbillinfo" => null);
+   			$get = $this->getbyUsername("userinfo",$username);
+                        $id["userinfo"] = $get["userinfo"][0]->getId();
+                        $id["userbillinfo"] = $get["userbillinfo"][0]->getId();
 			return $id;
 		}
 
@@ -785,14 +791,12 @@ class LUCompte
             public function getbyUsername($table, $username) {
               switch($table){
 		
-				case "userinfo":
-				  $get = array("userinfo" => null, "userbillinfo" => null);
-                  $get["userinfo"] = $this->userinfo->findByUsername($username)[0];
-				  if(!empty($this->userbillinfo->findByUsername($username))){
-						$get["userbillinfo"] = $this->userbillinfo->findByUsername($username)[0];
-					}	  
+		case "userinfo":
+		  $get = array("userinfo" => null, "userbillinfo" => null);
+                  $get["userinfo"] = $this->userinfo->findByUsername($username);
+                  $get["userbillinfo"] = $this->userbillinfo->findByUsername($username);	  
                   break;
-				case "groupinfo":
+		case "groupinfo":
                   $get = $this->groupinfo->findByGroupname($username);
                   break;
                 case "reply":
