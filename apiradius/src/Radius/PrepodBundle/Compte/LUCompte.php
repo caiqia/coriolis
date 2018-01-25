@@ -55,7 +55,7 @@ class LUCompte
       /**
        * creation d'un utilisateur
        * @param array $parameters the parameters in POST request body
-       * @return integer 
+       * @return array $id id of userinfo and userbillinfo
        */
        public function users($parameters){	 
            $post = new Userinfo;
@@ -138,7 +138,7 @@ class LUCompte
          * @param array $search filter search array
          * @param string $table entity radius
          * @throws InvalidJsonException when usename doesn't existe
-         *  
+         * @return 
          *                                           
          */
 	public function requestUri($uri, $search,$table ){
@@ -171,10 +171,10 @@ class LUCompte
 
  
 			  
-  	  /**
+      /**
        * creation d'un group
-       * @param array $parameters
-       * @return 
+       * @param array $parameters data for the creation of group
+       * @return integer $id id of groupinfo 
        */
        public function groups($parameters){	 
            $post = new Groupinfo;
@@ -188,9 +188,9 @@ class LUCompte
 
      /**
       * check si data est correcte pour PUT et DELETE
-      * @param string $username
-      * @param string $groupname
-      * @param string $parameters
+      * @param string $username username for user
+      * @param string $groupname groupname for group
+      * @param string $parameters data json given by client
       * @throws InvalidJsonException when data is not correct
       * @return
       */
@@ -207,17 +207,16 @@ class LUCompte
                 throw new InvalidJsonException($msg,400);
                 return;
             }
-        }
-  
+        } 
   }
 
 
       /**
        * post et patch dans radcheck, radreply, radgroupcheck et radgroupreply
-       * @param integer $id
-       * @param string $table
-       * @param array $parameters
-       * @return mixed $ret
+       * @param integer $id id of table for PUT , null for POST
+       * @param string $table table of radius
+       * @param array $parameters data json given by client
+       * @return mixed $ret primary key
        */
        public function checkReply($id,$table,$parameters){
 			if($id != null){                        //method PUT
@@ -342,9 +341,9 @@ class LUCompte
 	  /**
 	   * get objet radusergroup
 	   *
-	   * @param integer $id
-	   * @param string $groupname
-	   * @return Radusergroup $get
+	   * @param integer $id id of user
+	   * @param string $groupname groupname of group
+	   * @return Radusergroup $get 
 	   */
 	   public function getUsergroup($id,$groupname){
 			$user = $this->getbyId("userinfo",$id);
@@ -364,49 +363,14 @@ class LUCompte
 
 
 
-      /**
-       * verifier si username double
-       *
-       * @param string $username filter search array
-       *
-       * @return boolean
-       */
-      public function veriCheck($username){
 
-          $get = $this->radcheck->findByUsername($username);
-
-          if(empty($get)){
-                return TRUE;
-            }else{
-              return FALSE;
-            }
-      }
-
-
-
-      /**
-       * verifier si username double
-       *
-       * @param string $username filter search array
-       *
-       * @return boolean
-       */
-      public function veriGroupcheck($groupname){
-
-          $get = $this->radgroupcheck->findByGroupname($groupname);
-
-          if(empty($get)){
-                return TRUE;
-            }else{
-              return FALSE;
-            }
-      }
 
 
       /**
        * VERIFIER FORMAT JSON
        *
        * @param array $parameters filter search array
+       * @param string $table table of radius
        * @throws InvalidJsonException when json format is not correct
        *
        * @return
@@ -524,7 +488,7 @@ class LUCompte
                       }
                 }
               break;
-			 case "userinfo":
+	    case "userinfo":
                 $cpt = array(1);
                 foreach ($data as $key => $value){
                       if($key == "username"){
@@ -596,7 +560,7 @@ class LUCompte
 
 
       /**
-       * Get the count of Radreply.
+       * Get the count of table
        *
        * @param string $table filter search array
        * @param array $search filter search array
@@ -655,9 +619,9 @@ class LUCompte
         /**
          * DELETE DANS UNE TABLE
          *
-         * @param string $table
-         * @param integer $id
-         * @param array $parameters
+         * @param string $table table of radius
+         * @param integer $id id in the table
+         * @param array $parameters data json given by the client
          *
          */
           public function delete($id,$table,$parameters) {
@@ -679,19 +643,19 @@ class LUCompte
 	/**
          * DELETE DANS LA TABLE radusergroup
          *
-         * @param string $table
-         * @param integer $id
-         * @param string $parameters
-	 * @return integer 
+         * @param string $groupname groupname of group
+         * @param integer $id id of user
+         * @param string $parameters data json given by the client
+	 * @return string $name username   
          *
          */
           public function deleteUsergroup($id,$groupname,$parameters) {
               $delete = $this->getUsergroup($id,$groupname);
 //              $this->putOrdeleteData($delete->getUsername(),$delete->getGroupname(),$parameters);
-                $ar = $delete->getUsername();
+                $name = $delete->getUsername();
                 $this->om->remove($delete);
                 $this->om->flush();
-              return $ar;
+              return $name;
           }
 	
 	
@@ -700,7 +664,8 @@ class LUCompte
 	  /**
            * Get an OBJET
            *
-           * @param mixed $username
+           * @param string $table table of radius
+           * @param integer $id primary key
            *
 	   * @throws NotFoundHttpException when row not exist
            * @return array
@@ -730,13 +695,10 @@ class LUCompte
                     $get = $this->radgroupreply->findOneById($id);
                     break;
               }
-              
               if(empty($get)){
-                  
                 throw new NotFoundHttpException(sprintf('\'%s\' DANS \'rad%s\' N\'EXISTE PAS.',$id,$table));
               }
               return $get;
-
             }
 
 
@@ -746,8 +708,8 @@ class LUCompte
 		 * GET username AVEC id dans userinfo
 		 *
 		 *
-		 * @param integer $id
-		 * @return string $username
+		 * @param integer $id id of userinfo
+		 * @return string $username username of user
 		 *
 		 */
 		public function idtoName( $id ){
@@ -765,8 +727,8 @@ class LUCompte
 		 * GET id AVEC username
 		 *
 		 *
-		 * @param string $username
-		 * @return integer $id
+		 * @param string $username username of user
+		 * @return array $id id of userinfo and userbillinfo
 		 *
 		 */
 		public function nametoId( $username ){
@@ -778,14 +740,14 @@ class LUCompte
 		}
 
 
-		  /**
+	  /**
            * Get an OBJET
            *
-		   * @param string $table
-           * @param mixed $username
+	   * @param string $table table of radius
+           * @param mixed $username username of user
            *
-		   * @throws NotFoundHttpException when row not exist
-           * @return array
+	   * @throws NotFoundHttpException when row not exist
+           * @return array $get result of get
            *
            */
             public function getbyUsername($table, $username) {
@@ -830,7 +792,7 @@ class LUCompte
          * @param array         $parameters
          * @param String        $method
          *
-		 * @throws InvalidJsonException
+	 * @throws InvalidJsonException
          * @return Userinfo
          *
          *
